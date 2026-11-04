@@ -1,0 +1,126 @@
+{
+  "skill": "ue-test-record",
+  "description": "Trigger precision eval: verify ue-test-record activates on PIE input recording queries and NOT on scenario/generate/automation queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "입력 녹화해서 테스트 만들어줘",
+      "should_trigger": true,
+      "reason": "Korean '입력 녹화' — core trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "PIE 녹화 시작해줘",
+      "should_trigger": true,
+      "reason": "Korean 'PIE 녹화' — direct trigger"
+    },
+    {
+      "id": "tp-03",
+      "query": "녹화 테스트 해줘",
+      "should_trigger": true,
+      "reason": "Korean '녹화 테스트' — recording-based test"
+    },
+    {
+      "id": "tp-04",
+      "query": "입력 기록해서 자동화 테스트 만들어줘",
+      "should_trigger": false,
+      "reason": "Routes to ue-automation-test-builder (higher-priority overlap): Ambiguous: \"자동화 테스트 만들어줘\" matches ue-automation-test-builder (lower priority)"
+    },
+    {
+      "id": "tp-05",
+      "query": "게임플레이 녹화해서 테스트로 변환해줘",
+      "should_trigger": true,
+      "reason": "Korean gameplay recording to test conversion"
+    },
+    {
+      "id": "tp-06",
+      "query": "Record input from PIE and export as test",
+      "should_trigger": true,
+      "reason": "English 'record input' + 'PIE' — direct trigger"
+    },
+    {
+      "id": "tp-07",
+      "query": "PIE recording — capture player movement and create test",
+      "should_trigger": true,
+      "reason": "English 'PIE recording' — core trigger"
+    },
+    {
+      "id": "tp-08",
+      "query": "Record test from live gameplay session",
+      "should_trigger": true,
+      "reason": "English 'record test' — recording trigger"
+    },
+    {
+      "id": "tp-09",
+      "query": "Start input recording for jump sequence",
+      "should_trigger": true,
+      "reason": "English 'input recording' — direct trigger"
+    },
+    {
+      "id": "tp-10",
+      "query": "입력 녹화 — Capture PIE input and generate C++ test. PIE 녹화",
+      "should_trigger": true,
+      "reason": "English capture PIE → C++ test — core purpose"
+    },
+    {
+      "id": "tn-01",
+      "query": "캐릭터가 10m 전진 후 점프 테스트 시나리오",
+      "should_trigger": false,
+      "reason": "Routes to ue-test-scenario — scenario-based, not recording"
+    },
+    {
+      "id": "tn-02",
+      "query": "TakeDamage 테스트 생성해줘",
+      "should_trigger": false,
+      "reason": "Routes to ue-test-gen — code generation, not recording"
+    },
+    {
+      "id": "tn-03",
+      "query": "테스트 반복 실행해줘",
+      "should_trigger": false,
+      "reason": "Routes to test-iterate — iterative execution, not recording"
+    },
+    {
+      "id": "tn-04",
+      "query": "자동화 테스트 작성해줘",
+      "should_trigger": false,
+      "reason": "Routes to ue-test-gen — writing test code, not recording input"
+    },
+    {
+      "id": "tn-05",
+      "query": "테스트 실행해줘",
+      "should_trigger": false,
+      "reason": "Routes to test-run — running tests, not recording"
+    },
+    {
+      "id": "tn-06",
+      "query": "Test scenario: move and jump sequence",
+      "should_trigger": false,
+      "reason": "Routes to ue-test-scenario — scenario description, not recording"
+    },
+    {
+      "id": "tn-07",
+      "query": "Generate test for AMyCharacter",
+      "should_trigger": false,
+      "reason": "Routes to ue-test-gen — code generation, not recording"
+    },
+    {
+      "id": "tn-08",
+      "query": "Run edge case tests until clean pass",
+      "should_trigger": false,
+      "reason": "Routes to test-iterate — iterative testing, not recording"
+    },
+    {
+      "id": "tn-09",
+      "query": "Create automation test for inventory",
+      "should_trigger": false,
+      "reason": "Routes to ue-test-gen — code-based test creation"
+    },
+    {
+      "id": "tn-10",
+      "query": "Execute all gameplay tests",
+      "should_trigger": false,
+      "reason": "Routes to test-run — execution, not recording"
+    }
+  ]
+}

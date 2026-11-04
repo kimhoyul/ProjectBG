@@ -1,0 +1,294 @@
+{
+  "version": "1.0",
+  "source_engine": "5.4",
+  "target_engine": "5.5",
+  "generated_date": "2026-03-22T16:47:03.753090+00:00",
+  "epic_release_notes_url": "",
+  "deprecated_apis": [
+    {
+      "id": "DEPR_RN_2325",
+      "category": "function",
+      "old_signature": "UGameplayStatics::GetAllActorsOfClass",
+      "deprecated_since": "",
+      "replacement": {
+        "function": "UGameplayStatics::GetAllActorsOfClassAsync",
+        "signature": "",
+        "auto_fixable": false,
+        "fix_strategy": "api_replacement"
+      },
+      "locations_in_engine": [],
+      "severity": "warning",
+      "source": "release_notes"
+    },
+    {
+      "id": "DEPR_RN_adf2",
+      "category": "function",
+      "old_signature": "APlayerController::GetPawnOrSpectator",
+      "deprecated_since": "",
+      "replacement": {
+        "function": "APlayerController::GetPawnOrSpectatorPawn",
+        "signature": "",
+        "auto_fixable": false,
+        "fix_strategy": "api_replacement"
+      },
+      "locations_in_engine": [],
+      "severity": "warning",
+      "source": "release_notes"
+    },
+    {
+      "id": "DEPR_RN_2221",
+      "category": "function",
+      "old_signature": "UInputComponent::BindAction",
+      "deprecated_since": "",
+      "replacement": {
+        "function": "UEnhancedInputComponent::BindAction",
+        "signature": "",
+        "auto_fixable": false,
+        "fix_strategy": "api_replacement"
+      },
+      "locations_in_engine": [],
+      "severity": "warning",
+      "source": "release_notes"
+    },
+    {
+      "id": "DEPR_RN_b1f6",
+      "category": "function",
+      "old_signature": "UAnimInstance::Montage_Play",
+      "deprecated_since": "",
+      "replacement": {
+        "function": "UAnimInstance::PlayMontage",
+        "signature": "",
+        "auto_fixable": false,
+        "fix_strategy": "api_replacement"
+      },
+      "locations_in_engine": [],
+      "severity": "warning",
+      "source": "release_notes"
+    },
+    {
+      "id": "DEPR_RN_5f52",
+      "category": "function",
+      "old_signature": "UAbilitySystemComponent::TryActivateAbilityByClass",
+      "deprecated_since": "",
+      "replacement": {
+        "function": "UAbilitySystemComponent::TryActivateAbilityByTag",
+        "signature": "",
+        "auto_fixable": false,
+        "fix_strategy": "api_replacement"
+      },
+      "locations_in_engine": [],
+      "severity": "warning",
+      "source": "release_notes"
+    },
+    {
+      "id": "DEPR_RN_f3f8",
+      "category": "function",
+      "old_signature": "FPaths::GameDir",
+      "deprecated_since": "",
+      "replacement": {
+        "function": "FPaths::ProjectDir",
+        "signature": "",
+        "auto_fixable": true,
+        "fix_strategy": "api_replacement"
+      },
+      "locations_in_engine": [],
+      "severity": "warning",
+      "source": "release_notes"
+    },
+    {
+      "id": "DEPR_RN_7ecf",
+      "category": "class",
+      "old_signature": "FAnimNotifyEvent",
+      "deprecated_since": "",
+      "replacement": {
+        "function": "FAnimNotifyEventReference",
+        "signature": "",
+        "auto_fixable": true,
+        "fix_strategy": "api_replacement"
+      },
+      "locations_in_engine": [],
+      "severity": "warning",
+      "source": "release_notes"
+    },
+    {
+      "id": "DEPR_RN_c07c",
+      "category": "function",
+      "old_signature": "FAnimInstanceProxy::GetSkelMeshComponent",
+      "deprecated_since": "",
+      "replacement": {
+        "function": "FAnimInstanceProxy::GetSkeletalMeshComponent",
+        "signature": "",
+        "auto_fixable": false,
+        "fix_strategy": "api_replacement"
+      },
+      "locations_in_engine": [],
+      "severity": "warning",
+      "source": "release_notes"
+    },
+    {
+      "id": "DEPR_RN_b153",
+      "category": "function",
+      "old_signature": "UEnhancedInputLocalPlayerSubsystem::AddMappingContext",
+      "deprecated_since": "",
+      "replacement": {
+        "function": "UEnhancedInputLocalPlayerSubsystem::RequestMappingContext",
+        "signature": "",
+        "auto_fixable": false,
+        "fix_strategy": "api_replacement"
+      },
+      "locations_in_engine": [],
+      "severity": "warning",
+      "source": "release_notes"
+    }
+  ],
+  "breaking_changes": [
+    {
+      "id": "BREAK_RN_7a63",
+      "category": "member_removed",
+      "old_signature": "FAnimNode_StateMachine::GetCurrentStateName",
+      "new_signature": "",
+      "change_type": "removed",
+      "auto_fixable": false,
+      "fix_strategy": "manual",
+      "severity": "error",
+      "impact": "FAnimNode_StateMachine::GetCurrentStateName has been removed",
+      "migration_steps": [
+        "Find and replace with new API manually"
+      ],
+      "plugin_specific": false,
+      "source": "release_notes"
+    },
+    {
+      "id": "BREAK_RN_dfa1",
+      "category": "member_removed",
+      "old_signature": "UInputSettings::GetAxisConfig",
+      "new_signature": "",
+      "change_type": "removed",
+      "auto_fixable": false,
+      "fix_strategy": "manual",
+      "severity": "error",
+      "impact": "UInputSettings::GetAxisConfig has been removed",
+      "migration_steps": [
+        "Find and replace with new API manually"
+      ],
+      "plugin_specific": false,
+      "source": "release_notes"
+    },
+    {
+      "id": "BREAK_RN_a1a9",
+      "category": "member_removed",
+      "old_signature": "UGameplayAbility::CommitAbility",
+      "new_signature": "",
+      "change_type": "removed",
+      "auto_fixable": false,
+      "fix_strategy": "manual",
+      "severity": "error",
+      "impact": "UGameplayAbility::CommitAbility has been removed",
+      "migration_steps": [
+        "Find and replace with new API manually"
+      ],
+      "plugin_specific": false,
+      "source": "release_notes"
+    },
+    {
+      "id": "BREAK_RN_f560",
+      "category": "member_removed",
+      "old_signature": "UVerseVMSubsystem",
+      "new_signature": "",
+      "change_type": "removed",
+      "auto_fixable": false,
+      "fix_strategy": "manual",
+      "severity": "error",
+      "impact": "UVerseVMSubsystem has been removed",
+      "migration_steps": [
+        "Find and replace with new API manually"
+      ],
+      "plugin_specific": false,
+      "source": "release_notes"
+    }
+  ],
+  "class_removals": [
+    {
+      "id": "REMOVE_RN_f560",
+      "removed_class": "UVerseVMSubsystem",
+      "removed_from": "",
+      "reason": "Removed in UE ",
+      "severity": "error",
+      "source": "release_notes"
+    }
+  ],
+  "header_relocations": [],
+  "plugin_compatibility": [],
+  "plugin_breaking_changes": [],
+  "blueprint_changes": [],
+  "build_configuration_changes": [],
+  "deprecated_apis_rejected": [],
+  "breaking_changes_rejected": [],
+  "notes": [],
+  "statistics": {
+    "total_deprecated": 9,
+    "total_breaking": 4,
+    "total_removals": 1,
+    "total_relocations": 0,
+    "auto_fixable_percentage": 14.3,
+    "total_config_changes": 5
+  },
+  "config_changes": [
+    {
+      "id": "CONFIG_010",
+      "section": "[/Script/Engine.GarbageCollectionSettings]",
+      "key": "gc.TimeBetweenPurgingPendingKillObjects",
+      "config_file": "DefaultEngine.ini",
+      "change_type": "removed",
+      "auto_fixable": false,
+      "severity": "error",
+      "notes": "PendingKill removed in UE 5.5. Use soft/weak object references and garbage collection callbacks.",
+      "deprecated_since": "5.5"
+    },
+    {
+      "id": "CONFIG_011",
+      "section": "[/Script/Engine.RendererSettings]",
+      "key": "r.SkinCache.CompileShaders",
+      "config_file": "DefaultEngine.ini",
+      "change_type": "deprecated",
+      "new_key": "r.SkinCache.Mode",
+      "auto_fixable": true,
+      "severity": "warning",
+      "notes": "Skin cache shader compilation flag replaced by mode enum",
+      "deprecated_since": "5.5"
+    },
+    {
+      "id": "CONFIG_012",
+      "section": "[SystemSettings]",
+      "key": "TEXTUREGROUP_World",
+      "config_file": "DefaultEngine.ini",
+      "change_type": "deprecated",
+      "auto_fixable": false,
+      "severity": "warning",
+      "notes": "Legacy texture group settings. Use Texture Streaming virtual texture system instead.",
+      "deprecated_since": "5.5"
+    },
+    {
+      "id": "CONFIG_013",
+      "section": "[/Script/Engine.PhysicsSettings]",
+      "key": "PhysXTreeRebuildRate",
+      "config_file": "DefaultEngine.ini",
+      "change_type": "removed",
+      "auto_fixable": false,
+      "severity": "error",
+      "notes": "PhysX fully removed. Chaos Physics is the sole physics engine.",
+      "deprecated_since": "5.5"
+    },
+    {
+      "id": "CONFIG_014",
+      "section": "[/Script/Engine.RendererSettings]",
+      "key": "r.DefaultFeature.AmbientOcclusionStaticFraction",
+      "config_file": "DefaultEngine.ini",
+      "change_type": "deprecated",
+      "auto_fixable": false,
+      "severity": "warning",
+      "notes": "Static AO fraction deprecated. Use Lumen Global Illumination for ambient occlusion.",
+      "deprecated_since": "5.5"
+    }
+  ]
+}

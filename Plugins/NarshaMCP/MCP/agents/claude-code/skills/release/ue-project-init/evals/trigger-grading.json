@@ -1,0 +1,126 @@
+{
+  "skill": "ue-project-init",
+  "description": "Trigger precision eval: verify ue-project-init activates on project context generation queries and NOT on onboarding/audit/scaffold queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "프로젝트 초기화해줘",
+      "should_trigger": true,
+      "reason": "Korean '프로젝트 초기화' — core trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "컨텍스트 생성해줘",
+      "should_trigger": true,
+      "reason": "Korean '컨텍스트 생성' — generate context trigger"
+    },
+    {
+      "id": "tp-03",
+      "query": "프로젝트 도메인 정보 저장해줘",
+      "should_trigger": true,
+      "reason": "Korean '프로젝트 도메인' + '저장' — save project info"
+    },
+    {
+      "id": "tp-04",
+      "query": "프로젝트 정보 저장",
+      "should_trigger": true,
+      "reason": "Korean '프로젝트 정보 저장' — direct trigger"
+    },
+    {
+      "id": "tp-05",
+      "query": "프로젝트 초기화 — 이 프로젝트 컨텍스트 생성 파일 만들어줘",
+      "should_trigger": true,
+      "reason": "Korean context file creation — project init domain"
+    },
+    {
+      "id": "tp-06",
+      "query": "Generate project context for this UE project",
+      "should_trigger": true,
+      "reason": "English 'generate context' — direct trigger"
+    },
+    {
+      "id": "tp-07",
+      "query": "Init project context",
+      "should_trigger": true,
+      "reason": "English 'init project context' — direct trigger"
+    },
+    {
+      "id": "tp-08",
+      "query": "Save project info so Claude remembers it",
+      "should_trigger": true,
+      "reason": "English 'save project info' — persistent context trigger"
+    },
+    {
+      "id": "tp-09",
+      "query": "Project init — create domain context files",
+      "should_trigger": true,
+      "reason": "English 'project init' + context files — core purpose"
+    },
+    {
+      "id": "tp-10",
+      "query": "Initialize the project metadata and context",
+      "should_trigger": true,
+      "reason": "English 'initialize' + project context — init trigger"
+    },
+    {
+      "id": "tn-01",
+      "query": "프로젝트 분석해줘",
+      "should_trigger": false,
+      "reason": "Routes to project-onboarding — analysis/recommendations, not context generation"
+    },
+    {
+      "id": "tn-02",
+      "query": "이 프로젝트에서 뭘 할 수 있어?",
+      "should_trigger": false,
+      "reason": "Routes to project-onboarding — capability overview, not init"
+    },
+    {
+      "id": "tn-03",
+      "query": "프로젝트 건강 진단해줘",
+      "should_trigger": false,
+      "reason": "Routes to ue-audit — health check, not context init"
+    },
+    {
+      "id": "tn-04",
+      "query": "캐릭터 시스템 만들어줘",
+      "should_trigger": false,
+      "reason": "Routes to ue-scaffold — feature creation, not project init"
+    },
+    {
+      "id": "tn-05",
+      "query": "프로젝트 점검해줘",
+      "should_trigger": false,
+      "reason": "Routes to ue-audit — project health audit, not context generation"
+    },
+    {
+      "id": "tn-06",
+      "query": "What can you do with this project?",
+      "should_trigger": false,
+      "reason": "Routes to project-onboarding — orientation, not init"
+    },
+    {
+      "id": "tn-07",
+      "query": "Run a full audit on this project",
+      "should_trigger": false,
+      "reason": "Routes to ue-audit — audit, not project context init"
+    },
+    {
+      "id": "tn-08",
+      "query": "Create a new character class for the project",
+      "should_trigger": false,
+      "reason": "Routes to ue-scaffold — feature scaffolding, not project init"
+    },
+    {
+      "id": "tn-09",
+      "query": "Get started with this project",
+      "should_trigger": false,
+      "reason": "Routes to project-onboarding — first session orientation"
+    },
+    {
+      "id": "tn-10",
+      "query": "Set up the project build pipeline",
+      "should_trigger": false,
+      "reason": "Routes to ue-build-automate — build setup, not context init"
+    }
+  ]
+}

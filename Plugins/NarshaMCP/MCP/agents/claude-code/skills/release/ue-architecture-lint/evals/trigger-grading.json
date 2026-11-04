@@ -1,0 +1,127 @@
+{
+  "skill": "ue-architecture-lint",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for ue-architecture-lint skill.",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "architecture lint",
+      "should_trigger": true,
+      "reason": "English exact match"
+    },
+    {
+      "id": "tp-02",
+      "query": "arch lint",
+      "should_trigger": true,
+      "reason": "English short form"
+    },
+    {
+      "id": "tp-03",
+      "query": "structure check",
+      "should_trigger": true,
+      "reason": "English structure keyword"
+    },
+    {
+      "id": "tp-04",
+      "query": "design check",
+      "should_trigger": true,
+      "reason": "English design keyword"
+    },
+    {
+      "id": "tp-05",
+      "query": "architecture check",
+      "should_trigger": true,
+      "reason": "English architecture check"
+    },
+    {
+      "id": "tp-06",
+      "query": "run architecture lint on staged files",
+      "should_trigger": true,
+      "reason": "With scope argument"
+    },
+    {
+      "id": "tn-01",
+      "query": "APawn explain",
+      "should_trigger": false,
+      "reason": "Routes to ue-explain, not architecture-lint"
+    },
+    {
+      "id": "tn-02",
+      "query": "perf lint",
+      "should_trigger": false,
+      "reason": "Routes to ue-perf-lint, not architecture-lint"
+    },
+    {
+      "id": "tn-03",
+      "query": "build error fix",
+      "should_trigger": false,
+      "reason": "Routes to unreal-error-doctor"
+    },
+    {
+      "id": "tn-04",
+      "query": "commit check",
+      "should_trigger": false,
+      "reason": "Routes to ue-pre-commit"
+    },
+    {
+      "id": "tn-05",
+      "query": "create a new feature",
+      "should_trigger": false,
+      "reason": "Routes to ue-scaffold"
+    },
+    {
+      "id": "tn-06",
+      "query": "profiling bottleneck",
+      "should_trigger": false,
+      "reason": "Routes to ue-insights-profiler"
+    },
+    {
+      "id": "tn-07",
+      "query": "rename class safely",
+      "should_trigger": false,
+      "reason": "Routes to ue-cpp-refactor"
+    },
+    {
+      "id": "tn-08",
+      "query": "what is ACharacter",
+      "should_trigger": false,
+      "reason": "Routes to ue-explain"
+    },
+    {
+      "id": "tn-09",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "Build error -> ue-debug"
+    },
+    {
+      "id": "tn-10",
+      "query": "ACharacter 설명해줘",
+      "should_trigger": false,
+      "reason": "Explanation -> ue-explain"
+    },
+    {
+      "id": "tn-11",
+      "query": "성능 린트 실행",
+      "should_trigger": false,
+      "reason": "Perf lint -> ue-perf-lint"
+    },
+    {
+      "id": "tn-12",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "Diagnostic -> ue-audit"
+    },
+    {
+      "id": "tn-13",
+      "query": "네트워크 린트",
+      "should_trigger": false,
+      "reason": "Network lint -> ue-network-lint"
+    },
+    {
+      "id": "tn-14",
+      "query": "보안 린트",
+      "should_trigger": false,
+      "reason": "Security lint -> ue-security-lint"
+    }
+  ]
+}

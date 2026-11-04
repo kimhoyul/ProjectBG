@@ -1,0 +1,139 @@
+{
+  "skill": "ue-cvar-explorer",
+  "version": "1.1.0",
+  "description": "Trigger precision eval for ue-cvar-explorer skill. Tests correct activation on CVar/config queries and correct rejection of broad searches, debugging, and other skill domains.",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "r.Shadow.MaxResolution 뭐야?",
+      "should_trigger": true,
+      "reason": "Specific CVar name query — exact match for CVar exploration"
+    },
+    {
+      "id": "tp-02",
+      "query": "CVar search Shadow",
+      "should_trigger": true,
+      "reason": "Explicit CVar keyword with search intent"
+    },
+    {
+      "id": "tp-03",
+      "query": "그래픽 설정 분석",
+      "should_trigger": true,
+      "reason": "Graphics settings analysis — core CVar explorer domain"
+    },
+    {
+      "id": "tp-04",
+      "query": "scalability 설정 확인",
+      "should_trigger": true,
+      "reason": "Scalability settings are CVar groups (sg.* CVars)"
+    },
+    {
+      "id": "tp-05",
+      "query": "sg.ShadowQuality 뭐야?",
+      "should_trigger": true,
+      "reason": "Specific scalability group CVar name"
+    },
+    {
+      "id": "tp-06",
+      "query": "렌더링 옵션 검색",
+      "should_trigger": true,
+      "reason": "Rendering options search — CVar domain"
+    },
+    {
+      "id": "tp-07",
+      "query": "What does r.Streaming.PoolSize control?",
+      "should_trigger": true,
+      "reason": "English CVar name query with purpose question"
+    },
+    {
+      "id": "tp-08",
+      "query": "성능 설정 뭐가 있어?",
+      "should_trigger": true,
+      "reason": "Performance settings enumeration — CVar explorer scope"
+    },
+    {
+      "id": "tp-09",
+      "query": "quality settings for shadows",
+      "should_trigger": true,
+      "reason": "Quality settings with specific domain — scalability CVars"
+    },
+    {
+      "id": "tp-10",
+      "query": "r.VolumetricFog.GridSizeZ 값 확인",
+      "should_trigger": true,
+      "reason": "Specific CVar value check"
+    },
+    {
+      "id": "tp-11",
+      "query": "r.Lumen.ScreenProbeGather.ScreenSpaceBentNormal 값이 뭐야",
+      "should_trigger": true,
+      "reason": "Specific CVar name query with long dotted path — exact match for CVar exploration"
+    },
+    {
+      "id": "tn-01",
+      "query": "Shadow 관련 모든 설정 찾아줘",
+      "should_trigger": false,
+      "reason": "Broad search pattern (모든 설정 찾아) — should use ue_grep for wide exploration, not skill"
+    },
+    {
+      "id": "tn-02",
+      "query": "ACharacter 설명해줘",
+      "should_trigger": false,
+      "reason": "Class explanation — belongs to ue-explain skill"
+    },
+    {
+      "id": "tn-03",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "Project diagnostic — belongs to ue-audit skill"
+    },
+    {
+      "id": "tn-04",
+      "query": "config.ini 수정해줘",
+      "should_trigger": false,
+      "reason": "Direct .ini file editing — use built-in Read/Edit tools, not CVar explorer"
+    },
+    {
+      "id": "tn-05",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "Build error resolution — belongs to ue-debug skill"
+    },
+    {
+      "id": "tn-06",
+      "query": "전체에서 Rendering 관련된 모든 설정 검색",
+      "should_trigger": false,
+      "reason": "Broad sweep pattern (전체에서 ... 모든) — Explore-First with ue_grep, not skill"
+    },
+    {
+      "id": "tn-07",
+      "query": "DefaultEngine.ini에 설정 추가해줘",
+      "should_trigger": false,
+      "reason": "Config file modification — direct file edit, not CVar exploration"
+    },
+    {
+      "id": "tn-08",
+      "query": "에셋 검증해줘",
+      "should_trigger": false,
+      "reason": "Asset validation — belongs to ue-validate skill"
+    },
+    {
+      "id": "tn-09",
+      "query": "r.Shadow 변경하면 영향 범위?",
+      "should_trigger": false,
+      "reason": "TN: '변경하면 영향' is ue-impact trigger. Change impact analysis, not CVar exploration. Has 'r.' prefix but query intent is impact."
+    },
+    {
+      "id": "tn-10",
+      "query": "빌드 옵션 확인해줘",
+      "should_trigger": false,
+      "reason": "TN: '빌드 설정' is ue-build-automate domain. Build configuration, not CVar/rendering settings."
+    },
+    {
+      "id": "tn-11",
+      "query": "렌더링 퀄리티 전부 낮추면 뭐가 바뀌어?",
+      "should_trigger": false,
+      "reason": "Impact analysis of changing quality — belongs to ue-impact or ue-explain, not CVar exploration"
+    }
+  ]
+}

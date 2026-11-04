@@ -1,0 +1,19 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema/mcp.json",
+  "mcpServers": {
+    "narshamcp": {
+      "command": "{PLUGIN_DIR}/Source/ThirdParty/bin/narshamcp.exe",
+      "args": [
+        "connect",
+        "--project-path",
+        "{PROJECT_DIR}",
+        "--engine-path",
+        "{ENGINE_DIR}"
+      ],
+      "env": {
+        "RUST_LOG": "error",
+        "HOME": "{HOME}"
+      }
+    }
+  }
+}

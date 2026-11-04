@@ -1,0 +1,126 @@
+{
+  "skill": "ue-asset-discovery",
+  "description": "Trigger precision eval: verify ue-asset-discovery activates on asset reference/dependency queries and NOT on impact/search-assets/explain queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "에셋 참조 찾아줘",
+      "should_trigger": true,
+      "reason": "Korean '에셋 참조' — asset reference trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "M_Rock asset dependencies 확인해줘",
+      "should_trigger": true,
+      "reason": "English 'asset dependencies' — exact trigger pattern (avoids 'depends on' → ue-impact)"
+    },
+    {
+      "id": "tp-03",
+      "query": "순환 참조 검사해줘",
+      "should_trigger": true,
+      "reason": "Korean '순환 참조' — circular dependency trigger"
+    },
+    {
+      "id": "tp-04",
+      "query": "asset references for BP_Player",
+      "should_trigger": true,
+      "reason": "English 'asset references' — direct trigger"
+    },
+    {
+      "id": "tp-05",
+      "query": "에셋 의존성 분석",
+      "should_trigger": true,
+      "reason": "Korean '에셋 의존성' — asset dependency trigger"
+    },
+    {
+      "id": "tp-06",
+      "query": "circular dependencies check",
+      "should_trigger": true,
+      "reason": "English 'circular dependencies' — direct trigger"
+    },
+    {
+      "id": "tp-07",
+      "query": "what uses this asset?",
+      "should_trigger": true,
+      "reason": "English 'what uses this asset' — reference discovery trigger"
+    },
+    {
+      "id": "tp-08",
+      "query": "BP_Enemy 레퍼런스 찾기",
+      "should_trigger": true,
+      "reason": "Korean '레퍼런스 찾기' — reference search trigger"
+    },
+    {
+      "id": "tp-09",
+      "query": "reference graph for M_Character",
+      "should_trigger": true,
+      "reason": "English 'reference graph' — direct trigger"
+    },
+    {
+      "id": "tp-10",
+      "query": "에셋 참조 그래프 보여줘",
+      "should_trigger": true,
+      "reason": "Korean '에셋 참조 그래프' — reference graph trigger"
+    },
+    {
+      "id": "tn-01",
+      "query": "APawn 변경하면 뭐가 깨져?",
+      "should_trigger": false,
+      "reason": "TN: '변경하면 깨져' is ue-impact trigger. Change impact, not asset reference discovery."
+    },
+    {
+      "id": "tn-02",
+      "query": "What breaks if I change ACharacter?",
+      "should_trigger": false,
+      "reason": "TN: 'breaks if change' is ue-impact trigger. Impact analysis, not reference graph."
+    },
+    {
+      "id": "tn-03",
+      "query": "search for all Blueprints",
+      "should_trigger": false,
+      "reason": "TN: Asset search by type is ue_search_assets MCP tool. Metadata search, not references."
+    },
+    {
+      "id": "tn-04",
+      "query": "xref TakeDamage",
+      "should_trigger": false,
+      "reason": "TN: 'xref' for C++ function is ue-impact trigger. Code cross-ref, not asset reference."
+    },
+    {
+      "id": "tn-05",
+      "query": "ACharacter 어떻게 동작해?",
+      "should_trigger": false,
+      "reason": "TN: '어떻게 동작' is ue-explain trigger. Explanation, not asset references."
+    },
+    {
+      "id": "tn-06",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "TN: '에러 해결' is ue-debug trigger. Error fixing, not asset discovery."
+    },
+    {
+      "id": "tn-07",
+      "query": "BP_Player 수정하면 영향 범위?",
+      "should_trigger": false,
+      "reason": "TN: '수정하면 영향' is ue-impact trigger. Modification impact, not reference graph."
+    },
+    {
+      "id": "tn-08",
+      "query": "find all materials of type PBR",
+      "should_trigger": false,
+      "reason": "TN: Type-based search is ue_search_assets MCP tool. Asset type filter, not reference graph."
+    },
+    {
+      "id": "tn-09",
+      "query": "에셋 유효성 검사해줘",
+      "should_trigger": false,
+      "reason": "TN: '유효성 검사' is ue-validate trigger. Validation, not reference discovery."
+    },
+    {
+      "id": "tn-10",
+      "query": "AEnemy에 의존하는 것들 찾아줘",
+      "should_trigger": false,
+      "reason": "TN: C++ class dependency is ue-impact trigger. Code dependency, not asset reference graph."
+    }
+  ]
+}

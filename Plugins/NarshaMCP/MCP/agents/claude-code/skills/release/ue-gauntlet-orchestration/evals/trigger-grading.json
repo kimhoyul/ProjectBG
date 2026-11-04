@@ -1,0 +1,126 @@
+{
+  "skill": "ue-gauntlet-orchestration",
+  "description": "Trigger precision eval: verify ue-gauntlet-orchestration activates on Gauntlet/RunUAT/smoke/soak test queries and NOT on build/test-gen/test-run/dev-cycle queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "건틀릿 테스트 실행해줘",
+      "should_trigger": true,
+      "reason": "Korean '건틀릿' — core trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "스모크 테스트 돌려줘",
+      "should_trigger": true,
+      "reason": "Korean '스모크 테스트' — smoke test trigger"
+    },
+    {
+      "id": "tp-03",
+      "query": "소크 테스트 실행",
+      "should_trigger": true,
+      "reason": "Korean '소크 테스트' — soak test trigger"
+    },
+    {
+      "id": "tp-04",
+      "query": "쿠킹 빌드 테스트 해줘",
+      "should_trigger": true,
+      "reason": "Korean '쿠킹 빌드 테스트' — cook build test trigger"
+    },
+    {
+      "id": "tp-05",
+      "query": "멀티 플랫폼 건틀릿 테스트 실행",
+      "should_trigger": true,
+      "reason": "Korean multi-platform Gauntlet test"
+    },
+    {
+      "id": "tp-06",
+      "query": "Run Gauntlet tests",
+      "should_trigger": true,
+      "reason": "English 'gauntlet' — direct trigger"
+    },
+    {
+      "id": "tp-07",
+      "query": "Execute RunUAT smoke test on Windows",
+      "should_trigger": true,
+      "reason": "English 'RunUAT test' + 'smoke test' — direct trigger"
+    },
+    {
+      "id": "tp-08",
+      "query": "Run soak test for 30 minutes",
+      "should_trigger": true,
+      "reason": "English 'soak test' — soak test trigger"
+    },
+    {
+      "id": "tp-09",
+      "query": "건틀릿 실행해줘",
+      "should_trigger": true,
+      "reason": "English 'smoke test' — smoke test trigger"
+    },
+    {
+      "id": "tp-10",
+      "query": "Launch Gauntlet perf test on Linux",
+      "should_trigger": true,
+      "reason": "English Gauntlet perf test on platform — core purpose"
+    },
+    {
+      "id": "tn-01",
+      "query": "프로젝트 빌드해줘",
+      "should_trigger": false,
+      "reason": "Routes to ue-build-automate — build pipeline, not Gauntlet"
+    },
+    {
+      "id": "tn-02",
+      "query": "TakeDamage 테스트 생성해줘",
+      "should_trigger": false,
+      "reason": "Routes to ue-test-gen — test code generation, not RunUAT"
+    },
+    {
+      "id": "tn-03",
+      "query": "테스트 실행해줘",
+      "should_trigger": false,
+      "reason": "Routes to test-run — simple local test run, not Gauntlet"
+    },
+    {
+      "id": "tn-04",
+      "query": "개발 루프 돌려줘",
+      "should_trigger": false,
+      "reason": "Routes to ue-dev-cycle — dev cycle, not platform testing"
+    },
+    {
+      "id": "tn-05",
+      "query": "패키징해줘",
+      "should_trigger": false,
+      "reason": "Routes to ue-build-automate — packaging, not smoke/soak tests"
+    },
+    {
+      "id": "tn-06",
+      "query": "Build the project for shipping",
+      "should_trigger": false,
+      "reason": "Routes to ue-build-automate — build/package, not Gauntlet"
+    },
+    {
+      "id": "tn-07",
+      "query": "Generate test for combat system",
+      "should_trigger": false,
+      "reason": "Routes to ue-test-gen — test generation, not RunUAT"
+    },
+    {
+      "id": "tn-08",
+      "query": "Run unit tests for mcp_server",
+      "should_trigger": false,
+      "reason": "Routes to test-run — local unit tests, not Gauntlet"
+    },
+    {
+      "id": "tn-09",
+      "query": "Dev cycle for AMyHero — build and test",
+      "should_trigger": false,
+      "reason": "Routes to ue-dev-cycle — code-build-test loop"
+    },
+    {
+      "id": "tn-10",
+      "query": "Cook for Windows and package",
+      "should_trigger": false,
+      "reason": "Routes to ue-build-automate — cook/package, not smoke test"
+    }
+  ]
+}

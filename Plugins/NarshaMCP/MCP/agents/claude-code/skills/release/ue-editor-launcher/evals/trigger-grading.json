@@ -1,0 +1,127 @@
+{
+  "skill": "ue-editor-launcher",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for ue-editor-launcher skill. Tests correct activation on editor launch queries, and correct rejection of project audit, onboarding, project init, and build automation queries.",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "에디터 열어줘",
+      "should_trigger": true,
+      "reason": "Direct Korean trigger — '에디터 열어줘' core pattern"
+    },
+    {
+      "id": "TP-02",
+      "query": "Open editor",
+      "should_trigger": true,
+      "reason": "English trigger — 'open editor' core pattern"
+    },
+    {
+      "id": "TP-03",
+      "query": "언리얼 실행해줘",
+      "should_trigger": true,
+      "reason": "Korean trigger — '언리얼 실행해줘' core pattern"
+    },
+    {
+      "id": "TP-04",
+      "query": "Launch UE",
+      "should_trigger": true,
+      "reason": "English trigger — 'launch UE' core pattern"
+    },
+    {
+      "id": "TP-05",
+      "query": "에디터 시작해줘",
+      "should_trigger": true,
+      "reason": "Korean trigger — '에디터 시작' core pattern"
+    },
+    {
+      "id": "TP-06",
+      "query": "Start editor",
+      "should_trigger": true,
+      "reason": "English trigger — 'start editor' core pattern"
+    },
+    {
+      "id": "TP-07",
+      "query": "UE 열어줘",
+      "should_trigger": true,
+      "reason": "Korean trigger — 'UE 열어' core pattern"
+    },
+    {
+      "id": "TP-08",
+      "query": "프로젝트 열어줘",
+      "should_trigger": true,
+      "reason": "Korean trigger — '프로젝트 열어줘' core pattern"
+    },
+    {
+      "id": "TP-09",
+      "query": "Open Unreal Editor",
+      "should_trigger": true,
+      "reason": "English trigger — 'open Unreal' core pattern"
+    },
+    {
+      "id": "TP-10",
+      "query": "Launch Unreal Editor for this project",
+      "should_trigger": true,
+      "reason": "English — 'launch Unreal Editor' with context"
+    },
+    {
+      "id": "TN-01",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "Project audit — belongs to ue-audit skill (negative pattern: '진단')"
+    },
+    {
+      "id": "TN-02",
+      "query": "프로젝트 분석해줘",
+      "should_trigger": false,
+      "reason": "Project analysis — belongs to project-onboarding skill"
+    },
+    {
+      "id": "TN-03",
+      "query": "프로젝트 초기화해줘",
+      "should_trigger": false,
+      "reason": "Project init — belongs to ue-project-init skill"
+    },
+    {
+      "id": "TN-04",
+      "query": "에디터에서 BP 구조 확인해줘",
+      "should_trigger": false,
+      "reason": "Blueprint inspection — belongs to ue-manage-blueprint (editor operation, not launch)"
+    },
+    {
+      "id": "TN-05",
+      "query": "에디터 자동화 실행해줘",
+      "should_trigger": false,
+      "reason": "Editor automation — belongs to ue-editor-automation (automation, not launch)"
+    },
+    {
+      "id": "TN-06",
+      "query": "DDC 상태 확인해줘",
+      "should_trigger": false,
+      "reason": "DDC health — belongs to ue-project-ops skill"
+    },
+    {
+      "id": "TN-07",
+      "query": "캐릭터 만들어줘",
+      "should_trigger": false,
+      "reason": "Feature scaffolding — belongs to ue-scaffold skill"
+    },
+    {
+      "id": "TN-08",
+      "query": "빌드 자동화해줘",
+      "should_trigger": false,
+      "reason": "Build automation — belongs to ue-build-automate skill"
+    },
+    {
+      "id": "TN-09",
+      "query": "온보딩 해줘",
+      "should_trigger": false,
+      "reason": "Onboarding — belongs to project-onboarding skill"
+    },
+    {
+      "id": "TN-10",
+      "query": "건강 점검해줘",
+      "should_trigger": false,
+      "reason": "Health check — belongs to ue-audit skill (negative pattern: '건강')"
+    }
+  ]
+}

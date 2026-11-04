@@ -1,0 +1,22 @@
+{
+  "skill": "character-movement",
+  "version": "1.0.0",
+  "description": "Trigger precision eval — literal API names primary surface (avoids '방법/차이' ue-explain hijack). TN cases test rejection of multi-class system-generation (code-generation-power territory) and sibling-skill keywords (animation/input/gameplay-framework).",
+  "cases": [
+    {"id": "TP-01", "query": "UCharacterMovementComponent MaxWalkSpeed 기본값", "should_trigger": true, "reason": "Direct CMC + property — strongest trigger surface"},
+    {"id": "TP-02", "query": "ERootMotionMode 4가지 값", "should_trigger": true, "reason": "Enum name — baseline failure target (4-variant ambiguity)"},
+    {"id": "TP-03", "query": "EMovementMode MOVE_Custom PhysCustom 등록", "should_trigger": true, "reason": "Custom movement registration"},
+    {"id": "TP-04", "query": "FSavedMove_Character CanCombineWith override", "should_trigger": true, "reason": "Network prediction virtual"},
+    {"id": "TP-05", "query": "ServerMove RPC client-server character", "should_trigger": true, "reason": "Networking surface"},
+    {"id": "TP-06", "query": "ACharacter Jump StopJumping 호출", "should_trigger": true, "reason": "ACharacter integration point"},
+    {"id": "TP-07", "query": "PhysFalling JumpZVelocity GravityScale falling physics", "should_trigger": true, "reason": "Falling physics (avoids 'control' substring collision with ue-cvar-explorer P12 — see #13114 review C-1)"},
+    {"id": "TP-08", "query": "캐릭터 이동 속도 설정 MaxWalkSpeed", "should_trigger": true, "reason": "Korean + API name"},
+    {"id": "TP-09", "query": "루트 모션 모드 선택 RootMotionFromMontagesOnly", "should_trigger": true, "reason": "Korean root motion + enum name"},
+    {"id": "TP-10", "query": "FNetworkPredictionData_Client_Character SmoothingServerTimeStamp", "should_trigger": true, "reason": "Network prediction struct field"},
+    {"id": "TN-01", "query": "AnimMontage PlayMontage 호출 방법", "should_trigger": false, "reason": "Animation skill territory (animation-workflow)"},
+    {"id": "TN-02", "query": "Enhanced Input InputMappingContext 등록", "should_trigger": false, "reason": "input-system skill (#13115)"},
+    {"id": "TN-03", "query": "AI MoveTo BehaviorTree task 만들기", "should_trigger": false, "reason": "AI navigation territory"},
+    {"id": "TN-04", "query": "completely new vehicle character system from scratch AMyHovercraftCharacter UHovercraftMovementComponent multi-class", "should_trigger": false, "reason": "Multi-class system generation — code-generation-power"},
+    {"id": "TN-05", "query": "ACharacter Blueprint subclass create new Blueprint generator", "should_trigger": false, "reason": "Blueprint generation — blueprint-generator"}
+  ]
+}

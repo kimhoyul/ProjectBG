@@ -1,0 +1,126 @@
+{
+  "skill": "unreal-error-doctor",
+  "description": "Trigger precision eval: verify unreal-error-doctor activates on UE compilation/build error queries and NOT on project audit/runtime debug/code generation queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "UPROPERTY 에러 - AMyCharacter.cpp에서 빌드하면 error C2065: 'MaxHealth' undeclared identifier 에러가 나오는데 어떻게 고쳐? UPROPERTY로 선언한 건데 왜 못 찾는지 모르겠어",
+      "should_trigger": true,
+      "reason": "unreal-error-doctor wins: priority 3 beats ue-debug priority 4; 'UPROPERTY 에러' + '빌드' + 'error C2065' matches unreal-error-doctor compile error patterns"
+    },
+    {
+      "id": "tp-02",
+      "query": "just added a new UCLASS AWeaponBase but getting compile error - something about missing generated.h include. the error says 'expected class name' on line 15 of WeaponBase.h",
+      "should_trigger": true,
+      "reason": "unreal-error-doctor wins: priority 3 beats ue-debug priority 4; 'compile error' + 'generated.h' + 'UCLASS' matches unreal-error-doctor UE-specific build error patterns"
+    },
+    {
+      "id": "tp-03",
+      "query": "링커 에러 LNK2019 빌드 에러 해결해줘 — AEnemyController::OnPerceptionUpdated가 unresolved external symbol",
+      "should_trigger": true,
+      "reason": "unreal-error-doctor wins: priority 3 beats ue-debug priority 4; '빌드 에러 해결' + 'LNK2019' + 'unresolved external symbol' matches unreal-error-doctor linker error patterns"
+    },
+    {
+      "id": "tp-04",
+      "query": "UPROPERTY 에러 - 프로젝트 빌드가 갑자기 실패하기 시작했어. 어제까진 잘 됐는데 오늘 아침에 main merge하고 나서 에러 23개 나와. 첫 번째 에러가 'no matching function for call to CreateDefaultSubobject' 이야",
+      "should_trigger": true,
+      "reason": "unreal-error-doctor wins: priority 3 beats ue-debug priority 4; 'UPROPERTY 에러' + '빌드' + 'CreateDefaultSubobject' matches unreal-error-doctor compile error patterns"
+    },
+    {
+      "id": "tp-05",
+      "query": "UPROPERTY 에러 - UPROPERTY(EditAnywhere) 붙인 TArray<FInventorySlot> 변수에서 에러나. 'incomplete type is not allowed'라고 하는데 forward declaration 문제인 것 같아. Source/MyGame/Inventory/InventoryComponent.h 파일이야",
+      "should_trigger": true,
+      "reason": "unreal-error-doctor wins: priority 3 beats ue-debug priority 4; 'UPROPERTY 에러' + 'incomplete type' + '.h' matches unreal-error-doctor UE compile error patterns"
+    },
+    {
+      "id": "tp-06",
+      "query": "fix build errors - getting error C4430: missing type specifier in UCU_AbilitySystemComponent.h line 42. I think it's because I forgot to include the GAS headers but not sure which ones are needed",
+      "should_trigger": true,
+      "reason": "unreal-error-doctor wins: priority 3 beats ue-debug priority 4; 'fix build errors' + 'error C4430' + 'missing type specifier' matches unreal-error-doctor build error patterns"
+    },
+    {
+      "id": "tp-07",
+      "query": "빌드 에러 해결 좀 도와줘. MyGame.generated.h가 include 순서 문제인 것 같은데 세미콜론 관련 에러도 같이 나오고 있어. 에러 메시지가 5개인데 다 같은 파일에서 나옴",
+      "should_trigger": true,
+      "reason": "unreal-error-doctor wins: priority 3 beats ue-debug priority 4; '빌드 에러 해결' + 'generated.h' + 'include' matches unreal-error-doctor UE build error patterns"
+    },
+    {
+      "id": "tp-08",
+      "query": "fix the build errors in my project please. getting undefined reference to `ABaseEnemy::BeginPlay()` and 3 more similar errors in the enemy system classes. I think I declared them in the header but forgot the implementations",
+      "should_trigger": true,
+      "reason": "unreal-error-doctor wins: priority 3 beats ue-debug priority 4; 'fix the build errors' + 'undefined reference' + 'BeginPlay' matches unreal-error-doctor linker error patterns"
+    },
+    {
+      "id": "tp-09",
+      "query": "컴파일 에러 여러 개 나오는데 첫 번째가 'cannot convert from FVector to FVector2D' in Source/MyGame/UI/MinimapWidget.cpp:87이야. implicit conversion이 안 되나봐",
+      "should_trigger": true,
+      "reason": "unreal-error-doctor wins: priority 3 beats ue-debug priority 4; '컴파일 에러' + 'FVector'/'FVector2D' + 'cannot convert' matches unreal-error-doctor UE type error patterns"
+    },
+    {
+      "id": "tp-10",
+      "query": "빌드 실패. error: 'Super' was not declared in this scope가 Source/MyGame/Characters/MyHero.cpp에서 나와. 상속 구조가 ACharacter → ABaseCharacter → AMyHero인데 중간 클래스 추가하면서 뭔가 꼬인 것 같아",
+      "should_trigger": true,
+      "reason": "unreal-error-doctor wins: priority 3 beats ue-debug priority 4; '빌드 실패' + 'Super was not declared' + 'ACharacter' matches unreal-error-doctor UE compile error patterns"
+    },
+    {
+      "id": "tn-01",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "Project health audit -> ue-audit"
+    },
+    {
+      "id": "tn-02",
+      "query": "런타임에 크래시 나요 NullPtr",
+      "should_trigger": false,
+      "reason": "Runtime crash debugging -> ue-debug"
+    },
+    {
+      "id": "tn-03",
+      "query": "C++ 클래스 생성해줘",
+      "should_trigger": false,
+      "reason": "Code generation -> code-generation"
+    },
+    {
+      "id": "tn-04",
+      "query": "경고 요약해줘",
+      "should_trigger": false,
+      "reason": "Warning summary -> ue-audit"
+    },
+    {
+      "id": "tn-05",
+      "query": "Assertion failed: IsValid() 크래시",
+      "should_trigger": false,
+      "reason": "Runtime assertion crash -> ue-debug"
+    },
+    {
+      "id": "tn-06",
+      "query": "ACharacter 어떻게 동작해?",
+      "should_trigger": false,
+      "reason": "System explanation -> ue-explain"
+    },
+    {
+      "id": "tn-07",
+      "query": "에셋 검증해줘",
+      "should_trigger": false,
+      "reason": "Asset validation -> ue-validate"
+    },
+    {
+      "id": "tn-08",
+      "query": "error handling 패턴 설명해줘",
+      "should_trigger": false,
+      "reason": "Error handling explanation (not actual error) -> ue-explain"
+    },
+    {
+      "id": "tn-09",
+      "query": "라이브 코딩 실패",
+      "should_trigger": false,
+      "reason": "Live coding failure -> ue-livecoding-fix"
+    },
+    {
+      "id": "tn-10",
+      "query": "auto fix warnings 해줘",
+      "should_trigger": false,
+      "reason": "Auto fix warnings -> ue-audit"
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "refinement.schema.json",
+  "title": "BBox Refinement — bbox-refinement-checker SubAgent output",
+  "description": "Closed-loop visual refinement output. One file per iteration: refinement_iter<N>.json.",
+  "type": "object",
+  "required": [
+    "$schema_version",
+    "iteration",
+    "verdict",
+    "convergence_score",
+    "discrepancies",
+    "structural_changes",
+    "summary_narrative_for_user"
+  ],
+  "properties": {
+    "$schema_version": {"type": "string", "const": "1.0"},
+    "iteration": {"type": "integer", "minimum": 1, "maximum": 100},
+    "verdict": {
+      "type": "string",
+      "enum": ["clean", "minor_drift", "major_drift"],
+      "description": "clean = converged, no further iteration needed. minor_drift = small bbox tweaks remain. major_drift = significant structural / position issues."
+    },
+    "convergence_score": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "0.0 = totally wrong, 1.0 = pixel-perfect. Used by orchestrator to decide whether to continue."
+    },
+    "discrepancies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["component_name_guess", "issue", "rationale", "confidence"],
+        "properties": {
+          "component_name_guess": {
+            "type": "string",
+            "description": "Must match a name_guess in current stage1_analysis.json components[]. Special value '__new__' for proposing a brand-new component (must also appear in structural_changes with action='add')."
+          },
+          "issue": {
+            "type": "string",
+            "enum": [
+              "position_off",
+              "size_off",
+              "missing",
+              "extra",
+              "wrong_grouping",
+              "misclassified"
+            ]
+          },
+          "current_bbox": {
+            "type": ["array", "null"],
+            "items": {"type": "number", "minimum": 0, "maximum": 100},
+            "minItems": 4,
+            "maxItems": 4
+          },
+          "suggested_bbox": {
+            "type": ["array", "null"],
+            "items": {"type": "number", "minimum": 0, "maximum": 100},
+            "minItems": 4,
+            "maxItems": 4,
+            "description": "Required for position_off / size_off / wrong_grouping. Optional for missing/extra (those go in structural_changes)."
+          },
+          "rationale": {"type": "string", "minLength": 10},
+          "confidence": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+          "stage1_diff_hint": {
+            "type": ["string", "null"],
+            "description": "Optional JSON path hint, e.g. 'images[0].vision_extract.components[3].bbox'."
+          }
+        }
+      }
+    },
+    "structural_changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["action", "rationale"],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["merge", "split", "remove", "add"]
+          },
+          "components": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Source component name_guesses. For merge: components to combine. For split: 1 source. For remove: components to drop. For add: empty (new components in 'into')."
+          },
+          "into": {
+            "description": "For merge: single new component object. For split: array of new component objects. For add: single new component object.",
+            "oneOf": [
+              {"type": "object"},
+              {"type": "array", "items": {"type": "object"}}
+            ]
+          },
+          "rationale": {"type": "string", "minLength": 10}
+        }
+      }
+    },
+    "summary_narrative_for_user": {
+      "type": "string",
+      "description": "1-2 sentences for main context. NO pixel data, NO color hex, NO IP-revealing literal text from the source image.",
+      "maxLength": 500
+    },
+    "ip_safety_check": {
+      "type": ["object", "null"],
+      "properties": {
+        "literal_text_detected_in_source": {"type": "boolean"},
+        "color_hex_avoided": {"type": "boolean"},
+        "ip_lookalike_warning_present": {"type": "boolean"}
+      }
+    },
+    "vision_call_metadata": {
+      "type": ["object", "null"],
+      "properties": {
+        "vision_model": {"type": "string"},
+        "vision_called_at": {"type": "string"},
+        "input_pair": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

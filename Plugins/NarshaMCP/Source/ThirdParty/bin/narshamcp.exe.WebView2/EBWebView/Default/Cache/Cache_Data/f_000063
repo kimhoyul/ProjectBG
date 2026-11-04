@@ -1,0 +1,2112 @@
+// NarshaADK Dashboard - UE5 Theme - SSE + Interactive Controls
+'use strict';
+
+// ── i18n Module (Issue #8619) ──
+const I18N = {
+  _dict: {},
+  _fallback: {},
+  _lang: 'en',
+  _available: {},
+  _lastData: null,
+
+  init(langData) {
+    this._available = langData;
+    this._fallback = langData['en'] || {};
+    // One-time migration: clear stale lang pref so OS detection runs (Issue #8619)
+    if (!localStorage.getItem('narsha_i18n_v1')) {
+      localStorage.removeItem('narsha_lang');
+      localStorage.setItem('narsha_i18n_v1', '1');
+    }
+    const saved = localStorage.getItem('narsha_lang');
+    // Detect OS/browser language — try full code first for regional variants
+    // (e.g. "zh-CN" → "zh-CN", "pt-BR" → "pt-BR", "ko-KR" → "ko", "en-US" → "en")
+    var navLang = navigator.language || '';
+    var detected = langData[navLang] ? navLang :
+                   langData[navLang.split('-')[0]] ? navLang.split('-')[0] : 'en';
+    this._lang = (saved && langData[saved]) ? saved : (langData[detected] ? detected : 'en');
+    this._dict = langData[this._lang] || this._fallback;
+    this._applyDOM();
+    document.documentElement.lang = this._lang;
+    this._updateDir();
+  },
+
+  setLang(lang) {
+    if (!this._available[lang]) return;
+    this._lang = lang;
+    this._dict = this._available[lang];
+    localStorage.setItem('narsha_lang', lang);
+    document.documentElement.lang = lang;
+    this._updateDir();
+    this._applyDOM();
+    // Sync all language selectors
+    ['language-select', 'header-lang-select'].forEach(function(id) {
+      var sel = document.getElementById(id);
+      if (sel) sel.value = lang;
+    });
+    // Re-render dynamic content with new language
+    if (this._lastData) updateOverview(this._lastData);
+    if (memoryStatusLoaded) loadMemoryStatus();
+    if (_lastAiClients) renderAiClients(_lastAiClients);
+  },
+
+  t(key) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    var s = this._dict[key] || this._fallback[key] || key;
+    for (var i = 0; i < args.length; i++) {
+      s = s.replace('{' + i + '}', args[i]);
+    }
+    return s;
+  },
+
+  _applyDOM() {
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+      el.textContent = I18N.t(el.getAttribute('data-i18n'));
+    });
+    // data-i18n-html: Only for static translation keys containing safe HTML
+    // (e.g., <strong>, <code>). NEVER use for keys containing user input.
+    document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+      el.innerHTML = I18N.t(el.getAttribute('data-i18n-html'));
+    });
+    document.querySelectorAll('[data-i18n-title]').forEach(function(el) {
+      el.title = I18N.t(el.getAttribute('data-i18n-title'));
+    });
+    document.title = I18N.t('page.title');
+  },
+
+  // Set text direction from _meta.dir (RTL for Arabic, LTR for others)
+  _updateDir() {
+    var meta = this._dict._meta || {};
+    document.documentElement.dir = meta.dir || 'ltr';
+  },
+
+  getLangs() {
+    return Object.keys(this._available).map(function(code) {
+      var meta = I18N._available[code]._meta || {};
+      return { code: code, name: meta.name || code };
+    });
+  }
+};
+
+function t() { return I18N.t.apply(I18N, arguments); }
+
+const MAX_EVENTS = 50;
+const MEMORY_CEILING_MB = 16384; // 16 GB — assumed max for progress bar display
+const SSE_MAX_DELAY = 30000;
+const eventLog = [];
+let sseSource = null;
+let sseRetryDelay = 1000;
+
+// ── Tab Switching ──
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+// ── SSE Connection ──
+function connectSSE() {
+  if (sseSource) sseSource.close();
+  sseSource = new EventSource('/api/daemon/events');
+
+  const badge = document.getElementById('connection-status');
+  sseSource.onopen = () => {
+    badge.textContent = t('header.healthy');
+    badge.className = 'badge badge-green';
+    sseRetryDelay = 1000; // reset backoff on success
+  };
+
+  sseSource.onerror = () => {
+    badge.textContent = t('header.disconnected');
+    badge.className = 'badge badge-red';
+    setTimeout(connectSSE, sseRetryDelay);
+    sseRetryDelay = Math.min(sseRetryDelay * 2, SSE_MAX_DELAY);
+  };
+
+  sseSource.addEventListener('heartbeat', (e) => {
+    try { updateOverview(JSON.parse(e.data)); }
+    catch (err) { console.error('SSE heartbeat parse error:', err); }
+  });
+
+  const eventTypes = ['session_connected', 'session_disconnected', 'tool_start', 'tool_end', 'stale_session_removed', 'daemon_shutdown'];
+  eventTypes.forEach(type => {
+    sseSource.addEventListener(type, (e) => {
+      try { addEvent(type, JSON.parse(e.data)); }
+      catch (err) { console.error('SSE event parse error:', err); }
+    });
+  });
+
+  // Issue #8371: Memory transition event listeners
+  const memTransitionTypes = ['memory_transition_started', 'memory_transition_progress', 'memory_transition_completed', 'memory_transition_failed'];
+  memTransitionTypes.forEach(type => {
+    sseSource.addEventListener(type, (e) => {
+      try { handleMemoryTransitionEvent(type, JSON.parse(e.data)); }
+      catch (err) { console.error('SSE memory transition parse error:', err); }
+    });
+  });
+
+  // Issue #7972: License event listeners
+  sseSource.addEventListener('license_error', (e) => {
+    try { showLicenseError(JSON.parse(e.data)); }
+    catch (err) { console.error('SSE license_error parse error:', err); }
+  });
+
+  // Issue #10769 PR 6: project-config change notification.
+  // Backend `project_watcher` detects modifications to .uproject (release
+  // users — UE Editor rewrites this on engine-version conversion),
+  // .mcp.json, or .env (dev mode) and broadcasts this event. We show a
+  // toast prompting the user to click Restart Daemon to apply the new
+  // values. Wording is GENERIC ("Configuration changed: <kind>") because
+  // most release users see this triggered by .uproject, not .env.
+  sseSource.addEventListener('config_changed', (e) => {
+    try {
+      const data = JSON.parse(e.data);
+      const reasonCount = (data.config_errors || []).length;
+      const fileLabel = friendlyConfigFileLabel(data.path || '');
+      const msg = reasonCount > 0
+        ? t('degraded.config_changed.toast_with_errors', fileLabel, reasonCount)
+        : t('degraded.config_changed.toast', fileLabel);
+      showConfigChangedToast(msg);
+    } catch (err) {
+      console.error('SSE config_changed parse error:', err);
+    }
+  });
+}
+
+// Issue #10769 PR 6: Pick a short, localized label for the changed file.
+// Full paths are often deep + locale-specific; for the toast we want
+// a quick hint (".uproject" / ".mcp.json" / ".env") so the user knows
+// what kind of file changed without reading a long path.
+function friendlyConfigFileLabel(path) {
+  if (!path) return t('degraded.config_changed.label_generic');
+  const lower = path.toLowerCase();
+  if (lower.endsWith('.uproject')) return t('degraded.config_changed.label_uproject');
+  if (lower.endsWith('.mcp.json')) return t('degraded.config_changed.label_mcp_json');
+  if (lower.endsWith('.env')) return t('degraded.config_changed.label_env');
+  // Fallback: just the basename — short and informative enough.
+  const slash = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
+  return slash >= 0 ? path.substring(slash + 1) : path;
+}
+
+// Issue #10769 PR 6: Toast with an inline Restart-Daemon button.
+// Dedupes on .toast--config-changed so a busy editor (multiple saves
+// in quick succession) doesn't stack duplicate toasts.
+function showConfigChangedToast(message) {
+  const container = document.getElementById('toast-container');
+  if (!container) {
+    console.info('[config_changed]', message);
+    return;
+  }
+  let existing = container.querySelector('.toast--config-changed');
+  if (existing) {
+    const msgEl = existing.querySelector('.toast-message');
+    if (msgEl) msgEl.textContent = message;
+    return;
+  }
+  const toast = document.createElement('div');
+  toast.className = 'toast toast--config-changed';
+  toast.setAttribute('role', 'status');
+
+  const msgEl = document.createElement('span');
+  msgEl.className = 'toast-message';
+  msgEl.textContent = message;
+  toast.appendChild(msgEl);
+
+  const btn = document.createElement('button');
+  btn.className = 'toast-action';
+  btn.type = 'button';
+  btn.textContent = t('degraded.config_changed.restart_btn');
+  btn.onclick = () => { restartDaemon(); toast.remove(); };
+  toast.appendChild(btn);
+
+  container.appendChild(toast);
+  // 12s lets the user read + decide. Manual click of Restart any time before that.
+  setTimeout(() => toast.remove(), 12000);
+}
+
+// ── Overview Updates ──
+function updateOverview(data) {
+  I18N._lastData = data;
+  if (data.status) {
+    document.getElementById('version').textContent = 'v' + data.status.version;
+    document.getElementById('uptime').textContent = formatUptime(data.status.uptime_secs);
+    document.getElementById('session-count').textContent = data.status.session_count;
+    const sv = document.getElementById('settings-version');
+    if (sv) sv.textContent = 'v' + data.status.version;
+    const su = document.getElementById('settings-uptime');
+    if (su) su.textContent = formatUptime(data.status.uptime_secs);
+    // Server info (Issue #8470)
+    const ss = document.getElementById('settings-sessions');
+    if (ss) ss.textContent = data.status.session_count + ' ' + t('settings.active');
+    const sp = document.getElementById('settings-project');
+    if (sp && data.status.project_path) sp.textContent = data.status.project_path;
+    const se = document.getElementById('settings-engine');
+    if (se && data.status.engine_path) se.textContent = data.status.engine_path;
+    const sb = document.getElementById('settings-binary');
+    if (sb && data.status.binary_path) sb.textContent = data.status.binary_path;
+    // Daemon executable path (Issue #11572): canonical absolute path of the running binary
+    const sep = document.getElementById('settings-executable-path');
+    if (sep && data.status.executable_path) sep.textContent = data.status.executable_path;
+    // Cache path (Intermediate/NarshaMCP/)
+    const sc = document.getElementById('settings-cache');
+    if (sc && data.status.project_path) sc.textContent = data.status.project_path + '/Intermediate/NarshaMCP';
+    // License status
+    const sl = document.getElementById('settings-license');
+    const lh = document.getElementById('license-hint');
+    if (sl) {
+      if (data.license_error) {
+        sl.textContent = data.license_error.message || data.license_error.error_type || t('error.generic');
+        sl.style.color = 'var(--red)';
+        if (lh) lh.style.display = '';
+      } else if (data.license_verified) {
+        sl.textContent = t('settings.license_verified');
+        sl.style.color = 'var(--green)';
+        if (lh) lh.style.display = 'none';
+      } else {
+        sl.textContent = t('settings.license_not_verified');
+        sl.style.color = 'var(--text-dim)';
+        if (lh) lh.style.display = '';
+      }
+    }
+    if (data.status.project_path) {
+      document.getElementById('project-path').textContent = data.status.project_path;
+    }
+    if (data.status.engine_path) {
+      document.getElementById('engine-path').textContent = data.status.engine_path;
+    }
+    if (data.status.memory_mb != null) {
+      document.getElementById('memory-value').textContent = data.status.memory_mb.toLocaleString();
+      const pct = Math.min(100, (data.status.memory_mb / MEMORY_CEILING_MB) * 100);
+      const fill = document.getElementById('memory-fill');
+      if (fill) fill.style.width = pct + '%';
+    }
+    if (data.status.cpu_usage_percent != null) {
+      document.getElementById('cpu-value').textContent = data.status.cpu_usage_percent.toFixed(1);
+      const chip = document.getElementById('cpu-value').closest('.status-chip');
+      if (chip && data.status.cpu_cores) {
+        chip.title = data.status.cpu_cores + ' logical cores';
+      }
+    }
+    // Issue #10769: configuration-error banner. Surfaces startup-validation
+    // problems when the daemon enters degraded mode (PR 5+). Hidden when the
+    // daemon is healthy (degraded_mode === false or undefined for old daemons).
+    applyDegradedBanner(data.status);
+  }
+
+  if (data.sessions) {
+    const tbody = document.querySelector('#sessions-table tbody');
+    tbody.innerHTML = '';
+    if (data.sessions.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="11" x2="19" y2="17"/></svg><p>' + esc(t('sessions.no_active')) + '</p></div></td></tr>';
+    } else {
+      data.sessions.forEach(s => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td>' + esc(s.id.substring(0, 8)) + '</td>'
+          + '<td>' + esc(s.hostname || '-') + '</td>'
+          + '<td>' + esc(String(s.request_count || 0)) + '</td>'
+          + '<td>' + esc(formatAge(s.connected_at)) + '</td>';
+        tbody.appendChild(tr);
+      });
+    }
+  }
+
+  if (data.progress) {
+    updateIndexing(data.progress);
+  }
+
+  // Issue #7872: Sync engine config dropdowns + PDB status from heartbeat
+  if (data.engine_config) {
+    updateEngineConfig(data.engine_config);
+  }
+
+  // Issue #8453: Engine docs hydration status
+  if (data.engine_docs) {
+    updateEngineDocs(data.engine_docs);
+  }
+
+  // Issue #7860: Sync telemetry consent state
+  if (data.telemetry) {
+    updateTelemetry(data.telemetry);
+  }
+
+  // Issue #8082: Stale asset health
+  if (data.status && data.status.stale_assets) {
+    updateStaleAssets(data.status.stale_assets);
+  }
+
+  // Issue #7972: Show license status from heartbeat (late-connecting clients)
+  if (data.license_error) {
+    showLicenseError(data.license_error);
+  }
+  if (data.license_verified && !licenseVerifiedShown) {
+    licenseVerifiedShown = true;
+    showLicenseSuccess();
+  }
+}
+
+// ── Engine Config Sync ──
+// Skip heartbeat overwrite for 5s after user changes a config value
+let _cfgCooldown = 0;
+function markConfigChanged() {
+  _cfgCooldown = Date.now() + 5000;
+}
+
+let lastEngineConfig = null; // Issue #8866: cached for instant PDB status update on mode change
+function updateEngineConfig(cfg) {
+  lastEngineConfig = cfg;
+  // Skip sync while user just changed a value (wait for server to process)
+  const inCooldown = Date.now() < _cfgCooldown;
+
+  // Runtime settings — sync dropdowns/toggles to actual server state
+  if (!inCooldown) {
+    const modeSelect = document.getElementById('engine-source-mode');
+    if (modeSelect && cfg.engine_source_mode) {
+      modeSelect.value = cfg.engine_source_mode;
+    }
+    const parserSelect = document.getElementById('engine-parser');
+    if (parserSelect && cfg.engine_parser) {
+      parserSelect.value = cfg.engine_parser;
+    }
+    const fwBtn = document.getElementById('file-watcher-toggle');
+    if (fwBtn && cfg.file_watcher_enabled !== undefined) {
+      fwBtn.classList.toggle('on', cfg.file_watcher_enabled === true);
+      fwBtn.textContent = cfg.file_watcher_enabled ? 'ON' : 'OFF';
+    }
+    const arBtn = document.getElementById('auto-regenerate-toggle');
+    if (arBtn && cfg.auto_generate_metadata !== undefined) {
+      arBtn.classList.toggle('on', cfg.auto_generate_metadata === true);
+      arBtn.textContent = cfg.auto_generate_metadata ? 'ON' : 'OFF';
+    }
+  }
+
+  // PDB Load Config — 4-state display (Issue #7971, #8866)
+  // Cross-reference config flags with runtime pdb_categories indexed status
+  const pdbPanel = document.getElementById('pdb-load-status');
+  if (pdbPanel) {
+    const cats = cfg.pdb_categories || [];
+    const catMap = {};
+    cats.forEach(c => { catMap[c.label] = c; });
+
+    const items = [
+      { label: t('pdb.core'),              config: cfg.load_engine_core,        cat: 'EngineCore' },
+      { label: t('pdb.runtime'),           config: cfg.load_engine_runtime,     cat: 'EngineRuntime' },
+      { label: t('pdb.editor'),            config: cfg.load_engine_editor,      cat: 'EngineEditor' },
+      { label: t('pdb.engine_plugins'),    config: cfg.load_engine_plugins,     cat: 'EnginePlugin' },
+      { label: t('pdb.engine_collection'), config: cfg.include_engine_pdb,      cat: null },
+      { label: t('pdb.engine_metadata'),   config: cfg.include_engine_metadata, cat: null },
+    ];
+
+    pdbPanel.innerHTML = items.map(item => {
+      let catInfo = item.cat ? catMap[item.cat] : null;
+      // Fallback: EngineCore often merged into EngineRuntime
+      if (!catInfo && item.cat === 'EngineCore') catInfo = catMap['EngineRuntime'];
+      const indexed = catInfo ? catInfo.indexed : (item.cat ? false : item.config === true);
+      // Issue #8866: When no catInfo exists, compute needsRegen from config+indexed
+      // so newly-enabled categories show yellow instead of staying gray
+      const needsRegen = catInfo ? !!catInfo.needs_regen : (item.config === true && !indexed);
+      return pdbStatusItem(item.label, item.config, indexed, needsRegen);
+    }).join('');
+  }
+}
+
+function pdbStatusItem(label, configEnabled, indexed, needsRegen) {
+  let cls, text;
+  if (!configEnabled) {
+    cls = 'disabled'; text = t('pdb.off');
+  } else if (needsRegen) {
+    cls = 'needs-regen'; text = t('pdb.needs_regen');
+  } else if (indexed) {
+    cls = 'loaded'; text = t('pdb.loaded');
+  } else {
+    cls = 'pending'; text = t('pdb.pending');
+  }
+  return '<div class="pdb-status-item">'
+    + '<span class="status-dot ' + cls + '"></span>'
+    + '<span>' + esc(label) + ': ' + text + '</span>'
+    + '</div>';
+}
+
+// ── Detailed Indexing (TUI-level) ──
+function updateIndexing(progress) {
+  const container = document.getElementById('indexing-container');
+  container.innerHTML = '';
+
+  // Status + symbols in status bar
+  const statusEl = document.getElementById('indexing-status');
+  const rawStatus = progress.indexing_status || '--';
+  // User-friendly status labels
+  const statusMap = {
+    'Complete': t('indexing.complete'),
+    'Running': t('indexing.indexing') + '...',
+    'Pending': t('indexing.starting'),
+    'Loading': t('indexing.loading_cache'),
+    'Unknown': '--',
+  };
+  const displayStatus = statusMap[rawStatus] || rawStatus;
+  // Header reflects overall indexing state: PDB + Metadata (Issue #8113)
+  const isPdbActive = rawStatus === 'Running' || rawStatus === 'Pending' || rawStatus === 'Loading' || rawStatus === 'Indexing';
+  const isMetadataActive = progress.metadata_progress && progress.metadata_progress.in_progress;
+  const isActive = isPdbActive || isMetadataActive;
+  if (isActive) {
+    statusEl.innerHTML = esc(t('indexing.indexing')) + '<span class="indexing-dots"><span>.</span><span>.</span><span>.</span></span>';
+    statusEl.style.color = 'var(--yellow)';
+    statusEl.style.fontWeight = '600';
+  } else if (rawStatus === 'Complete') {
+    statusEl.textContent = t('indexing.complete');
+    statusEl.style.color = 'var(--green)';
+    statusEl.style.fontWeight = '';
+    // Restore Regenerate button when indexing completes
+    var rBtn = document.querySelector('button[onclick="regenerateAll()"]');
+    if (rBtn) { rBtn.disabled = false; rBtn.textContent = t('controls.regenerate_all'); }
+  } else {
+    statusEl.textContent = displayStatus;
+    statusEl.style.color = 'var(--text-dim)';
+    statusEl.style.fontWeight = '';
+  }
+
+  // Symbols count
+  const totalSymbols = progress.total_symbols;
+  if (totalSymbols != null && totalSymbols > 0) {
+    const symStr = totalSymbols >= 1000000
+      ? (totalSymbols / 1000000).toFixed(1) + 'M'
+      : totalSymbols >= 1000
+        ? Math.round(totalSymbols / 1000) + 'K'
+        : String(totalSymbols);
+    document.getElementById('symbols-value').textContent = symStr;
+  } else {
+    document.getElementById('symbols-value').textContent = '--';
+  }
+
+  // PDB Progress — show even when indexing (total > 0 OR actively running)
+  if (progress.pdb_progress) {
+    const p = progress.pdb_progress;
+    if (p.total_pdbs > 0 || p.percent > 0) {
+      // Snapshot restore reports indexed_pdbs=0 but percent=100 — show as complete
+      const displayCurrent = (p.percent >= 100 && p.indexed_pdbs === 0) ? p.total_pdbs : p.indexed_pdbs;
+      container.appendChild(makeDetailedProgress(t('indexing.pdb'), displayCurrent, p.total_pdbs, 'green'));
+    }
+  }
+
+  // Metadata Progress — show loading state
+  if (progress.metadata_progress) {
+    const m = progress.metadata_progress;
+    if (m.in_progress && m.total > 0) {
+      // Actively generating metadata
+      container.appendChild(makeDetailedProgress(t('indexing.metadata_generating'), m.processed, m.total, 'cyan'));
+    } else if (m.in_progress) {
+      // Loading/waiting state
+      const row = document.createElement('div');
+      row.className = 'progress-row';
+      row.innerHTML = '<div class="progress-label"><span class="label">' + esc(t('indexing.metadata')) + '</span>'
+        + '<span class="detail" style="color:var(--yellow)">' + esc(t('indexing.metadata_loading')) + '</span></div>'
+        + '<div class="progress-bar"><div class="progress-fill cyan" style="width:30%;animation:pulse 1.5s infinite"></div></div>';
+      container.appendChild(row);
+    } else if (m.node_count > 0) {
+      // Complete
+      const row = document.createElement('div');
+      row.className = 'progress-row';
+      row.innerHTML = '<div class="progress-label"><span class="label">' + esc(t('indexing.metadata')) + '</span>'
+        + '<span class="detail"><span style="color:var(--green)">' + esc(String(m.node_count.toLocaleString())) + '</span> ' + esc(t('indexing.nodes')) + ', '
+        + '<span style="color:var(--green)">' + esc(String(m.blueprint_count)) + '</span> ' + esc(t('indexing.bps')) + '</span></div>'
+        + '<div class="progress-bar"><div class="progress-fill complete" style="width:100%"></div></div>';
+      container.appendChild(row);
+    }
+  }
+
+  // Cross-Reference Index
+  if (progress.cross_ref_index && progress.cross_ref_index.total_blueprints > 0) {
+    const x = progress.cross_ref_index;
+    const row = document.createElement('div');
+    row.className = 'progress-row';
+    row.innerHTML = '<div class="progress-label"><span class="label">' + esc(t('indexing.cross_ref')) + '</span>'
+      + '<span class="detail">'
+      + '<span style="color:var(--green)">' + esc(String(x.total_blueprints)) + '</span> ' + esc(t('indexing.bps')) + ', '
+      + '<span style="color:var(--green)">' + esc(String(x.total_call_edges)) + '</span> ' + esc(t('indexing.calls')) + ', '
+      + '<span style="color:var(--green)">' + esc(String(x.total_delegate_edges)) + '</span> ' + esc(t('indexing.delegates'))
+      + (x.build_time_ms > 0 ? '  (' + esc(String((x.build_time_ms / 1000).toFixed(1))) + 's)' : '')
+      + '</span></div>';
+    container.appendChild(row);
+  }
+
+  // Show "empty" state if nothing is indexed and not actively running
+  if (container.children.length === 0 && !isActive) {
+    container.innerHTML = '<div style="color:var(--text-dim);font-size:11px;padding:8px 0">' + esc(t('indexing.no_data')) + '</div>';
+  }
+
+  // PDB Categories
+  const pdbCatEl = document.getElementById('pdb-categories');
+  pdbCatEl.innerHTML = '';
+  if (progress.pdb_categories && progress.pdb_categories.length > 0) {
+    const title = document.createElement('div');
+    title.className = 'category-section-title';
+    title.style.cssText = 'display:flex;justify-content:space-between;align-items:center';
+    const symStr = document.getElementById('symbols-value').textContent;
+    title.innerHTML = esc(t('categories.pdb_sources')) + (symStr && symStr !== '--' ? '<span style="font-size:11px;color:var(--green);font-weight:600">' + esc(symStr) + ' ' + esc(t('indexing.symbols')) + '</span>' : '');
+    pdbCatEl.appendChild(title);
+    progress.pdb_categories.forEach(c => {
+      pdbCatEl.appendChild(makeCategoryRow(c.label, c.count, c.indexed));
+    });
+  }
+
+  // Meta Categories
+  const metaCatEl = document.getElementById('meta-categories');
+  metaCatEl.innerHTML = '';
+  if (progress.meta_categories && progress.meta_categories.length > 0) {
+    const title = document.createElement('div');
+    title.className = 'category-section-title';
+    title.textContent = t('categories.metadata_sources');
+    metaCatEl.appendChild(title);
+    progress.meta_categories.forEach(c => {
+      metaCatEl.appendChild(makeCategoryRow(c.label, c.count, c.parsed));
+    });
+  }
+
+  // Error
+  const errorEl = document.getElementById('indexing-error');
+  errorEl.innerHTML = '';
+  const errMsg = progress.metadata_error;
+  if (errMsg) {
+    // Banner stays the same shape it always had — single .error-banner div.
+    // The "Open in Claude Code →" button is appended as a sibling so the
+    // banner CSS is untouched and the helper owns its own state.
+    const bannerHost = document.createElement('div');
+    const bannerInner = document.createElement('div');
+    bannerInner.className = 'error-banner';
+    bannerInner.textContent = errMsg;  // textContent instead of innerHTML + esc() — same XSS-safety, no escaping ambiguity
+    bannerHost.appendChild(bannerInner);
+    // idPrefix carries 'indexing-error' so the spawned button + result
+    // ids stay unique against the degraded-mode banner's static ids
+    // (`open-claude-code-btn` / `-result`) which still live in the DOM.
+    renderOpenClaudeCodeButton(bannerHost, errMsg, 'open-claude-code-indexing');
+    errorEl.appendChild(bannerHost);
+  }
+}
+
+function makeDetailedProgress(label, current, total, color) {
+  const rawPct = total > 0 ? Math.round((current / total) * 100) : 0;
+  const pct = Math.min(rawPct, 100); // Cap at 100% (counters may accumulate across regenerations)
+  const isComplete = pct >= 100;
+  const displayCurrent = Math.min(current, total); // Don't show > total
+  const div = document.createElement('div');
+  div.className = 'progress-row';
+  div.innerHTML = '<div class="progress-label">'
+    + '<span class="label">' + label + '</span>'
+    + '<span class="detail">'
+    + displayCurrent.toLocaleString() + '/' + total.toLocaleString()
+    + ' (' + pct + '%)'
+    + '</span></div>'
+    + '<div class="progress-bar"><div class="progress-fill ' + (isComplete ? 'complete' : color) + '" style="width:' + pct + '%"></div></div>';
+  return div;
+}
+
+function makeCategoryRow(label, count, done) {
+  const div = document.createElement('div');
+  div.className = 'category-chip';
+  const st = done ? 'done' : 'pending';
+  div.innerHTML = '<span class="category-dot ' + st + '"></span>'
+    + '<span class="category-name">' + esc(label) + '</span>'
+    + '<span class="category-badge ' + st + '">' + count.toLocaleString() + '</span>';
+  return div;
+}
+
+// ── Event Log ──
+function addEvent(type, data) {
+  const now = new Date().toLocaleTimeString();
+  const typeClass = type.replace(/_/g, '-');
+  let detail = '';
+  if (data.session_id) detail += data.session_id.substring(0, 8);
+  if (data.tool) detail += ' ' + data.tool;
+  if (data.operation) detail += '.' + data.operation;
+
+  eventLog.unshift({ time: now, type, typeClass, detail });
+  if (eventLog.length > MAX_EVENTS) eventLog.pop();
+  renderEvents();
+}
+
+function renderEvents() {
+  const container = document.getElementById('event-log');
+  container.innerHTML = eventLog.map(e =>
+    '<div class="event-entry evt-' + e.typeClass + '"><span class="event-time">' + e.time
+    + '</span><span class="event-badge ' + e.typeClass + '">' + e.type
+    + '</span><span>' + esc(e.detail) + '</span></div>'
+  ).join('');
+}
+
+// ── Sub-tab Switching ──
+function switchSubTab(btn, name) {
+  const card = btn.closest('.card');
+  card.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+  card.querySelectorAll('.sub-tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  card.querySelector('#subtab-' + name).classList.add('active');
+}
+
+// ── Result Formatting ──
+function formatResult(result) {
+  // MCP tools return {content: [{type:"text", text: "JSON string"}]}
+  // Extract the inner text and parse it for pretty display
+  try {
+    const text = result?.content?.[0]?.text;
+    if (text) {
+      try {
+        const parsed = JSON.parse(text);
+        return JSON.stringify(parsed, null, 2);
+      } catch (e) {
+        // Not JSON — return raw text (e.g. plain string responses)
+        return text;
+      }
+    }
+  } catch (e) { /* fall through */ }
+  // Fallback: stringify the whole result
+  return JSON.stringify(result, null, 2);
+}
+
+// ── Actions ──
+async function runAction(tool, operation, params) {
+  const btn = event ? event.target : null;
+  if (btn) { btn.classList.add('loading'); btn.disabled = true; }
+
+  try {
+    const resp = await fetch('/api/daemon/action', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tool, operation, params: params || {} })
+    });
+    const result = await resp.json();
+
+    const activeTab = document.querySelector('.tab.active').dataset.tab;
+    const panel = document.getElementById(activeTab + '-result')
+      || document.getElementById('dashboard-result');
+
+    if (result.success) {
+      panel.textContent = formatResult(result.result);
+      panel.style.color = 'var(--text)';
+      showToast('success', tool + '.' + operation + ' (' + result.duration_ms + 'ms)');
+    } else {
+      // Issue #16145: the action endpoint now reports top-level success:false for
+      // tool errors (incl. cost-guard rejections). Surface the machine error_code
+      // (e.g. confirm_required) as a tag prefix so the user can tell a retriable
+      // failure from a fatal one; the human message stays in result.error.
+      const body = result.error || t('toast.action_failed');
+      const msg = result.error_code ? '[' + result.error_code + '] ' + body : body;
+      panel.textContent = msg;
+      panel.style.color = 'var(--red)';
+      showToast('error', msg);
+    }
+  } catch (err) {
+    showToast('error', t('toast.network_error', err.message));
+  } finally {
+    if (btn) { btn.classList.remove('loading'); btn.disabled = false; }
+  }
+}
+
+function confirmAction(name, tool, operation, params) {
+  const modal = document.getElementById('confirm-modal');
+  document.getElementById('confirm-message').textContent = name + '?';
+  modal.classList.add('visible');
+
+  document.getElementById('confirm-ok').onclick = () => {
+    closeModal();
+    runAction(tool, operation, params);
+    // Reset cacheCleared flag when regeneration starts
+    if (operation === 'regenerate_all' || operation === 'regenerate_pdb' || operation === 'regenerate_metadata') {
+      cacheCleared = false;
+      showToast('info', t('toast.regen_started'));
+      resetIndexingUI();
+    }
+  };
+}
+
+function resetIndexingUI() {
+  var statusEl = document.getElementById('indexing-status');
+  statusEl.innerHTML = esc(t('indexing.indexing')) + '<span class="indexing-dots"><span>.</span><span>.</span><span>.</span></span>';
+  statusEl.style.color = 'var(--yellow)';
+  statusEl.style.fontWeight = '600';
+  var container = document.getElementById('indexing-container');
+  container.innerHTML = '<div class="progress-row">'
+    + '<div class="progress-label"><span class="label">' + esc(t('indexing.pdb')) + '</span><span class="detail">' + esc(t('indexing.clearing')) + '</span></div>'
+    + '<div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div></div>';
+  var btn = document.querySelector('button[onclick="regenerateAll()"]');
+  if (btn) { btn.disabled = true; btn.textContent = t('controls.regenerating'); }
+}
+
+function closeModal() {
+  document.getElementById('confirm-modal').classList.remove('visible');
+}
+
+function runCommandlet() {
+  const name = document.getElementById('commandlet-name').value.trim();
+  if (!name) { showToast('error', t('error.enter_commandlet_name')); return; }
+  runAction('ue_build_pipeline', 'run_commandlet', { commandlet_name: name });
+}
+
+function validateAsset() {
+  const name = document.getElementById('validate-asset-name').value.trim();
+  if (!name) { showToast('error', t('error.enter_asset_name')); return; }
+  runAction('ue_editor_assets', 'validate_asset', { asset_path: name });
+}
+
+function setEngineSourceMode(value) {
+  const scanEnabled = value !== 'disabled';
+  // The #9383 cost guard only requires confirm on an OFF→ON scan transition
+  // (backend checks !current_scan). Mirror that here so an already-scan-on mode
+  // switch (e.g. extended→full) doesn't show a misleading "this enables scan"
+  // warning. Unknown state (no heartbeat yet) → prompt, to stay safe.
+  const scanAlreadyOn = !!(lastEngineConfig && lastEngineConfig.engine_source_scan === true);
+
+  // Issue #15997: enabling engine source scan trips the #9383 cost guard
+  // (~46 GB peak RAM / ~5 min rebuild), which rejects the change unless
+  // confirm=true is sent. Without a confirm flow the dashboard only showed a
+  // cryptic cost-error toast and the SSE heartbeat snapped the dropdown back to
+  // the live value after the 5s cooldown — so non-disabled modes never stuck.
+  // Surface the cost (mirrors the memory-transition confirm) and send
+  // confirm:true on accept; revert the <select> cleanly on cancel.
+  if (scanEnabled && !scanAlreadyOn && !confirm(t('settings.engine_source_confirm', value))) {
+    const modeSelect = document.getElementById('engine-source-mode');
+    // Revert to the last known server mode; fall back to 'disabled' (the DOM /
+    // server default, and the safe no-cost choice) when no heartbeat has run yet.
+    const revertTo = (lastEngineConfig && lastEngineConfig.engine_source_mode) || 'disabled';
+    if (modeSelect) modeSelect.value = revertTo;
+    return;
+  }
+
+  markConfigChanged();
+  runAction('ue_cache_control', 'set_engine_config', {
+    engine_source_mode: value,
+    engine_source_scan: scanEnabled,
+    confirm: scanEnabled
+  });
+  showToast('info', scanEnabled
+    ? t('toast.engine_source_on', value)
+    : t('toast.engine_source_off'));
+
+  // Issue #8866: Immediately update PDB status colors without waiting for heartbeat.
+  // Derive load flags from the new mode (mirrors PdbLoadConfig::with_engine_source_mode).
+  const modeFlags = {
+    'disabled': { core: false, runtime: false, editor: false, plugins: false, pdb: false, meta: false },
+    'core':     { core: true,  runtime: false, editor: false, plugins: false, pdb: true,  meta: false },
+    'extended': { core: true,  runtime: true,  editor: false, plugins: false, pdb: true,  meta: false },
+    'full':     { core: true,  runtime: true,  editor: true,  plugins: true,  pdb: true,  meta: true  },
+  };
+  const flags = modeFlags[value];
+  if (flags && lastEngineConfig) {
+    lastEngineConfig.load_engine_core = flags.core;
+    lastEngineConfig.load_engine_runtime = flags.runtime;
+    lastEngineConfig.load_engine_editor = flags.editor;
+    lastEngineConfig.load_engine_plugins = flags.plugins;
+    lastEngineConfig.include_engine_pdb = flags.pdb;
+    lastEngineConfig.include_engine_metadata = flags.meta;
+    updateEngineConfig(lastEngineConfig);
+  }
+}
+
+function setEngineParser(value) {
+  markConfigChanged();
+  runAction('ue_cache_control', 'set_engine_config', { engine_parser: value });
+  showToast('info', t('toast.engine_parser', value));
+}
+
+function regenerateAll() {
+  // Pass current UI mode state as explicit include_engine param
+  // so regenerate_all doesn't depend on runtime config timing
+  const modeSelect = document.getElementById('engine-source-mode');
+  const includeEngine = modeSelect && modeSelect.value !== 'disabled';
+  confirmAction(
+    t('controls.regenerate_all_confirm'),
+    'ue_cache_control',
+    'regenerate_all',
+    { include_engine: includeEngine }
+  );
+}
+
+// ── Utilities ──
+function formatUptime(secs) {
+  if (secs == null) return '--:--:--';
+  const h = Math.floor(secs / 3600);
+  const m = Math.floor((secs % 3600) / 60);
+  const s = secs % 60;
+  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+}
+
+function formatAge(iso) {
+  if (!iso) return '-';
+  const time = new Date(iso).getTime();
+  if (isNaN(time)) return '-';
+  const diff = Math.floor((Date.now() - time) / 1000);
+  if (diff < 60) return t('time.seconds_ago', diff);
+  if (diff < 3600) return t('time.minutes_ago', Math.floor(diff / 60));
+  return t('time.hours_ago', Math.floor(diff / 3600));
+}
+
+function esc(s) {
+  if (!s) return '';
+  const el = document.createElement('span');
+  el.textContent = s;
+  return el.innerHTML;
+}
+
+function showToast(type, message) {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = 'toast toast-' + type;
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 4000);
+}
+
+// ── Initial Load (with retry for slow daemon startup) ──
+async function loadInitialState(attempt) {
+  attempt = attempt || 1;
+  const maxAttempts = 30; // 30 x 2s = 60s max wait
+  try {
+    const [statusRes, sessionsRes, progressRes] = await Promise.all([
+      fetch('/api/daemon/status'),
+      fetch('/api/daemon/sessions'),
+      fetch('/api/daemon/progress'),
+    ]);
+    const status = await statusRes.json();
+    const sessions = await sessionsRes.json();
+    const progress = await progressRes.json();
+    updateOverview({ status, sessions: sessions.sessions, progress });
+    document.getElementById('connection-status').textContent = t('header.connected');
+    document.getElementById('connection-status').className = 'badge badge-green';
+    loadAiClients(); // Issue #8288: Load AI client config status
+  } catch (err) {
+    console.warn('Initial load attempt ' + attempt + ' failed:', err.message);
+    document.getElementById('connection-status').textContent = t('header.connecting', attempt);
+    document.getElementById('connection-status').className = 'badge badge-red';
+    if (attempt < maxAttempts) {
+      setTimeout(() => loadInitialState(attempt + 1), 2000);
+    }
+  }
+}
+
+// Health status is determined by SSE connection state (onopen/onerror).
+// No separate health check tool call needed — avoids resource accumulation.
+
+// ── Telemetry Consent (Issue #7860) ──
+// ── Open Folder (click on Project/Engine path chip) ──
+function openFolder(elementOrId) {
+  const el = typeof elementOrId === 'string'
+    ? document.getElementById(elementOrId)
+    : elementOrId;
+  if (!el || el.textContent === '--') return;
+  const path = el.textContent.trim();
+  fetch('/api/daemon/open-folder', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ path })
+  }).then(r => r.json()).then(d => {
+    if (!d.success) showToast('error', d.error || t('toast.open_folder_failed'));
+  }).catch(() => showToast('error', t('toast.open_folder_failed')));
+}
+
+// ── AI Client Configuration (Issue #8288) ──
+var _lastAiClients = null; // Cache for re-rendering on language switch (Issue #8660)
+
+async function loadAiClients() {
+  try {
+    const resp = await fetch('/api/daemon/ai-clients');
+    const data = await resp.json();
+    _lastAiClients = data.clients;
+    renderAiClients(data.clients);
+  } catch (e) {
+    const el = document.getElementById('ai-clients-list');
+    if (el) el.innerHTML = '<div class="setting-row" style="color:var(--red)">' + esc(t('settings.ai_failed')) + '</div>';
+  }
+}
+
+// escapeHtml aliases esc() for readability in AI client rendering
+function escapeHtml(s) { return esc(s); }
+
+function renderAiClientRow(client) {
+  var row = document.createElement('div');
+  row.className = 'setting-row';
+  var isLocal = client.scope === 'project_local';
+  var isEnabled = client.status === 'enabled';
+  var statusLabels = { enabled: t('settings.ai_installed'), disabled: t('settings.ai_not_installed'), global_only: t('settings.ai_global_only') };
+  var statusText = statusLabels[client.status] || client.status;
+  var toggleHtml;
+  if (isLocal) {
+    var btnLabel = isEnabled ? t('settings.ai_uninstall') : t('settings.ai_install');
+    toggleHtml = '<div class="setting-toggle-group">' +
+      '<span class="setting-status ' + (isEnabled ? 'on' : 'off') + '">' + escapeHtml(statusText) + '</span>' +
+      '<button class="action-btn ' + (isEnabled ? 'btn-uninstall' : 'btn-install') + '" onclick="toggleAiClient(\'' + client.id + '\', ' + !isEnabled + ')">' + btnLabel + '</button>' +
+      '</div>';
+  } else {
+    toggleHtml = '<div class="setting-toggle-group">' +
+      '<span class="setting-status off" style="font-size:11px">' + escapeHtml(client.note || t('settings.ai_global_only')) + '</span>' +
+      '</div>';
+  }
+  var experimentalBadge = client.experimental
+    ? ' <span style="font-size:9px;padding:1px 5px;border-radius:3px;background:var(--yellow,#b58900);color:#000;margin-left:6px;vertical-align:middle">' + esc(t('settings.ai_experimental')) + '</span>'
+    : '';
+  var pathInfo = client.config_path
+    ? '<div class="setting-desc" style="font-size:10px;opacity:0.6">' + escapeHtml(client.config_path) + '</div>'
+    : '';
+  var globalWarning = client.global_config_detected
+    ? '<div style="font-size:10px;color:var(--yellow,#e5c07b);margin-top:2px">&#9888; ' + escapeHtml(client.global_config_hint || t('settings.ai_global_hint')) + '</div>'
+    : '';
+  row.innerHTML = '<div><div class="setting-label">' + escapeHtml(client.name) + experimentalBadge + '</div>' + pathInfo + globalWarning + '</div>' + toggleHtml;
+  return row;
+}
+
+function renderAiClients(clients) {
+  const container = document.getElementById('ai-clients-list');
+  if (!container) return;
+  container.innerHTML = '';
+
+  // Issue #8470: Separate primary client (Claude Code) from others
+  var primary = [];
+  var others = [];
+  clients.forEach(function(client) {
+    if (client.id === 'claude_code') {
+      primary.push(client);
+    } else {
+      others.push(client);
+    }
+  });
+
+  // Always-visible: Claude Code
+  primary.forEach(function(client) {
+    container.appendChild(renderAiClientRow(client));
+  });
+
+  // Collapsible: all other clients
+  if (others.length > 0) {
+    var enabledCount = others.filter(function(c) { return c.status === 'enabled'; }).length;
+    var summaryText = enabledCount > 0
+      ? t('settings.ai_clients_count', enabledCount, others.length)
+      : t('settings.ai_clients_label', others.length);
+
+    var toggle = document.createElement('div');
+    toggle.className = 'advanced-toggle' + (localStorage.getItem('aiClientsExpanded') === '1' ? ' open' : '');
+    toggle.onclick = function() { toggleAiClientsExpanded(); };
+    toggle.innerHTML = '<span class="arrow">&#9654;</span>' +
+      '<span class="title">' + esc(t('settings.ai_other_clients')) + '</span>' +
+      '<span class="advanced-summary" id="advanced-summary">' + escapeHtml(summaryText) + '</span>';
+    container.appendChild(toggle);
+
+    var content = document.createElement('div');
+    content.id = 'advanced-settings-content';
+    content.className = 'advanced-content' + (localStorage.getItem('aiClientsExpanded') === '1' ? ' open' : '');
+    others.forEach(function(client) {
+      content.appendChild(renderAiClientRow(client));
+    });
+    container.appendChild(content);
+  }
+}
+
+async function toggleAiClient(clientId, enabled) {
+  try {
+    var resp = await fetch('/api/daemon/ai-clients', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ client: clientId, enabled: enabled })
+    });
+    var data = await resp.json();
+    if (data.success) {
+      showToast('success', data.message || (clientId + ' ' + (enabled ? t('settings.ai_installed') : t('settings.ai_not_installed'))));
+      loadAiClients();
+    } else {
+      showToast('error', data.error || (t('toast.action_failed') + ': ' + clientId));
+    }
+  } catch (e) {
+    showToast('error', t('toast.network_error', e.message));
+  }
+}
+
+// ── AI Clients Collapsible (Issue #8470) ──
+function toggleAiClientsExpanded() {
+  const content = document.getElementById('advanced-settings-content');
+  const toggle = content ? content.previousElementSibling : null;
+  if (!content || !toggle) return;
+  const isOpen = content.classList.toggle('open');
+  toggle.classList.toggle('open', isOpen);
+  localStorage.setItem('aiClientsExpanded', isOpen ? '1' : '0');
+}
+
+// ── Settings Tab Toggles ──
+function toggleWatcher() {
+  const btn = document.getElementById('watcher-toggle');
+  const on = !btn.classList.contains('on');
+  btn.classList.toggle('on', on);
+  const st = document.getElementById('watcher-status');
+  if (st) { st.textContent = on ? t('settings.enabled') : t('settings.disabled'); st.className = 'setting-status ' + (on ? 'on' : 'off'); }
+  runAction('ue_cache_control', 'set_engine_config', { file_watcher_enabled: on });
+  showToast('info', t('toast.file_watcher', on ? t('settings.enabled') : t('settings.disabled')));
+}
+
+function toggleAutoRegen() {
+  const btn = document.getElementById('auto-regen-toggle');
+  const on = !btn.classList.contains('on');
+  btn.classList.toggle('on', on);
+  const st = document.getElementById('auto-regen-status');
+  if (st) { st.textContent = on ? t('settings.enabled') : t('settings.disabled'); st.className = 'setting-status ' + (on ? 'on' : 'off'); }
+  runAction('ue_cache_control', 'set_engine_config', { auto_generate_metadata: on });
+  showToast('info', t('toast.auto_regen', on ? t('settings.enabled') : t('settings.disabled')));
+}
+
+function updateTelemetry(td) {
+  const toggle = document.getElementById('telemetry-toggle');
+  if (toggle) {
+    toggle.classList.toggle('on', td.enabled);
+  }
+  const status = document.getElementById('telemetry-status');
+  if (status) {
+    status.textContent = td.enabled ? t('settings.enabled') : t('settings.disabled');
+    status.className = 'setting-status ' + (td.enabled ? 'on' : 'off');
+  }
+  const overlay = document.getElementById('consent-overlay');
+  if (overlay && !overlay.classList.contains('confirmed')) {
+    overlay.style.display = td.state === 'not_configured' ? '' : 'none';
+  }
+}
+
+async function setConsent(enabled) {
+  try {
+    const resp = await fetch('/api/daemon/telemetry', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ enabled })
+    });
+    const data = await resp.json();
+    if (data.success) {
+      const overlay = document.getElementById('consent-overlay');
+      const iconEl = document.getElementById('consent-confirm-icon');
+      const textEl = document.getElementById('consent-confirm-text');
+      if (enabled) {
+        iconEl.className = 'consent-checkmark';
+        iconEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>';
+        textEl.textContent = t('consent.enabled_thanks');
+      } else {
+        iconEl.className = 'consent-deny-mark';
+        iconEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="7" y1="7" x2="17" y2="17"/><line x1="17" y1="7" x2="7" y2="17"/></svg>';
+        textEl.textContent = t('consent.disabled');
+      }
+      overlay.classList.add('confirmed');
+      overlay.classList.add('fade-out');
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        overlay.classList.remove('confirmed', 'fade-out');
+      }, 1300);
+      updateTelemetry({ state: data.state, enabled });
+    }
+  } catch (e) {
+    showToast('error', t('toast.action_failed') + ': ' + e.message);
+  }
+}
+
+async function toggleConsent() {
+  const toggle = document.getElementById('telemetry-toggle');
+  const newState = !toggle.classList.contains('on');
+  await setConsent(newState);
+}
+
+// ── Issue #8082: Asset Health (stale assets) ──
+function updateStaleAssets(staleData) {
+  const section = document.getElementById('asset-health-section');
+  if (!section) return;
+  if (!staleData || staleData.stale_count === 0) {
+    section.style.display = 'none';
+    return;
+  }
+  section.style.display = '';
+  const badge = document.getElementById('stale-badge');
+  document.getElementById('stale-count').textContent = staleData.stale_count;
+  badge.className = 'stale-badge';
+
+  // Version distribution
+  const distEl = document.getElementById('stale-distribution');
+  distEl.innerHTML = '';
+  if (staleData.version_distribution) {
+    Object.entries(staleData.version_distribution).sort((a,b) => b[1]-a[1]).forEach(([label, count]) => {
+      const item = document.createElement('span');
+      item.className = 'dist-item';
+      item.textContent = label + ': ' + count;
+      distEl.appendChild(item);
+    });
+  }
+
+  // Stale samples
+  const samplesEl = document.getElementById('stale-samples');
+  samplesEl.innerHTML = '';
+  if (staleData.stale_samples && staleData.stale_samples.length > 0) {
+    staleData.stale_samples.forEach(s => {
+      const div = document.createElement('div');
+      div.className = 'sample';
+      div.textContent = esc(s.path) + ' (' + esc(s.ue_version_label) + ')';
+      samplesEl.appendChild(div);
+    });
+  }
+}
+
+function runResaveAssets(mode) {
+  if (mode === 'stale_only' && !confirm(t('asset_health.resave_confirm'))) return;
+  runAction('ue_cache_control', 'resave_assets', { mode: mode });
+  showToast('info', t('toast.resave_started', mode));
+}
+
+// ── Issue #7972: License Error Modal ──
+let licenseEditorPath = null;
+let licenseErrorShown = false;
+let licenseVerifiedShown = false;
+
+function showLicenseSuccess() {
+  if (licenseErrorShown) return;
+  const overlay = document.getElementById('license-overlay');
+  document.getElementById('license-success').style.display = '';
+  document.getElementById('license-error').style.display = 'none';
+  overlay.style.display = '';
+  // Auto fade-out after 2 seconds
+  setTimeout(() => { overlay.classList.add('fade-out'); }, 2000);
+  setTimeout(() => { overlay.style.display = 'none'; overlay.classList.remove('fade-out'); }, 3000);
+}
+
+function showLicenseError(data) {
+  // Issue #20405: if we're running inside the native wry webview and the window is
+  // tray-hidden (daemon auto-spawn after consent), ask the native side to surface
+  // it so a license error is never missed. Posted BEFORE the licenseErrorShown
+  // early-return so a re-broadcast while hidden still re-reveals. `window.ipc` is
+  // undefined in a plain browser, so this is a safe no-op there.
+  if (window.ipc && window.ipc.postMessage) window.ipc.postMessage('show_window');
+  if (licenseErrorShown) return;
+  licenseErrorShown = true;
+  const overlay = document.getElementById('license-overlay');
+  document.getElementById('license-success').style.display = 'none';
+  document.getElementById('license-error').style.display = '';
+  document.getElementById('license-error-message').textContent = data.message;
+  if (data.editor_path) {
+    licenseEditorPath = data.editor_path;
+    document.getElementById('license-open-editor-btn').style.display = '';
+  }
+  overlay.style.display = '';
+}
+
+function openEditor() {
+  if (!licenseEditorPath) return;
+  fetch('/api/daemon/open-editor', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ editor_path: licenseEditorPath })
+  }).then(() => {
+    showToast('info', t('toast.launching_editor'));
+  }).catch(() => {
+    showToast('error', t('toast.launch_failed'));
+  });
+}
+
+function closeLicenseError() {
+  fetch('/api/daemon/exit', { method: 'POST' }).catch(() => {});
+  document.getElementById('license-overlay').style.display = 'none';
+  showToast('info', t('toast.shutting_down'));
+}
+
+// ── Memory Breakdown (Issue #8040) ──
+async function showMemoryBreakdown() {
+  const modal = document.getElementById('memory-modal');
+  const content = document.getElementById('memory-breakdown-content');
+  content.innerHTML = '<div style="color:var(--text-dim)">' + esc(t('modal.loading_breakdown')) + '</div>';
+  modal.classList.add('visible');
+
+  try {
+    const resp = await fetch('/api/daemon/memory-breakdown');
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    renderMemoryBreakdown(content, data);
+  } catch (err) {
+    content.innerHTML = '<div style="color:var(--red)">' + esc(t('toast.action_failed')) + ': ' + esc(String(err.message || err)) + '</div>';
+  }
+}
+
+function renderMemoryBreakdown(container, data) {
+  const cats = (data.categories || []).slice().sort((a, b) => b.mb - a.mb);
+
+  let html = '<div style="margin-bottom:12px">';
+  html += '<div style="display:flex;justify-content:space-between;margin-bottom:4px">'
+    + '<span style="color:var(--text-dim)">' + esc(t('modal.rss')) + '</span>'
+    + '<span style="color:var(--green);font-weight:600">' + formatMemMB(data.rss_mb) + '</span></div>';
+  html += '<div style="display:flex;justify-content:space-between;margin-bottom:4px">'
+    + '<span style="color:var(--text-dim)">' + esc(t('modal.private')) + '</span>'
+    + '<span style="color:var(--cyan);font-weight:600">' + formatMemMB(data.private_mb) + '</span></div>';
+  html += '<div style="display:flex;justify-content:space-between;margin-bottom:4px">'
+    + '<span style="color:var(--text-dim)">' + esc(t('modal.measured_total')) + '</span>'
+    + '<span style="color:var(--text-bright);font-weight:600">' + formatMemMB(data.total_measured_mb) + '</span></div>';
+  html += '</div>';
+
+  html += '<div style="border-top:1px solid var(--border-light);padding-top:8px">';
+  cats.forEach(function(c) {
+    if (c.mb < 0.1) return;
+    var barPct = data.rss_mb > 0 ? Math.min(100, (c.mb / data.rss_mb) * 100) : 0;
+    var estMark = c.is_estimate ? ' <span style="color:var(--text-dim);font-size:10px">~est</span>' : '';
+    var countStr = c.entry_count != null ? ' <span style="color:var(--text-dim);font-size:10px">(' + c.entry_count.toLocaleString() + ')</span>' : '';
+    html += '<div style="margin-bottom:6px">'
+      + '<div style="display:flex;justify-content:space-between;font-size:12px">'
+      + '<span>' + esc(c.name) + countStr + estMark + '</span>'
+      + '<span style="color:var(--text-bright)">' + formatMemMB(c.mb) + '</span></div>'
+      + '<div class="progress-bar" style="height:4px"><div class="progress-fill cyan" style="width:' + barPct.toFixed(1) + '%"></div></div>'
+      + '</div>';
+  });
+
+  if (data.gap_mb > 0) {
+    html += '<div style="margin-top:8px;display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim)">'
+      + '<span>' + esc(t('modal.unmeasured')) + '</span>'
+      + '<span>' + formatMemMB(data.gap_mb) + '</span></div>';
+  }
+  html += '</div>';
+
+  container.innerHTML = html;
+}
+
+function formatMemMB(mb) {
+  if (mb >= 1024) return (mb / 1024).toFixed(1) + ' GB';
+  if (mb >= 100) return mb.toFixed(0) + ' MB';
+  if (mb >= 1) return mb.toFixed(1) + ' MB';
+  if (mb >= 0.001) return (mb * 1024).toFixed(0) + ' KB';
+  return '0 KB';
+}
+
+function closeMemoryModal() {
+  document.getElementById('memory-modal').classList.remove('visible');
+}
+
+// ── Memory Management (Issue #8371) ──
+let memoryStatusLoaded = false;
+
+function loadMemoryStatus() {
+  fetch('/api/daemon/memory-status')
+    .then(r => r.json())
+    .then(data => {
+      memoryStatusLoaded = true;
+      renderMemoryPanel(data);
+    })
+    .catch(err => console.warn('memory-status fetch failed:', err));
+}
+
+function renderMemoryPanel(data) {
+  const sel = document.getElementById('memory-mode-select');
+  const inp = document.getElementById('memory-limit-input');
+  const limitRow = document.getElementById('memory-limit-row');
+  const budgetBar = document.getElementById('memory-budget-bar');
+  const btn = document.getElementById('memory-apply-btn');
+  const desc = document.getElementById('memory-mode-desc');
+
+  if (!sel || !inp) return;
+
+  // 'auto' resolves to 'bounded' or 'unbounded' at startup; the dropdown
+  // only offers those two concrete modes. Coerce 'auto' to the resolved
+  // value so the select doesn't silently become empty.
+  const rawMode = data.memory_mode || 'unbounded';
+  const mode = (rawMode === 'auto') ? (data.is_bounded ? 'bounded' : 'unbounded') : rawMode;
+  sel.value = mode;
+  sel.disabled = false;
+  inp.value = data.limit_mb || 4096;
+  inp.disabled = false;
+  btn.disabled = false;
+
+  desc.textContent = mode === 'bounded'
+    ? t('settings.memory_bounded_desc')
+    : t('settings.memory_unbounded_desc');
+
+  // Show limit row + budget bar only in bounded mode
+  const isBounded = mode === 'bounded';
+  limitRow.style.display = isBounded ? 'flex' : 'none';
+  budgetBar.style.display = isBounded ? 'block' : 'none';
+
+  if (isBounded && data.budget) {
+    const warmMB = (data.budget.current_warm_bytes / (1024 * 1024)).toFixed(0);
+    const budgetMB = (data.budget.warm_budget_bytes / (1024 * 1024)).toFixed(0);
+    const pct = data.budget.utilization_pct || 0;
+    document.getElementById('memory-budget-pct').textContent = pct.toFixed(1) + '%';
+    document.getElementById('memory-budget-detail').textContent = warmMB + ' / ' + budgetMB + ' MB';
+    const fill = document.getElementById('memory-bar-fill');
+    fill.style.width = Math.min(pct, 100) + '%';
+    fill.className = 'memory-bar-fill' + (pct > 90 ? ' danger' : pct > 70 ? ' warning' : '');
+  }
+
+  // Disable controls during transition
+  if (data.transition && data.transition.state === 'running') {
+    sel.disabled = true;
+    inp.disabled = true;
+    btn.disabled = true;
+    btn.textContent = t('settings.memory_transitioning');
+  } else {
+    btn.textContent = t('settings.memory_apply');
+  }
+
+  // Enable Apply only when values differ from current
+  sel.onchange = inp.oninput = () => onMemoryFormChange(data);
+}
+
+function onMemoryFormChange(currentData) {
+  const sel = document.getElementById('memory-mode-select');
+  const inp = document.getElementById('memory-limit-input');
+  const btn = document.getElementById('memory-apply-btn');
+  const limitRow = document.getElementById('memory-limit-row');
+  const budgetBar = document.getElementById('memory-budget-bar');
+
+  const isBounded = sel.value === 'bounded';
+  limitRow.style.display = isBounded ? 'flex' : 'none';
+  budgetBar.style.display = (isBounded && currentData.memory_mode === 'bounded') ? 'block' : 'none';
+
+  const modeChanged = sel.value !== currentData.memory_mode;
+  const limitChanged = isBounded && parseInt(inp.value) !== currentData.limit_mb;
+  btn.disabled = !(modeChanged || limitChanged);
+}
+
+function applyMemoryTransition() {
+  const mode = document.getElementById('memory-mode-select').value;
+  const limit = parseInt(document.getElementById('memory-limit-input').value);
+  const btn = document.getElementById('memory-apply-btn');
+
+  const msg = mode === 'bounded'
+    ? t('settings.memory_confirm_bounded', limit)
+    : t('settings.memory_confirm_unbounded');
+
+  if (!confirm(msg)) return;
+
+  btn.disabled = true;
+  btn.textContent = t('settings.memory_applying');
+  showMemoryProgressOverlay();
+
+  const params = { memory_mode: mode };
+  if (mode === 'bounded') params.memory_limit_mb = limit;
+
+  fetch('/api/daemon/action', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tool: 'ue_cache_control', operation: 'set_engine_config', params: params })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (!data.success) {
+      hideMemoryProgressOverlay();
+      alert(t('error.transition_failed', data.error || 'unknown'));
+    }
+    // On success, the SSE events handle progress + completion
+    loadMemoryStatus();
+  })
+  .catch(err => {
+    hideMemoryProgressOverlay();
+    alert(t('error.transition_request_failed', err));
+  })
+  .finally(() => {
+    btn.textContent = t('settings.memory_apply');
+  });
+}
+
+function handleMemoryTransitionEvent(type, data) {
+  const overlay = document.getElementById('memory-progress-overlay');
+  const phase = document.getElementById('memory-progress-phase');
+  const bar = document.getElementById('memory-progress-bar');
+  const pct = document.getElementById('memory-progress-pct');
+
+  switch (type) {
+    case 'memory_transition_started':
+      showMemoryProgressOverlay();
+      phase.textContent = data.from_mode + ' → ' + data.to_mode;
+      bar.style.width = '0%';
+      pct.textContent = '0%';
+      break;
+    case 'memory_transition_progress':
+      phase.textContent = data.phase;
+      bar.style.width = data.progress_pct + '%';
+      pct.textContent = data.progress_pct + '%';
+      break;
+    case 'memory_transition_completed':
+      phase.textContent = t('settings.memory_complete', data.total_elapsed_ms);
+      bar.style.width = '100%';
+      pct.textContent = '100%';
+      setTimeout(() => {
+        hideMemoryProgressOverlay();
+        loadMemoryStatus();
+        // Show restart prompt for real RSS savings
+        showRestartPrompt();
+      }, 1500);
+      break;
+    case 'memory_transition_failed':
+      phase.textContent = t('settings.memory_failed_at', data.phase, data.error);
+      bar.style.width = '0%';
+      pct.textContent = t('error.generic');
+      bar.classList.add('danger');
+      setTimeout(hideMemoryProgressOverlay, 3000);
+      break;
+  }
+}
+
+function showMemoryProgressOverlay() {
+  document.getElementById('memory-progress-overlay').style.display = 'flex';
+}
+
+function hideMemoryProgressOverlay() {
+  document.getElementById('memory-progress-overlay').style.display = 'none';
+  document.getElementById('memory-progress-bar').classList.remove('danger');
+}
+
+function showRestartPrompt() {
+  const restartBtn = document.getElementById('memory-restart-btn');
+  if (restartBtn) restartBtn.style.display = 'inline-block';
+}
+
+// ── Configuration Error Banner (Issue #10769 PR 4) ──
+//
+// Reads `status.degraded_mode` + `status.config_errors[]` from
+// `/api/daemon/status` (and SSE `config_changed` events in PR 6) and
+// shows/hides the #config-error-banner. The banner stays in the DOM but
+// `display:none` when healthy, so it can flicker on/off as the user fixes
+// .env without page reload.
+function applyDegradedBanner(status) {
+  const banner = document.getElementById('config-error-banner');
+  if (!banner) return; // Defensive: pre-PR-4 dashboards lack the element.
+
+  const isDegraded = !!(status && status.degraded_mode);
+  if (!isDegraded) {
+    banner.style.display = 'none';
+    document.body.classList.remove('degraded');
+    // Issue #11147: clear recovery suggestions when daemon recovers so a
+    // stale list doesn't linger if the banner re-shows for a different
+    // error class.
+    const sugHost = document.getElementById('recovery-suggestions');
+    if (sugHost) {
+      sugHost.hidden = true;
+      sugHost.innerHTML = '';
+    }
+    return;
+  }
+
+  // Populate one <li> per reason. The fix_instruction_key is resolved
+  // through I18N.t() so the message follows the user's language selection.
+  // Path is shown verbatim — it's a user-supplied string, never localized.
+  const list = document.getElementById('config-error-list');
+  if (list) {
+    list.innerHTML = '';
+    const errors = status.config_errors || [];
+    errors.forEach(err => {
+      const li = document.createElement('li');
+      const codeSpan = document.createElement('code');
+      codeSpan.className = 'config-error-banner__code';
+      codeSpan.textContent = err.code;
+      li.appendChild(codeSpan);
+      li.appendChild(document.createTextNode(' '));
+      // Issue #10769 PR 8: pass `extra` (variant-specific values like
+      // EngineVersionMismatch's [assoc, uproject_engine, env_engine]) into
+      // I18N.t so parameterized strings ("expects {0} ({1}); .env points
+      // at {2}") substitute correctly. For non-parameterized variants the
+      // extra Vec is empty and t() ignores trailing args.
+      const fixSpan = document.createElement('span');
+      const extraArgs = Array.isArray(err.extra) ? err.extra : [];
+      fixSpan.textContent = t.apply(null, [err.fix_instruction_key].concat(extraArgs));
+      li.appendChild(fixSpan);
+      // Issue #10769 PR 8: severity badge (warning vs. error) so the
+      // banner can de-emphasize informational items like
+      // EngineVersionMismatch (daemon CAN run, just with stale engine).
+      if (err.severity === 'warning') {
+        li.classList.add('config-error-banner__item--warning');
+      }
+      // PR 8: only show the user_path suffix when extra is empty —
+      // parameterized fix strings already include the relevant paths
+      // inline ("...points at {2}"), so appending user_path again would
+      // duplicate them.
+      if (err.user_path && extraArgs.length === 0) {
+        const pathSpan = document.createElement('span');
+        pathSpan.className = 'config-error-banner__path';
+        pathSpan.textContent = ' (' + err.user_path + ')';
+        li.appendChild(pathSpan);
+      }
+      list.appendChild(li);
+    });
+  }
+
+  // Issue #11147: aggregate suggested_paths across all errors and render
+  // the unified "Try one of these detected paths:" section. Suggestions
+  // are deduplicated by absolute path so duplicate hits across env/.ini
+  // /.uproject collapse to one row.
+  renderRecoverySuggestions(status.config_errors || []);
+
+  banner.style.display = '';
+  // body.degraded lets CSS dim the now-meaningless backend chips
+  // (indexing/sessions/memory) so the banner is the visual focus.
+  document.body.classList.add('degraded');
+}
+
+// Issue #11147: render per-error recovery candidates from the engine
+// resolve chain (env / config.ini / .uproject / install scan). Each row
+// shows [source-badge] [path] [Apply] where Apply copies the platform-
+// specific env-set command to the clipboard.
+function renderRecoverySuggestions(errors) {
+  const host = document.getElementById('recovery-suggestions');
+  if (!host) return; // Pre-#11147 dashboard.
+
+  // Flatten + dedupe by path. Preserve first-occurrence ordering so the
+  // priority chain (env first, scan last) shows through visually.
+  const seen = new Set();
+  const flat = [];
+  errors.forEach(err => {
+    (err.suggested_paths || []).forEach(c => {
+      if (!seen.has(c.path)) {
+        seen.add(c.path);
+        // Issue #11147 review C-1: detect project-class reasons by 'PROJECT' substring.
+        // Both MISSING_PROJECT_PATH and PROJECT_PATH_NOT_* must route to UECODEGEN_PROJECT_DIR.
+        // startsWith('PROJECT_') would have missed MISSING_PROJECT_PATH and copied the wrong env var.
+        flat.push({ candidate: c, varName: err.code && err.code.includes('PROJECT') ? 'UECODEGEN_PROJECT_DIR' : 'UECODEGEN_ENGINE_DIR' });
+      }
+    });
+  });
+
+  if (flat.length === 0) {
+    host.hidden = true;
+    host.innerHTML = '';
+    return;
+  }
+
+  host.hidden = false;
+  host.innerHTML = '';
+  const header = document.createElement('p');
+  header.className = 'recovery-suggestions__header';
+  header.textContent = t('degraded.recovery_hint.try_paths');
+  host.appendChild(header);
+
+  const list = document.createElement('ul');
+  list.className = 'recovery-suggestions__list';
+  flat.forEach(({ candidate, varName }) => {
+    const li = document.createElement('li');
+    li.className = 'recovery-suggestions__item';
+    if (!candidate.verified) {
+      li.classList.add('recovery-suggestions__item--unverified');
+    }
+
+    const sourceBadge = document.createElement('span');
+    sourceBadge.className = 'recovery-suggestions__badge';
+    sourceBadge.textContent = t('recovery_hint.source.' + candidate.source);
+    li.appendChild(sourceBadge);
+
+    const pathSpan = document.createElement('code');
+    pathSpan.className = 'recovery-suggestions__path';
+    pathSpan.textContent = candidate.path;
+    li.appendChild(pathSpan);
+
+    if (candidate.note) {
+      const noteSpan = document.createElement('span');
+      noteSpan.className = 'recovery-suggestions__note';
+      noteSpan.textContent = candidate.note;
+      li.appendChild(noteSpan);
+    }
+
+    const applyBtn = document.createElement('button');
+    applyBtn.type = 'button';
+    applyBtn.className = 'recovery-suggestions__apply';
+    applyBtn.textContent = t('recovery_hint.action.apply');
+    applyBtn.addEventListener('click', () => {
+      // Platform detection is best-effort — userAgent is the only signal
+      // available to the dashboard JS. We emit BOTH the per-shell and the
+      // persistent setx form on Windows so the operator's clipboard works
+      // whether they paste into cmd, PowerShell, or "permanent" config.
+      const isWindows = /Win/i.test(navigator.userAgent || '');
+      const cmd = isWindows
+        ? `set ${varName}="${candidate.path}"\nsetx ${varName} "${candidate.path}"`
+        : `export ${varName}="${candidate.path}"`;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(cmd).then(
+          () => showToast('success', t('recovery_hint.action.copied')),
+          () => showToast('error', t('degraded.copy_guide.copy_failed'))
+        );
+      } else {
+        // Pre-clipboard-API fallback.
+        window.prompt(t('recovery_hint.action.copied'), cmd);
+      }
+    });
+    li.appendChild(applyBtn);
+
+    list.appendChild(li);
+  });
+  host.appendChild(list);
+}
+
+// Copy a plain-text fix guide to clipboard so the user can paste it into
+// notes / tickets / .env comments. Pulls the same i18n strings the banner
+// renders, so the copy stays in sync with what's on screen.
+function copyFixGuide() {
+  const list = document.getElementById('config-error-list');
+  if (!list) return;
+
+  // Header + current diagnosis from the live banner
+  const lines = [t('degraded.title'), ''];
+  Array.from(list.children).forEach(li => {
+    lines.push('  - ' + (li.textContent || '').trim());
+  });
+  lines.push('');
+
+  // Issue #10769 follow-up: enumerate ALL configuration sources in priority
+  // order. Different deployment paths mean different "correct" places to
+  // edit:
+  //   - Claude Code MCP user → `.mcp.json` (most common)
+  //   - Direct CLI invocation → `narshamcp daemon --project-path X`
+  //   - Headless / shell scripts → environment variables
+  //   - UE plugin (post-build) → Config/config.ini (auto-populated)
+  //   - Repo developer → `.env`
+  // Plain text — no I18N here because the option names (file paths, env
+  // var names, CLI flag names) are language-neutral.
+  lines.push('=== Project path — set via ONE of these (priority order) ===');
+  lines.push('  1. .mcp.json (Claude Code MCP config) — args: ["connect", "--project-path", "<DIR>", ...]');
+  lines.push('  2. CLI flag — narshamcp daemon --project-path <DIR>');
+  lines.push('  3. Environment variable — UECODEGEN_PROJECT_DIR=<DIR>');
+  lines.push('  4. Config/config.ini — [Paths] default_project_path = <DIR>');
+  lines.push('  5. .env file (dev mode)        — UECODEGEN_PROJECT_DIR=<DIR>');
+  lines.push('');
+  lines.push('=== Engine path — same priority order ===');
+  lines.push('  1. .mcp.json — args: ["connect", "--engine-path", "<UE_ROOT>", ...]');
+  lines.push('  2. CLI flag — narshamcp daemon --engine-path <UE_ROOT>');
+  lines.push('  3. Environment variable — UECODEGEN_ENGINE_DIR=<UE_ROOT>');
+  lines.push('  4. Config/config.ini — [Paths] engine_path = <UE_ROOT>');
+  lines.push('  5. .env file (dev mode)        — UECODEGEN_ENGINE_DIR=<UE_ROOT>');
+  lines.push('');
+  lines.push('Where <DIR> contains a *.uproject file');
+  lines.push('Where <UE_ROOT> is the UE install root, e.g. C:/Program Files/Epic Games/UE_5.7');
+  lines.push('After updating, click "Restart Daemon" or rerun `claude` to apply.');
+
+  const text = lines.join('\n');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(
+      () => showToast('success', t('degraded.copy_guide.copied')),
+      () => showToast('error', t('degraded.copy_guide.copy_failed'))
+    );
+  } else {
+    // Pre-clipboard-API fallback: prompt() lets the user copy manually.
+    window.prompt(t('degraded.copy_guide.copied'), text);
+  }
+}
+
+function restartDaemon() {
+  if (!confirm(t('settings.memory_restart_confirm'))) return;
+  const btn = document.getElementById('memory-restart-btn');
+  if (btn) { btn.disabled = true; btn.textContent = t('header.restarting'); }
+  fetch('/api/daemon/restart', { method: 'POST' })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById('connection-status').textContent = t('header.restarting');
+        document.getElementById('connection-status').className = 'badge badge-yellow';
+      } else {
+        alert(t('toast.restart_failed') + ': ' + (data.error || 'unknown'));
+        if (btn) { btn.disabled = false; btn.textContent = t('settings.memory_restart'); }
+      }
+    })
+    .catch(err => {
+      // Connection lost = restart in progress (expected)
+      document.getElementById('connection-status').textContent = t('header.restarting');
+      document.getElementById('connection-status').className = 'badge badge-yellow';
+    });
+}
+
+/**
+ * Collect a single-line human-readable summary of the current degraded
+ * banner so we can hand it to the spawned Claude Code session as
+ * context. Concatenates each <li> in #config-error-list — the same DOM
+ * applyDegradedBanner() populates — separated by `; `. Falls back to a
+ * generic message when the banner is empty (degraded flag is on but
+ * no structured reasons were attached, which is rare but possible).
+ */
+function collectDegradedErrorMessage() {
+  const list = document.getElementById('config-error-list');
+  if (!list || !list.children.length) {
+    return 'Daemon reported degraded_mode without structured config_errors';
+  }
+  return Array.from(list.children)
+    .map(li => (li.textContent || '').trim())
+    .filter(Boolean)
+    .join('; ');
+}
+
+/**
+ * Shared spawn-and-render helper for any "Open in Claude Code" button.
+ *
+ * Two call sites exist as of v0.10.x:
+ *   1. The degraded-mode config-error banner — `openInClaudeCode()`
+ *      collects the structured `config_errors[]` summary.
+ *   2. The per-indexing-cycle `#indexing-error` block (populated when
+ *      `progress.metadata_error` is non-null). The pre-extracted helper
+ *      `renderOpenClaudeCodeButton(container, errorMessage, idPrefix)`
+ *      lets either banner mount its own button without duplicating the
+ *      fetch + state machine.
+ *
+ * The function:
+ *   - Builds a fresh `<button>` + result `<span>` pair inside `container`.
+ *   - Wires the click handler to POST `/api/daemon/open-claude-code`.
+ *   - Manages disabled / loading / launched / failed states inline so
+ *     the operator never has to look elsewhere for the launch outcome.
+ *
+ * `idPrefix` keeps DOM ids unique across multiple instances on the same
+ * page (otherwise the second mount would clash with the first).
+ */
+function renderOpenClaudeCodeButton(container, errorMessage, idPrefix) {
+  if (!container) return;
+  const btnId = idPrefix + '-btn';
+  const resultId = idPrefix + '-result';
+
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.id = btnId;
+  btn.className = 'config-error-banner__btn config-error-banner__btn--ghost';
+  btn.setAttribute('data-i18n', 'degraded.action.open_claude_code');
+  btn.textContent = t('degraded.action.open_claude_code') || 'Open in Claude Code →';
+
+  const resultBox = document.createElement('div');
+  resultBox.id = resultId;
+  resultBox.className = 'config-error-banner__inline-result';
+  resultBox.hidden = true;
+
+  btn.addEventListener('click', async () => {
+    const originalLabel = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = t('degraded.action.open_claude_code_launching') || 'Launching…';
+    resultBox.hidden = true;
+    resultBox.textContent = '';
+    resultBox.classList.remove(
+      'config-error-banner__inline-result--ok',
+      'config-error-banner__inline-result--err'
+    );
+
+    try {
+      const res = await fetch('/api/daemon/open-claude-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ error_message: errorMessage }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (data && data.success) {
+        resultBox.classList.add('config-error-banner__inline-result--ok');
+        const pidPart = data.pid != null ? ` (PID ${data.pid})` : '';
+        resultBox.textContent =
+          (t('degraded.action.open_claude_code_launched') ||
+            'Launched Claude Code at') +
+          ' ' +
+          (data.cwd || '?') +
+          pidPart;
+      } else {
+        resultBox.classList.add('config-error-banner__inline-result--err');
+        const detail = (data && data.error) || 'HTTP ' + res.status;
+        resultBox.textContent =
+          (t('degraded.action.open_claude_code_failed') || 'Failed') + ': ' + detail;
+      }
+    } catch (err) {
+      resultBox.classList.add('config-error-banner__inline-result--err');
+      resultBox.textContent =
+        (t('degraded.action.open_claude_code_failed') || 'Failed') +
+        ': ' +
+        (err && err.message ? err.message : String(err));
+    } finally {
+      resultBox.hidden = false;
+      btn.disabled = false;
+      btn.textContent = originalLabel;
+    }
+  });
+
+  container.appendChild(btn);
+  container.appendChild(resultBox);
+}
+
+/**
+ * Legacy entry point — the inline `onclick="openInClaudeCode()"` on the
+ * static config-error banner button in `dashboard.html` still calls
+ * this. Keeps backward compatibility (no HTML change needed) while
+ * routing through the shared helper's POST + state-machine logic.
+ *
+ * `openInClaudeCode()` itself can't be reused for `#indexing-error`
+ * because that DOM region is re-rendered on every progress tick — see
+ * the helper's per-mount `idPrefix` for the dynamic case.
+ */
+async function openInClaudeCode() {
+  const btn = document.getElementById('open-claude-code-btn');
+  const resultBox = document.getElementById('open-claude-code-result');
+  if (!btn || !resultBox) return;
+
+  const errorMessage = collectDegradedErrorMessage();
+
+  const originalLabel = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = t('degraded.action.open_claude_code_launching') || 'Launching…';
+  resultBox.hidden = true;
+  resultBox.textContent = '';
+  resultBox.classList.remove('config-error-banner__inline-result--ok',
+                              'config-error-banner__inline-result--err');
+
+  try {
+    const res = await fetch('/api/daemon/open-claude-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error_message: errorMessage }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (data && data.success) {
+      resultBox.classList.add('config-error-banner__inline-result--ok');
+      const pidPart = data.pid != null ? ` (PID ${data.pid})` : '';
+      resultBox.textContent = (t('degraded.action.open_claude_code_launched') ||
+        'Launched Claude Code at') + ' ' + (data.cwd || '?') + pidPart;
+    } else {
+      resultBox.classList.add('config-error-banner__inline-result--err');
+      const detail = (data && data.error) || `HTTP ${res.status}`;
+      resultBox.textContent =
+        (t('degraded.action.open_claude_code_failed') || 'Failed') + ': ' + detail;
+    }
+  } catch (err) {
+    resultBox.classList.add('config-error-banner__inline-result--err');
+    resultBox.textContent =
+      (t('degraded.action.open_claude_code_failed') || 'Failed') + ': ' +
+      (err && err.message ? err.message : String(err));
+  } finally {
+    resultBox.hidden = false;
+    btn.disabled = false;
+    btn.textContent = originalLabel;
+  }
+}
+
+// ── Engine Docs Hydration (Issue #8453) ──
+
+/**
+ * Format an ISO 8601 timestamp into "YYYY-MM-DD" for compact display.
+ */
+function _edFormatDate(iso) {
+  if (!iso || iso === 'unknown') return '—';
+  try {
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return iso;
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  } catch (e) {
+    return iso;
+  }
+}
+
+/**
+ * Render the Engine Docs status card from the SSE heartbeat payload.
+ */
+function updateEngineDocs(ed) {
+  const statusEl = document.getElementById('engine-docs-status');
+  const badgeEl = document.getElementById('engine-docs-state-badge');
+  const btn = document.getElementById('rehydrate-btn');
+  const progress = document.getElementById('engine-docs-progress');
+  const bar = document.getElementById('engine-docs-progress-bar');
+  const progressText = document.getElementById('engine-docs-progress-text');
+  const hint = document.getElementById('engine-docs-hint');
+  if (!statusEl || !btn) return;
+
+  const enginePathOK = ed.engine_path_available === true;
+  const sizeStr = ed.file_size_mb != null ? `${ed.file_size_mb.toFixed(1)} MB` : '—';
+  const dateStr = _edFormatDate(ed.last_modified);
+
+  // Helper: set the small "state badge" pill in the toggle group.
+  // Uses the same .setting-status on/off classes as the file-watcher row
+  // so the styling is consistent across the Settings tab.
+  function setBadge(label, kind) {
+    if (!badgeEl) return;
+    badgeEl.textContent = label;
+    // Reset class first, then apply the new variant.
+    badgeEl.className = 'setting-status ' + kind;
+  }
+
+  switch (ed.status) {
+    case 'hydrated': {
+      statusEl.textContent = t('settings.engine_docs_hydrated', sizeStr, dateStr, ed.documents.toLocaleString());
+      statusEl.style.color = 'var(--text)';
+      setBadge(t('settings.engine_docs_badge_hydrated'), 'on');
+      btn.disabled = !enginePathOK;
+      btn.textContent = t('settings.engine_docs_rehydrate');
+      progress.style.display = 'none';
+      if (hint) {
+        if (!enginePathOK) {
+          hint.style.display = '';
+          hint.textContent = t('settings.engine_docs_config_path_hint');
+        } else {
+          hint.style.display = 'none';
+        }
+      }
+      break;
+    }
+    case 'skeleton': {
+      statusEl.textContent = t('settings.engine_docs_skeleton', ed.documents.toLocaleString());
+      statusEl.style.color = 'var(--yellow)';
+      setBadge(t('settings.engine_docs_badge_skeleton'), 'off');
+      btn.disabled = !enginePathOK;
+      btn.textContent = t('settings.engine_docs_hydrate');
+      progress.style.display = 'none';
+      if (hint) {
+        hint.style.display = '';
+        hint.textContent = enginePathOK
+          ? t('settings.engine_docs_skeleton_hint')
+          : t('settings.engine_docs_config_first_hint');
+      }
+      break;
+    }
+    case 'hydrating': {
+      const total = ed.progress_total || 0;
+      const done = ed.progress_done || 0;
+      const pct = total > 0 ? Math.min(100, Math.round((done / total) * 100)) : 0;
+      statusEl.textContent = t('settings.engine_docs_hydrating_status', done.toLocaleString(), total.toLocaleString());
+      statusEl.style.color = 'var(--cyan)';
+      setBadge(t('settings.engine_docs_badge_hydrating'), 'on');
+      btn.disabled = true;
+      btn.textContent = t('settings.engine_docs_hydrating');
+      progress.style.display = '';
+      bar.style.width = pct + '%';
+      progressText.textContent = pct + '%';
+      if (hint) hint.style.display = 'none';
+      break;
+    }
+    case 'not_loaded':
+    default: {
+      statusEl.textContent = t('settings.engine_docs_not_loaded');
+      statusEl.style.color = 'var(--text-dim)';
+      setBadge(t('settings.engine_docs_badge_not_loaded'), 'off');
+      btn.disabled = true;
+      btn.textContent = t('settings.engine_docs_rehydrate');
+      progress.style.display = 'none';
+      if (hint) {
+        hint.style.display = '';
+        hint.textContent = t('settings.engine_docs_install_hint');
+      }
+      break;
+    }
+  }
+}
+
+/**
+ * Trigger a manual re-hydration via POST /api/daemon/rehydrate.
+ * The actual progress is tracked via the SSE heartbeat, so this function
+ * only handles the POST acknowledgement and the error UI.
+ */
+function triggerRehydrate() {
+  const btn = document.getElementById('rehydrate-btn');
+  const hint = document.getElementById('engine-docs-hint');
+  if (!btn) return;
+  btn.disabled = true;
+  btn.textContent = t('settings.engine_docs_starting');
+
+  fetch('/api/daemon/rehydrate', { method: 'POST' })
+    .then(r => r.json().then(body => ({ status: r.status, body })))
+    .then(({ status, body }) => {
+      if (status === 202) {
+        // Success — SSE heartbeat will flip card to "Hydrating..." on next tick.
+        if (hint) hint.style.display = 'none';
+        return;
+      }
+      // Non-202: restore button and show message.
+      btn.disabled = false;
+      btn.textContent = t('settings.engine_docs_rehydrate');
+      if (hint) {
+        hint.style.display = '';
+        hint.textContent = (body && body.message) || t('settings.engine_docs_rehydration_failed', status);
+      }
+    })
+    .catch(err => {
+      btn.disabled = false;
+      btn.textContent = t('settings.engine_docs_rehydrate');
+      if (hint) {
+        hint.style.display = '';
+        hint.textContent = t('settings.engine_docs_network_error');
+      }
+      console.error('triggerRehydrate failed:', err);
+    });
+}
+
+// ── Language Selector ──
+function populateLanguageSelector() {
+  var langs = I18N.getLangs();
+  ['language-select', 'header-lang-select'].forEach(function(id) {
+    var sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = '';
+    langs.forEach(function(l) {
+      var opt = document.createElement('option');
+      opt.value = l.code;
+      opt.textContent = l.name;
+      if (l.code === I18N._lang) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  });
+}
+
+// ── Memory Guard (Issue #12148) ──
+// Polled every 10s — guard sampling itself fires every mi_collect tick
+// (default 300s), so faster polling here only smooths the UI rather than
+// providing genuinely fresher data. 10s matches the existing /memory-status
+// cadence and keeps the badge responsive when a transition crosses a
+// dashboard refresh.
+var _memoryGuardLastLevel = 'NORMAL';
+var _memoryGuardBackoffMs = 10000;
+
+function levelColor(level) {
+  return level === 'HARD_CAP' ? 'var(--red)'
+    : level === 'CRITICAL' ? 'var(--orange, #d97706)'
+    : level === 'WARN' ? 'var(--yellow, #ca8a04)'
+    : 'var(--green)';
+}
+
+function loadMemoryGuard() {
+  fetch('/api/daemon/memory-guard').then(function (r) { return r.json(); })
+    .then(function (data) {
+      var section = document.getElementById('memory-guard-section');
+      var badge = document.getElementById('memory-guard-badge');
+      if (!section || !badge) return;
+      var color = levelColor(data.level);
+      section.style.borderLeftColor = color;
+      badge.textContent = data.level;
+      badge.style.color = color;
+      badge.style.background = data.level === 'NORMAL' ? 'var(--bg-dim)' : 'rgba(0,0,0,0.15)';
+      var setText = function (id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
+      setText('memory-guard-rss', data.rss_mb || 0);
+      setText('memory-guard-cap', data.hard_cap_mb || 0);
+      setText('memory-guard-warn', data.warn_mb || 0);
+      setText('memory-guard-critical', data.critical_mb || 0);
+      setText('memory-guard-rejected', data.rejected_count || 0);
+      var msg = document.getElementById('memory-guard-message');
+      if (msg) msg.textContent = data.message || '';
+      // Transitions log: render newest-first, last 10 entries.
+      var tx = document.getElementById('memory-guard-transitions');
+      if (tx && Array.isArray(data.transitions)) {
+        var rows = data.transitions.slice(-10).reverse().map(function (e) {
+          var when = new Date(e.ts_ms).toLocaleTimeString();
+          return when + '  ' + e.from + ' → ' + e.to + '  (' + e.rss_mb + ' MB)';
+        });
+        tx.textContent = rows.join('\n');
+      }
+      // Surface a toast on transition into WARN or worse so headless users
+      // see the level change even when they aren't looking at the tab.
+      if (data.level !== _memoryGuardLastLevel) {
+        if (data.level === 'CRITICAL' || data.level === 'HARD_CAP') {
+          if (typeof showToast === 'function') {
+            showToast('error', data.message || ('Memory guard: ' + data.level));
+          }
+        } else if (data.level === 'WARN' && _memoryGuardLastLevel === 'NORMAL') {
+          if (typeof showToast === 'function') {
+            showToast('warn', data.message || 'Memory guard: WARN');
+          }
+        }
+        _memoryGuardLastLevel = data.level;
+      }
+    })
+    .catch(function () { /* daemon may be restarting; next tick retries */ });
+}
+
+// ── Startup ──
+function startDashboard() {
+  populateLanguageSelector();
+  loadInitialState(1);
+  connectSSE();
+  loadMemoryStatus();
+  loadMemoryGuard();
+  setInterval(loadMemoryGuard, _memoryGuardBackoffMs);
+  fetch('/api/daemon/telemetry').then(r => r.json()).then(updateTelemetry).catch(() => {});
+}
+
+fetch('/dashboard/i18n.json')
+  .then(function(r) { return r.json(); })
+  .then(function(data) { I18N.init(data); startDashboard(); })
+  .catch(function() { startDashboard(); });
+// Issue #7736: Auto health check disabled — repeated dashboard_call_tool
+// invocations accumulate resources and crash the process after ~20min.
+// SSE heartbeat already provides status/memory/sessions — no need for
+// separate health check tool call. Engine path set from first heartbeat.

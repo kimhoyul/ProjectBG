@@ -1,0 +1,126 @@
+{
+  "skill": "code-generation-power",
+  "description": "Trigger precision eval: verify code-generation-power activates on multi-class system generation queries and NOT on single class codegen, BP creation, or GAS analysis queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "무기 시스템 전체 만들어줘. AWeaponBase 기본 클래스에 AWeaponRanged/AWeaponMelee 하위 클래스, UAmmoComponent 탄약 관리, FWeaponData 데이터 테이블 행 구조체까지 포함해서",
+      "should_trigger": true,
+      "reason": "Korean full weapon system with base class, subclasses, component, and data table"
+    },
+    {
+      "id": "tp-02",
+      "query": "complete inventory system — GAS 기반 캐릭터 전투 시스템 세트 생성해줘. UMyAbilitySystemCompone",
+      "should_trigger": true,
+      "reason": "Korean full GAS character combat system with 5+ interconnected classes"
+    },
+    {
+      "id": "tp-03",
+      "query": "generate a complete inventory system - UInventoryManagerComponent, UInventorySlot, FItemDefinition data table row, APickupActor with collision, and a UInventoryWidget for the UI. they all need to cross-reference each other",
+      "should_trigger": true,
+      "reason": "English full inventory system with 5 classes including UI"
+    },
+    {
+      "id": "tp-04",
+      "query": "멀티플레이어 대전 게임용 캐릭터 시스템 전체 생성해줘. AMyCharacter에 UHealthComponent, UStaminaComponent 붙이고, AMyPlayerState에서 스탯 관리, AMyGameMode에서 라운드/스폰 로직, 그리고 리플리케이션 세팅까지",
+      "should_trigger": true,
+      "reason": "Korean multiplayer character system with 5+ classes and replication"
+    },
+    {
+      "id": "tp-05",
+      "query": "full AI enemy system with BT and EQS - AEnemyBase character, UEnemyPerceptionComponent, BTTask_FindPatrolPoint, BTTask_AttackTarget, EQS_FindCover query, and UAIDataAsset for difficulty scaling. patrol/chase/attack 3가지 상태 전환",
+      "should_trigger": true,
+      "reason": "English full AI system with BT tasks, EQS, perception, and state machine"
+    },
+    {
+      "id": "tp-06",
+      "query": "AI 적 시스템 전체 구현해줘. StateTree 기반으로 ST_EnemyBrain, 순찰/추적/공격 3가지 State, UEnemySensingComponent, FEnemySpawnParams 스폰 설정, AEnemySpawnManager 매니저 클래스까지",
+      "should_trigger": true,
+      "reason": "Korean full AI system with StateTree, states, sensing, spawn manager"
+    },
+    {
+      "id": "tp-07",
+      "query": "RPG 전투 시스템 전체 코드 생성해줘. 턴 매니저(ATurnManager), 스킬 시스템(USkillComponent + FSkillData), 파티 관리(UPartySubsystem), 전투 UI(UBattleWidget), 적 AI(UTacticalAIComponent). Lyra 아키텍처 참고해서",
+      "should_trigger": true,
+      "reason": "Korean full RPG battle system with 6+ classes across multiple domains"
+    },
+    {
+      "id": "tp-08",
+      "query": "generate full system with multi-class code generation: GAS ability system with enhanced input binding for a character action game",
+      "should_trigger": true,
+      "reason": "English full GAS system with input binding, 3 abilities, effects, and UI data"
+    },
+    {
+      "id": "tp-09",
+      "query": "generate weapon system: 대화 시스템 + UI + 데이터 전체 만들어줘. UDialogueSubsystem 메인 로직, FDialogueNode/FDialogueChoice 구조체, UDialogueWidget UI, ADialogueTriggerVolume 트리거, UDialogueDataAsset 데이터, USpeakerComponent NPC용",
+      "should_trigger": true,
+      "reason": "Korean full dialogue system with 6 interconnected classes/structs"
+    },
+    {
+      "id": "tp-10",
+      "query": "vehicle system 전체 구현 - AMyWheeledVehicle base, UVehicleInputComponent, UVehicleDamageComponent, AMyWheeledVehicleSport/AMyWheeledVehicleTruck subclasses, FVehicleConfigData 데이터 테이블, plus tire/suspension 물리 세팅",
+      "should_trigger": true,
+      "reason": "Mixed language full vehicle system with subclasses, components, and physics config"
+    },
+    {
+      "id": "tn-01",
+      "query": "C++ 캐릭터 클래스 하나 만들어줘",
+      "should_trigger": false,
+      "reason": "Single class generation -> code-generation"
+    },
+    {
+      "id": "tn-02",
+      "query": "Blueprint 생성해줘",
+      "should_trigger": false,
+      "reason": "Blueprint creation -> blueprint-generator"
+    },
+    {
+      "id": "tn-03",
+      "query": "GAS ability 전체 흐름 추적해줘",
+      "should_trigger": false,
+      "reason": "GAS flow tracing -> cross-domain-flow"
+    },
+    {
+      "id": "tn-04",
+      "query": "ACharacter 기반 클래스 생성해줘",
+      "should_trigger": false,
+      "reason": "Single class derivation -> code-generation"
+    },
+    {
+      "id": "tn-05",
+      "query": "GAS 밸런스 분석해줘",
+      "should_trigger": false,
+      "reason": "GAS analysis -> gas-development"
+    },
+    {
+      "id": "tn-06",
+      "query": "BP_Player 실행 흐름 분석해줘",
+      "should_trigger": false,
+      "reason": "BP flow analysis -> blueprint-flow"
+    },
+    {
+      "id": "tn-07",
+      "query": "컴포넌트 하나 scaffold 해줘",
+      "should_trigger": false,
+      "reason": "Single component scaffold -> code-generation"
+    },
+    {
+      "id": "tn-08",
+      "query": "BP를 C++로 변환해줘",
+      "should_trigger": false,
+      "reason": "BP to C++ conversion -> bp-cpp-project-init"
+    },
+    {
+      "id": "tn-09",
+      "query": "머테리얼 M_Rock 노드 구조 보여줘",
+      "should_trigger": false,
+      "reason": "Material analysis -> material-analysis"
+    },
+    {
+      "id": "tn-10",
+      "query": "이 함수 이름 바꿔도 괜찮을까?",
+      "should_trigger": false,
+      "reason": "Refactoring safety check -> caller-graph-visualizer"
+    }
+  ]
+}

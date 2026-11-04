@@ -1,0 +1,145 @@
+{
+  "skill": "ue-dev-cycle",
+  "version": "1.1.0",
+  "description": "Trigger precision eval for ue-dev-cycle skill. Tests correct activation on UE C++ dev loop (code-build-fix-test) queries, and correct rejection of full lifecycle, scaffolding only, build only, and error fixing only. v1.1.0 adds --code-exec flag positive cases (Issue #9581 PoC).",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "개발 루프 돌려줘",
+      "should_trigger": true,
+      "reason": "Dev loop — direct trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "개발 사이클 실행",
+      "should_trigger": true,
+      "reason": "Dev cycle execution — direct trigger"
+    },
+    {
+      "id": "tp-03",
+      "query": "코드 빌드 테스트 자동화해줘",
+      "should_trigger": true,
+      "reason": "Code-build-test automation — dev loop pattern"
+    },
+    {
+      "id": "tp-04",
+      "query": "빌드 루프 실행해줘",
+      "should_trigger": true,
+      "reason": "Build loop — iterative cycle"
+    },
+    {
+      "id": "tp-05",
+      "query": "구현하고 빌드해줘",
+      "should_trigger": true,
+      "reason": "Implement and build — dev cycle steps"
+    },
+    {
+      "id": "tp-06",
+      "query": "Dev cycle for AMyHero class",
+      "should_trigger": true,
+      "reason": "English dev cycle for specific class"
+    },
+    {
+      "id": "tp-07",
+      "query": "Run the dev loop for this feature",
+      "should_trigger": true,
+      "reason": "English dev loop execution"
+    },
+    {
+      "id": "tp-08",
+      "query": "개발 루프 — Code, build, and test this change dev cycle",
+      "should_trigger": true,
+      "reason": "English code-build-test pattern"
+    },
+    {
+      "id": "tp-09",
+      "query": "Start a dev cycle: implement TakeDamage override",
+      "should_trigger": true,
+      "reason": "Dev cycle with specific implementation target"
+    },
+    {
+      "id": "tp-10",
+      "query": "개발 루프로 AMyCharacter 구현해줘",
+      "should_trigger": true,
+      "reason": "Dev loop for named class implementation"
+    },
+    {
+      "id": "tp-ce-01",
+      "query": "개발 루프 돌려줘 --code-exec",
+      "should_trigger": true,
+      "reason": "Dev loop with --code-exec flag (Issue #9581 PoC) — flag is additive, must still trigger ue-dev-cycle"
+    },
+    {
+      "id": "tp-ce-02",
+      "query": "Run dev cycle for AMyHero --code-exec",
+      "should_trigger": true,
+      "reason": "English dev cycle with --code-exec flag — Phase 2-CE orchestration script path"
+    },
+    {
+      "id": "tp-ce-03",
+      "query": "코드 빌드 테스트 --code-exec 모드로 실행",
+      "should_trigger": true,
+      "reason": "Mixed Korean+English with --code-exec — flag mention should NOT suppress trigger"
+    },
+    {
+      "id": "tn-01",
+      "query": "풀사이클 6600 실행",
+      "should_trigger": false,
+      "reason": "Full lifecycle workflow — belongs to full-cycle skill"
+    },
+    {
+      "id": "tn-02",
+      "query": "캐릭터 만들어줘",
+      "should_trigger": false,
+      "reason": "Creation only — belongs to ue-scaffold skill"
+    },
+    {
+      "id": "tn-03",
+      "query": "프로젝트 빌드해줘",
+      "should_trigger": false,
+      "reason": "Build only — belongs to ue-build-automate skill"
+    },
+    {
+      "id": "tn-04",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "Error fixing only — belongs to ue-debug skill"
+    },
+    {
+      "id": "tn-05",
+      "query": "Create a new Character class",
+      "should_trigger": false,
+      "reason": "Scaffolding only — belongs to ue-scaffold skill"
+    },
+    {
+      "id": "tn-06",
+      "query": "Full workflow for issue #7000",
+      "should_trigger": false,
+      "reason": "Full lifecycle — belongs to full-cycle skill"
+    },
+    {
+      "id": "tn-07",
+      "query": "Fix this compilation error",
+      "should_trigger": false,
+      "reason": "Error fix only — belongs to ue-debug skill"
+    },
+    {
+      "id": "tn-08",
+      "query": "Cook and package the project",
+      "should_trigger": false,
+      "reason": "Build pipeline — belongs to ue-build-automate skill"
+    },
+    {
+      "id": "tn-09",
+      "query": "라이브 코딩 실패",
+      "should_trigger": false,
+      "reason": "Live coding fix — belongs to ue-livecoding-fix skill"
+    },
+    {
+      "id": "tn-10",
+      "query": "Build an inventory system",
+      "should_trigger": false,
+      "reason": "Feature scaffolding — belongs to ue-scaffold skill"
+    }
+  ]
+}

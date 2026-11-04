@@ -1,0 +1,127 @@
+{
+  "skill": "mcp-analyze",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for mcp-analyze skill — retrospective analysis of MCP tool calls in current session",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "MCP 도구 분석해줘",
+      "should_trigger": true,
+      "reason": "MCP tool analysis"
+    },
+    {
+      "id": "TP-02",
+      "query": "MCP 사용 결과 분석",
+      "should_trigger": true,
+      "reason": "MCP usage result analysis"
+    },
+    {
+      "id": "TP-03",
+      "query": "mcp-analyze 실행",
+      "should_trigger": true,
+      "reason": "Direct skill invocation"
+    },
+    {
+      "id": "TP-04",
+      "query": "tool call retrospective",
+      "should_trigger": true,
+      "reason": "Tool call retrospective"
+    },
+    {
+      "id": "TP-05",
+      "query": "MCP 도구 선택 품질 분석",
+      "should_trigger": true,
+      "reason": "MCP tool selection quality analysis"
+    },
+    {
+      "id": "TP-06",
+      "query": "세션 MCP 사용 분석",
+      "should_trigger": true,
+      "reason": "Session MCP usage analysis"
+    },
+    {
+      "id": "TP-07",
+      "query": "MCP output analysis",
+      "should_trigger": true,
+      "reason": "MCP output analysis"
+    },
+    {
+      "id": "TP-08",
+      "query": "도구 호출 정확성 분석",
+      "should_trigger": true,
+      "reason": "Tool call accuracy analysis"
+    },
+    {
+      "id": "TP-09",
+      "query": "retrospective MCP analysis",
+      "should_trigger": true,
+      "reason": "Retrospective MCP analysis"
+    },
+    {
+      "id": "TP-10",
+      "query": "MCP 실행 품질 평가",
+      "should_trigger": true,
+      "reason": "MCP execution quality evaluation"
+    },
+    {
+      "id": "TN-01",
+      "query": "MCP 라이브 테스트",
+      "should_trigger": false,
+      "reason": "MCP live test — belongs to mcp-live-test"
+    },
+    {
+      "id": "TN-02",
+      "query": "MCP-First 벤치마크",
+      "should_trigger": false,
+      "reason": "MCP benchmark — belongs to mcp-first-benchmark"
+    },
+    {
+      "id": "TN-03",
+      "query": "MCP 바이너리 배포",
+      "should_trigger": false,
+      "reason": "MCP deploy — belongs to mcp-deploy"
+    },
+    {
+      "id": "TN-04",
+      "query": "코드 리뷰",
+      "should_trigger": false,
+      "reason": "Code review — belongs to ns-review"
+    },
+    {
+      "id": "TN-05",
+      "query": "세션 헬스 체크",
+      "should_trigger": false,
+      "reason": "Session health — belongs to session-health-check"
+    },
+    {
+      "id": "TN-06",
+      "query": "코드베이스 자기 진단",
+      "should_trigger": false,
+      "reason": "Self-analysis — belongs to codebase-self-analyzer"
+    },
+    {
+      "id": "TN-07",
+      "query": "스킬 평가",
+      "should_trigger": false,
+      "reason": "Skill eval — belongs to llm-judge-evaluator"
+    },
+    {
+      "id": "TN-08",
+      "query": "CI 확인",
+      "should_trigger": false,
+      "reason": "CI check — belongs to ci-verify"
+    },
+    {
+      "id": "TN-09",
+      "query": "야간 E2E 테스트",
+      "should_trigger": false,
+      "reason": "Nightly E2E — belongs to mcp-e2e-nightly"
+    },
+    {
+      "id": "TN-10",
+      "query": "E2E 테스트 실행",
+      "should_trigger": false,
+      "reason": "E2E test — belongs to e2e-test-runner"
+    }
+  ]
+}

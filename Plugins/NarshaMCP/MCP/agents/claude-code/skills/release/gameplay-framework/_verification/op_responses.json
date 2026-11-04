@@ -1,0 +1,88 @@
+{
+  "_meta": {
+    "skill_name": "gameplay-framework",
+    "purpose": "UE5 gameplay framework reference (GameMode/GameState/PlayerController/PlayerState/Pawn lifecycle/ENetRole).",
+    "schema_version": "1.0",
+    "capture_date": "2026-06-16",
+    "narshamcp_version": "0.10.1",
+    "ue_version": "5.7.1",
+    "project": "Lyra_5.7",
+    "capture_method": "Live in-session MCP calls against the NarshaMCP daemon (read-only ops, Lyra_5.7 indexed). Responses trimmed to representative excerpts. Re-capture: see _capture.py (Issue #15437)."
+  },
+  "tools": {
+    "ue_analyze_symbols": {
+      "_status": "captured",
+      "operations": {
+        "search_symbols": {
+          "request": {"operation": "search_symbols", "query": "AGameModeBase", "limit": 5},
+          "response": {
+            "operation": "search_symbols",
+            "query": "AGameModeBase",
+            "total_found": 3,
+            "results": [
+              {"name": "AGameModeBase", "type": "class", "module_name": "CommonLoadingScreen", "source_category": "Plugin", "score": 125},
+              {"name": "AGameModeBase::DefaultPawnClass", "type": "data", "module_name": "CommonLoadingScreen", "source_category": "Plugin", "score": 95}
+            ]
+          }
+        }
+      },
+      "note": "PDB symbol search resolves the engine framework class + its members; the skill cites these to verify API names."
+    },
+    "ue_engine_docs": {
+      "_status": "captured",
+      "operations": {
+        "search": {
+          "request": {"operation": "search", "query": "AGameModeBase InitGame lifecycle", "max_results": 4},
+          "response": {
+            "operation": "search",
+            "scoring_method": "hybrid:nl",
+            "total_count": 1004,
+            "truncated": true,
+            "results_sample": [
+              {"path": "ue5_7/modules/Plugins/ModelingToolsEditorMode/CLASSES.md", "title": "Modeling Tools Editor Mode - C++ Classes Reference", "relevance_score": 0.4494, "match_source": "bm25"}
+            ],
+            "_truncated": "4 results returned, 1 shown"
+          }
+        }
+      },
+      "note": "Engine-docs BM25 search over the bundled 5.7 module docs — the skill's source for behavior not in training data."
+    },
+    "ue_grep": {
+      "_status": "captured",
+      "operations": {
+        "source_search": {
+          "request": {"query": "GameState", "domain": "source", "limit": 4},
+          "response": {
+            "operation": "ue_grep",
+            "query": "GameState",
+            "scope": "project",
+            "total_found": 269,
+            "matches_sample": [
+              "[source] Source\\LyraGame\\GameModes\\LyraGameMode.cpp:36 — GameStateClass = ALyraGameState::StaticClass();",
+              "[source] Source\\LyraGame\\Player\\LyraPlayerController.cpp:173 — GameState->SetRecorderPlayerState(PlayerState);"
+            ],
+            "_truncated": "269 total matches, 2 shown"
+          }
+        }
+      },
+      "note": "Project-source grep confirms how the framework classes are wired in a real game (GameStateClass assignment, etc.)."
+    },
+    "ue_read": {
+      "_status": "captured",
+      "operations": {
+        "symbol_detail": {
+          "request": {"identifier": "AGameModeBase::InitGame"},
+          "response": {
+            "operation": "ue_read",
+            "identifier": "AGameModeBase::InitGame",
+            "type": "symbol",
+            "owner_type": "class",
+            "source_category": "Plugin",
+            "message": "Symbol AGameModeBase::InitGame (method details unavailable)"
+          }
+        }
+      },
+      "note": "Symbol lookup for a framework lifecycle method. Detail depth depends on PDB DetailStore availability for engine symbols — captured as-returned."
+    }
+  }
+}

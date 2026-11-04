@@ -1,0 +1,143 @@
+{
+  "skill": "ue-scaffold",
+  "version": "1.0.0",
+  "description": "Output quality eval: verify ue-scaffold proposes architecture, uses ue_generate_code, and includes UE macro patterns",
+  "cases": [
+    {
+      "id": "qual-01",
+      "prompt": "캐릭터 만들어줘",
+      "assertions": [
+        {
+          "type": "content_pattern",
+          "value": "(architecture|class design|class hierarchy|component|structure)",
+          "description": "Should propose an architecture or class design"
+        },
+        {
+          "type": "tool_usage",
+          "value": "ue_generate_code",
+          "description": "Should use ue_generate_code to scaffold the character class"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(UCLASS|UPROPERTY|UFUNCTION)",
+          "description": "Should include UE reflection macros in generated code"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(ACharacter|APawn|AActor)",
+          "description": "Should derive from an appropriate UE base class"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response give an evidence-backed scaffold receipt with architecture/class hierarchy, generated artifact paths and symbols, Unreal base type and reflection macros actually present or missing, validation, next integration steps, and an honest GENERATED/PARTIAL/FAILED status? In-memory or missing files and missing requested macros must not be called fully generated.",
+          "threshold": 0.6,
+          "max_output_chars": 20000,
+          "requires_tools": ["ue_generate_code"],
+          "description": "Should report the character scaffold result honestly (LLM judge)"
+        }
+      ]
+    },
+    {
+      "id": "qual-02",
+      "prompt": "Build an inventory system",
+      "assertions": [
+        {
+          "type": "content_pattern",
+          "value": "(component|subsystem|UActorComponent|UObject)",
+          "description": "Should propose appropriate UE class type for the inventory system"
+        },
+        {
+          "type": "tool_usage",
+          "value": "ue_generate_code",
+          "description": "Should use ue_generate_code for class generation"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(UPROPERTY|TArray|TMap|FStruct|USTRUCT)",
+          "description": "Should include data container patterns (arrays, maps, or structs)"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(add|remove|slot|item|stack|capacity)",
+          "description": "Should define core inventory operations"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response give an evidence-backed scaffold receipt with architecture/class hierarchy, generated artifact paths and symbols, Unreal base type and reflection macros actually present or missing, validation, next integration steps, and an honest GENERATED/PARTIAL/FAILED status? Hand-authored completion ideas must be distinguished from tool-generated inventory artifacts.",
+          "threshold": 0.6,
+          "max_output_chars": 20000,
+          "requires_tools": ["ue_generate_code"],
+          "description": "Should report the inventory scaffold result honestly (LLM judge)"
+        }
+      ]
+    },
+    {
+      "id": "qual-03",
+      "prompt": "Create a health bar widget",
+      "assertions": [
+        {
+          "type": "content_pattern",
+          "value": "(UUserWidget|UMG|Widget|HUD|UI)",
+          "description": "Should identify this as a UMG widget task"
+        },
+        {
+          "type": "tool_usage",
+          "value": "ue_generate_code",
+          "description": "Should use ue_generate_code for widget class scaffolding"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(BindWidget|ProgressBar|TextBlock|UPROPERTY.*Meta)",
+          "description": "Should include BindWidget pattern or reference common widget components"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(health|percent|current|max|update)",
+          "description": "Should define health tracking properties and update logic"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response give an evidence-backed scaffold receipt with widget architecture/class hierarchy, generated artifact paths and symbols, UUserWidget and BindWidget/reflection patterns actually present or missing, validation, next integration steps, and an honest GENERATED/PARTIAL/FAILED status?",
+          "threshold": 0.6,
+          "max_output_chars": 20000,
+          "requires_tools": ["ue_generate_code"],
+          "description": "Should report the widget scaffold result honestly (LLM judge)"
+        }
+      ]
+    },
+    {
+      "id": "qual-04",
+      "prompt": "Set up a GAS ability system",
+      "assertions": [
+        {
+          "type": "content_pattern",
+          "value": "(UAbilitySystemComponent|UGameplayAbility|UGameplayEffect|FGameplayAttribute)",
+          "description": "Should reference core GAS classes"
+        },
+        {
+          "type": "tool_usage",
+          "value": "ue_generate_code",
+          "description": "Should use ue_generate_code with GAS features"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(UCLASS|UPROPERTY|UFUNCTION|gas_setup|AttributeSet)",
+          "description": "Should include GAS-specific UE patterns and features"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(AbilitySystemComponent|IAbilitySystemInterface|InitializeAbilitySystem|GiveAbility)",
+          "description": "Should cover ASC initialization and ability granting"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response give an evidence-backed GAS scaffold receipt with architecture/class hierarchy, generated artifact paths and symbols, GAS base types and reflection patterns actually present or missing, validation, next integration steps, and an honest GENERATED/PARTIAL/FAILED status? Missing AbilitySystemComponent initialization must be called out rather than implied complete.",
+          "threshold": 0.6,
+          "max_output_chars": 20000,
+          "requires_tools": ["ue_generate_code"],
+          "description": "Should report the GAS scaffold result honestly (LLM judge)"
+        }
+      ]
+    }
+  ]
+}

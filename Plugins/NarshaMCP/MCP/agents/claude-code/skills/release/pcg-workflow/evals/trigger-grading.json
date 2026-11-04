@@ -1,0 +1,127 @@
+{
+  "skill": "pcg-workflow",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for pcg-workflow skill. Tests correct activation on multi-step PCG orchestration queries (audit, batch, clone), and correct rejection of single PCG queries (ue_manage_pcg direct), Blueprint, and material queries.",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "PCG_Forest 그래프가 있는데 L_OpenWorld에서 실행하면 3초 넘게 걸려. 노드 40개짜리인데 어디가 병목인지 성능 감사 돌려줘. 특히 SurfaceSampler 밀도가 너무 높은 것 같아",
+      "should_trigger": true,
+      "reason": "PCG performance audit with specific graph, level, bottleneck suspicion, and node count"
+    },
+    {
+      "id": "TP-02",
+      "query": "SurfaceSampler - PCG_VegetationScatter에서 SM_Tree_Oak 메시를 SM_Tree_Birch로 일괄 교체하고 싶어. 근데 L_Forest, L_Meadow, L_Hillside 세 레벨에서 다 쓰이고 있어서 전부 한번에 바꿔야 해",
+      "should_trigger": true,
+      "reason": "PCG batch asset swap across 3 named levels with specific mesh assets"
+    },
+    {
+      "id": "TP-03",
+      "query": "PCG performance audit: all PCG graphs in the project need an audit. we have PCG_Rocks, PCG_Grass, PCG_Trees, PCG_Props across 8 levels and i want to know which ones are using deprecated nodes or have density over 10 per sqm. batch report please",
+      "should_trigger": true,
+      "reason": "Batch PCG audit across multiple named graphs and levels with specific criteria"
+    },
+    {
+      "id": "TP-04",
+      "query": "SurfaceSampler - PCG_CityStreet 그래프를 L_Downtown에서 쓰고 있는데 L_Suburb에도 비슷한 거 필요해. 복제해서 밀도만 0.3배로 낮추고 SM_Building_Tall 대신 SM_House_Small로 바꿔줘",
+      "should_trigger": true,
+      "reason": "PCG graph clone to new level with density and mesh modifications"
+    },
+    {
+      "id": "TP-05",
+      "query": "프로젝트 전체 PCG 감사 좀 돌려줘. 지금 12개 PCG 그래프가 있는데 각각의 노드 수, 실행 시간 추정치, 메모리 사용량 비교해서 최적화 우선순위 매겨줬으면 좋겠어",
+      "should_trigger": true,
+      "reason": "Full project PCG audit with 12 graphs — node count, execution time, memory comparison"
+    },
+    {
+      "id": "TP-06",
+      "query": "SurfaceSampler - PCG_RiverBank 그래프 복제해서 PCG_LakeShore라는 변형 만들어줘. 원본은 직선 형태인데 변형은 원형으로 배치하고 싶어. SplineSampler 노드를 PointSampler로 바꿔야 할 것 같은데",
+      "should_trigger": true,
+      "reason": "PCG graph clone with topology change — spline to point sampler conversion"
+    },
+    {
+      "id": "TP-07",
+      "query": "아트팀에서 숲 밀도를 전체적으로 높여달라고 해서, PCG_Trees, PCG_Bushes, PCG_Groundcover 세 그래프의 SurfaceSampler PointsPerSquareMeter를 현재값의 1.5배로 일괄 변경해줘",
+      "should_trigger": true,
+      "reason": "Batch density parameter scaling across 3 specific PCG graphs with multiplier"
+    },
+    {
+      "id": "TP-08",
+      "query": "새 숲 레벨 만드는데 PCG 워크플로우 처음부터 세팅해줘. 큰 나무(SM_Pine_Large) 밀도 낮게, 관목(SM_Bush_Medium) 중간, 풀(SM_Grass_Clump) 높은 밀도로 3개 레이어. 지형 경사 30도 이상은 제외하고 강가 10m 이내도 제외",
+      "should_trigger": true,
+      "reason": "Full PCG workflow setup from scratch — 3 vegetation layers with slope/exclusion zones"
+    },
+    {
+      "id": "TP-09",
+      "query": "PCG pipeline 전체 구조를 분석해주고 최적화 제안해줘. PCG_MasterGraph에서 서브그래프 5개를 호출하는 구조인데, 각 서브그래프가 독립적으로 SurfaceSampler를 쓰고 있어서 중복 샘플링이 있을 것 같거든",
+      "should_trigger": true,
+      "reason": "PCG pipeline architecture analysis — master/sub-graph redundancy detection"
+    },
+    {
+      "id": "TP-10",
+      "query": "PCG 에셋 일괄 교체 — PCG_Landscape, PCG_Props, PCG_Foliage 세 개 그래프랑 의존 에셋 정리. clone PCG graph 필요",
+      "should_trigger": true,
+      "reason": "PCG asset migration with named graphs, dependency tracking, and target path"
+    },
+    {
+      "id": "TN-01",
+      "query": "PCG 그래프 파라미터 하나 바꿔줘",
+      "should_trigger": false,
+      "reason": "Single PCG parameter change — belongs to ue_manage_pcg(set_parameter) direct MCP call"
+    },
+    {
+      "id": "TN-02",
+      "query": "PCG 구조 보여줘",
+      "should_trigger": false,
+      "reason": "Single PCG structure query — belongs to ue_manage_pcg(get_structure) direct MCP call"
+    },
+    {
+      "id": "TN-03",
+      "query": "BP_Player 블루프린트 흐름 분석",
+      "should_trigger": false,
+      "reason": "Blueprint flow analysis — belongs to blueprint-flow skill"
+    },
+    {
+      "id": "TN-04",
+      "query": "M_Grass 머티리얼 분석해줘",
+      "should_trigger": false,
+      "reason": "Material analysis — belongs to material-analysis skill"
+    },
+    {
+      "id": "TN-05",
+      "query": "캐릭터 만들어줘",
+      "should_trigger": false,
+      "reason": "Character creation — belongs to ue-scaffold skill"
+    },
+    {
+      "id": "TN-06",
+      "query": "프로젝트 건강도 분석",
+      "should_trigger": false,
+      "reason": "Project health analysis — belongs to performance-health-check skill"
+    },
+    {
+      "id": "TN-07",
+      "query": "애니메이션 검색해줘",
+      "should_trigger": false,
+      "reason": "Animation search — belongs to animation-workflow skill"
+    },
+    {
+      "id": "TN-08",
+      "query": "조명 추가해줘",
+      "should_trigger": false,
+      "reason": "Light placement — belongs to lighting-workflow skill"
+    },
+    {
+      "id": "TN-09",
+      "query": "모든 블루프린트 일괄 수정",
+      "should_trigger": false,
+      "reason": "Bulk Blueprint modification — belongs to asset-modification-wizard skill"
+    },
+    {
+      "id": "TN-10",
+      "query": "Niagara 파티클 시스템 검색",
+      "should_trigger": false,
+      "reason": "Niagara search — belongs to ue_manage_niagara direct MCP call"
+    }
+  ]
+}

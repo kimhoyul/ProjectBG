@@ -1,0 +1,210 @@
+{
+  "skill": "ue-scaffold",
+  "description": "Trigger precision eval: verify ue-scaffold activates on creation/build/scaffold queries and NOT on explain/debug/impact/audit/validate queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "캐릭터 만들어줘",
+      "should_trigger": true,
+      "reason": "Korean creation pattern - core trigger ('만들어줘')"
+    },
+    {
+      "id": "tp-02",
+      "query": "Build an inventory system",
+      "should_trigger": true,
+      "reason": "English 'build' keyword for system creation"
+    },
+    {
+      "id": "tp-03",
+      "query": "Create a health bar widget",
+      "should_trigger": true,
+      "reason": "English 'create' keyword - core trigger"
+    },
+    {
+      "id": "tp-04",
+      "query": "AI patrol enemy 구현해줘",
+      "should_trigger": true,
+      "reason": "Korean implementation request ('구현해줘')"
+    },
+    {
+      "id": "tp-05",
+      "query": "Set up a GAS ability system",
+      "should_trigger": true,
+      "reason": "English 'set up' pattern for system scaffolding"
+    },
+    {
+      "id": "tp-06",
+      "query": "무기 시스템 만들어줘",
+      "should_trigger": true,
+      "reason": "Korean creation request for weapon system"
+    },
+    {
+      "id": "tp-07",
+      "query": "Scaffold a multiplayer lobby",
+      "should_trigger": true,
+      "reason": "English 'scaffold' keyword - exact trigger word"
+    },
+    {
+      "id": "tp-08",
+      "query": "대화 시스템 생성해줘",
+      "should_trigger": true,
+      "reason": "Korean '생성' (create/generate) pattern"
+    },
+    {
+      "id": "tp-09",
+      "query": "Build a save game system with slots",
+      "should_trigger": true,
+      "reason": "English 'build' for feature system creation"
+    },
+    {
+      "id": "tp-10",
+      "query": "Create an enemy spawner component",
+      "should_trigger": true,
+      "reason": "English 'create' for UE component scaffolding"
+    },
+    {
+      "id": "tn-01",
+      "query": "ACharacter 설명해줘",
+      "should_trigger": false,
+      "reason": "Explanation -> ue-explain (contains '설명해줘'). Similar pattern to '만들어줘' but intent is understanding"
+    },
+    {
+      "id": "tn-02",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "Error fix -> ue-debug (contains '에러', '해결해줘'). '해결해줘' is similar to '만들어줘' but intent is fixing"
+    },
+    {
+      "id": "tn-03",
+      "query": "APawn 변경하면 뭐가 깨져?",
+      "should_trigger": false,
+      "reason": "Impact analysis -> ue-impact (contains '변경하면', '깨져')"
+    },
+    {
+      "id": "tn-04",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "Audit -> ue-audit (contains '진단'). '-해줘' suffix matches scaffold pattern but intent is audit"
+    },
+    {
+      "id": "tn-05",
+      "query": "이 에셋 유효한지 검증해줘",
+      "should_trigger": false,
+      "reason": "Validation -> ue-validate (contains '검증'). '-해줘' suffix present but intent is validation"
+    },
+    {
+      "id": "tn-06",
+      "query": "How does the inventory system work?",
+      "should_trigger": false,
+      "reason": "Explanation -> ue-explain (contains 'how does...work'). Mentions 'inventory system' but intent is understanding"
+    },
+    {
+      "id": "tn-07",
+      "query": "ACharacter 테스트 만들어줘",
+      "should_trigger": false,
+      "reason": "Test generation -> ue-test-gen (contains '테스트 만들어'). Has '만들어줘' but '테스트' prefix routes to test-gen"
+    },
+    {
+      "id": "tn-08",
+      "query": "Explain how to create a character in UE",
+      "should_trigger": false,
+      "reason": "Explanation -> ue-explain (contains 'explain'). Mentions 'create' but intent is learning, not building"
+    },
+    {
+      "id": "tn-09",
+      "query": "BP_Player 수정하면 영향 분석",
+      "should_trigger": false,
+      "reason": "Impact -> ue-impact (contains '수정하면', '영향')"
+    },
+    {
+      "id": "tn-10",
+      "query": "리팩터링 AEnemy를 ABaseEnemy로 리네임",
+      "should_trigger": false,
+      "reason": "Refactoring -> ue-cpp-refactor (contains '리팩터링', '리네임'). Involves code changes but intent is rename, not creation"
+    },
+    {
+      "id": "tn-11",
+      "query": "BP 그래프 만들어줘 - 문 상호작용 시스템",
+      "should_trigger": false,
+      "reason": "Blueprint graph creation -> blueprint-generator (negative pattern 'BP 만들어' blocks ue-scaffold)"
+    },
+    {
+      "id": "tn-12",
+      "query": "Create a Blueprint graph for door interaction",
+      "should_trigger": false,
+      "reason": "Blueprint generation -> blueprint-generator (negative pattern 'create Blueprint' blocks ue-scaffold)"
+    },
+    {
+      "id": "tn-widget-animation-ko",
+      "query": "WBP_HUD에 위젯 애니메이션 추가해줘",
+      "should_trigger": false,
+      "reason": "Issue #27511: shipped widget-animation authoring belongs to ue-widget-authoring"
+    },
+    {
+      "id": "tn-widget-animation-en",
+      "query": "create a widget animation for WBP_HUD",
+      "should_trigger": false,
+      "reason": "Issue #27511: create_widget_animation guidance is not feature scaffolding"
+    },
+    {
+      "id": "fp-branch-create",
+      "query": "브런치 생성",
+      "should_trigger": false,
+      "reason": "Issue #21420 live FP: bare 생성 must not route to ue-scaffold"
+    },
+    {
+      "id": "fp-report-create",
+      "query": "리포트 생성",
+      "should_trigger": false,
+      "reason": "Issue #21420 live FP"
+    },
+    {
+      "id": "fp-commit-msg-create",
+      "query": "커밋 메시지 생성",
+      "should_trigger": false,
+      "reason": "Issue #21420 live FP"
+    },
+    {
+      "id": "fp-changelog-create",
+      "query": "체인지로그 생성",
+      "should_trigger": false,
+      "reason": "Issue #21420 live FP"
+    },
+    {
+      "id": "fp-thumbnail-create",
+      "query": "썸네일 생성",
+      "should_trigger": false,
+      "reason": "Issue #21420 live FP"
+    },
+    {
+      "id": "fp-retro-create",
+      "query": "회고 생성",
+      "should_trigger": false,
+      "reason": "Issue #21420 live FP"
+    },
+    {
+      "id": "fp-handoff-create",
+      "query": "핸드오프 생성",
+      "should_trigger": false,
+      "reason": "Issue #21420 live FP"
+    },
+    {
+      "id": "fp-savefile-create",
+      "query": "세이브 파일 생성",
+      "should_trigger": false,
+      "reason": "Issue #21420 live FP"
+    },
+    {
+      "id": "fp-logfile-create",
+      "query": "로그 파일 생성",
+      "should_trigger": false,
+      "reason": "Issue #21420 live FP"
+    },
+    {
+      "id": "fp-nav-standard-spelling",
+      "query": "내비게이션 생성",
+      "should_trigger": false,
+      "reason": "Issue #21420 #21396 residual: standard 내비게이션 spelling"
+    }
+  ]
+}

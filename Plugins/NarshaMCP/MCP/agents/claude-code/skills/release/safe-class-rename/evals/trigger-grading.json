@@ -1,0 +1,127 @@
+{
+  "skill": "safe-class-rename",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for safe-class-rename skill. Tests correct activation on class rename/refactor-name queries, and correct rejection of general refactoring, code generation, and impact analysis queries.",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "AEnemy를 ABaseEnemy로 이름 변경해야 하는데, BP_Goblin이랑 BP_Skeleton이 AEnemy를 상속받고 있어. CoreRedirects 넣어주고 Blueprint 참조도 안전하게 업데이트해줘",
+      "should_trigger": true,
+      "reason": "Class rename with specific child BPs and CoreRedirects + BP reference safety concern"
+    },
+    {
+      "id": "TP-02",
+      "query": "rename APlayerCharacter to AHeroCharacter. it's in Source/MyGame/Characters/ and there are like 5 BPs inheriting from it plus a bunch of cast nodes in other BPs. need to make sure nothing breaks",
+      "should_trigger": true,
+      "reason": "English class rename with source path, known BP dependencies, and safety requirement"
+    },
+    {
+      "id": "TP-03",
+      "query": "AWeapon을 ABaseWeapon으로 safe rename하고 싶은데, AWeapon이 Source/MyGame/Weapons/Weapon.h에 있고, AWeaponMelee, AWeaponRanged가 상속 중이야. Redirector 자동으로 해줄 수 있어?",
+      "should_trigger": true,
+      "reason": "Safe rename with file path, known subclasses, and redirector automation question"
+    },
+    {
+      "id": "TP-04",
+      "query": "UHealthComponent라는 이름이 다른 플러그인이랑 겹쳐서 UCUHealthComponent로 리네임해야 해. CU prefix 규칙 때문인데, BP_Player랑 BP_Enemy에서 이 컴포넌트 쓰고 있어",
+      "should_trigger": true,
+      "reason": "CU prefix migration rename with naming collision context and BP usage"
+    },
+    {
+      "id": "TP-05",
+      "query": "refactor class name AProjectile to ABaseProjectile. we have AProjectileBullet, AProjectileRocket, AProjectileGrenade inheriting from it. also need CoreRedirects for any serialized references",
+      "should_trigger": true,
+      "reason": "Class name refactor with 3 specific subclasses and serialization concern"
+    },
+    {
+      "id": "TP-06",
+      "query": "AItem 클래스 이름을 좀 더 명확하게 바꾸고 싶은데, APickupItem으로 변경하면 돼. 근데 BP_HealthPack, BP_AmmoBox, BP_WeaponPickup이 전부 AItem 상속이라 안전하게 해줘야 해",
+      "should_trigger": true,
+      "reason": "Rename with 3 inheriting BPs explicitly named — safety-first rename"
+    },
+    {
+      "id": "TP-07",
+      "query": "AMonster 클래스를 ACreature로 리네임해야 하는데, 팀에서 디자인 변경으로 몬스터뿐만 아니라 NPC까지 포함하는 베이스 클래스로 쓰기로 했거든. Source/MyGame/AI/Monster.h 파일명도 같이 바꿔줘",
+      "should_trigger": true,
+      "reason": "Class rename with design rationale, file rename request, and expanded scope context"
+    },
+    {
+      "id": "TP-08",
+      "query": "UInventoryComponent 이름을 UCUInventoryComponent로 변경해야 해. Issue #5915 CU prefix 규칙 적용이야. GetInventory(), AddItem() 같은 함수에서 참조하는 곳도 전부 업데이트 필요해",
+      "should_trigger": true,
+      "reason": "CU prefix migration with specific issue reference and function reference update scope"
+    },
+    {
+      "id": "TP-09",
+      "query": "rename AMyPawn to ACUBasePawn safely. i know there are at least 3 BPs using it and some C++ files in Source/Combat/ that cast to AMyPawn. can you check all references before renaming and set up CoreRedirects?",
+      "should_trigger": true,
+      "reason": "Safe rename with pre-rename reference check request and CoreRedirects setup"
+    },
+    {
+      "id": "TP-10",
+      "query": "ACharacterBase 클래스명을 ACharacterCore로 바꿔야 하는데, 이 클래스가 모듈 경계를 넘어서 GameCore 모듈이랑 GamePlay 모듈 양쪽에서 참조되고 있어. Build.cs 의존성도 확인하면서 리네임해줘",
+      "should_trigger": true,
+      "reason": "Cross-module rename with Build.cs dependency concern and two specific module names"
+    },
+    {
+      "id": "TN-01",
+      "query": "함수 추출해줘 BeginPlay에서",
+      "should_trigger": false,
+      "reason": "Method extraction — belongs to ue-cpp-refactor skill (extract method)"
+    },
+    {
+      "id": "TN-02",
+      "query": "ACharacter C++ 클래스 생성해줘",
+      "should_trigger": false,
+      "reason": "Class generation — belongs to code-generation or ue-scaffold skill"
+    },
+    {
+      "id": "TN-03",
+      "query": "APawn 변경하면 뭐가 깨져?",
+      "should_trigger": false,
+      "reason": "Impact analysis — belongs to ue-impact skill"
+    },
+    {
+      "id": "TN-04",
+      "query": "ACharacter의 callers 찾아줘",
+      "should_trigger": false,
+      "reason": "Caller graph query — belongs to caller-graph-visualizer or ue_analyze_symbols"
+    },
+    {
+      "id": "TN-05",
+      "query": "함수 이름 변경해줘 TakeDamage를 ApplyDamage로",
+      "should_trigger": false,
+      "reason": "Function rename — belongs to ue-cpp-refactor skill (rename_function)"
+    },
+    {
+      "id": "TN-06",
+      "query": "프로젝트 리팩터링 전략 제안해줘",
+      "should_trigger": false,
+      "reason": "General refactoring strategy — belongs to ue-cpp-refactor skill"
+    },
+    {
+      "id": "TN-07",
+      "query": "BP_Enemy 블루프린트 분석해줘",
+      "should_trigger": false,
+      "reason": "Blueprint analysis — belongs to blueprint-flow skill"
+    },
+    {
+      "id": "TN-08",
+      "query": "변수 이름 바꿔줘 MaxHP를 MaxHealth로",
+      "should_trigger": false,
+      "reason": "Variable rename — belongs to ue-cpp-refactor skill, not class-level rename"
+    },
+    {
+      "id": "TN-09",
+      "query": "GAS ability 개발해줘",
+      "should_trigger": false,
+      "reason": "GAS development — belongs to gas-development skill"
+    },
+    {
+      "id": "TN-10",
+      "query": "에셋 검증해줘",
+      "should_trigger": false,
+      "reason": "Asset validation — belongs to ue-validate skill"
+    }
+  ]
+}

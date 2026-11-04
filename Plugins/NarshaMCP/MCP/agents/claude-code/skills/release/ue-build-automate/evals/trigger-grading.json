@@ -1,0 +1,127 @@
+{
+  "skill": "ue-build-automate",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for ue-build-automate skill. Tests correct activation on build/cook/package pipeline automation queries, and correct rejection of build error debugging, dev loops, full workflows, and hot reload.",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "프로젝트 빌드해줘",
+      "should_trigger": true,
+      "reason": "Project build — direct trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "쿡해줘",
+      "should_trigger": true,
+      "reason": "Cook — direct trigger keyword"
+    },
+    {
+      "id": "tp-03",
+      "query": "패키징해줘",
+      "should_trigger": true,
+      "reason": "Packaging — direct trigger keyword"
+    },
+    {
+      "id": "tp-04",
+      "query": "커맨드릿 실행해줘",
+      "should_trigger": true,
+      "reason": "Commandlet execution — build pipeline operation"
+    },
+    {
+      "id": "tp-05",
+      "query": "빌드 파이프라인 실행",
+      "should_trigger": true,
+      "reason": "Build pipeline execution — explicit trigger"
+    },
+    {
+      "id": "tp-06",
+      "query": "Build the project for Windows",
+      "should_trigger": true,
+      "reason": "English project build request"
+    },
+    {
+      "id": "tp-07",
+      "query": "Cook for Windows and package",
+      "should_trigger": true,
+      "reason": "English cook + package pipeline"
+    },
+    {
+      "id": "tp-08",
+      "query": "Run BuildCookRun pipeline",
+      "should_trigger": true,
+      "reason": "English BuildCookRun — explicit pipeline trigger"
+    },
+    {
+      "id": "tp-09",
+      "query": "Run commandlet CompileAllBlueprints",
+      "should_trigger": true,
+      "reason": "English commandlet execution"
+    },
+    {
+      "id": "tp-10",
+      "query": "빌드 자동화 설정해줘",
+      "should_trigger": true,
+      "reason": "Build automation setup"
+    },
+    {
+      "id": "tn-01",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "Build error resolution — belongs to ue-debug skill"
+    },
+    {
+      "id": "tn-02",
+      "query": "개발 루프 돌려줘",
+      "should_trigger": false,
+      "reason": "Dev cycle loop — belongs to ue-dev-cycle skill"
+    },
+    {
+      "id": "tn-03",
+      "query": "풀사이클 실행해줘",
+      "should_trigger": false,
+      "reason": "Full cycle workflow — belongs to full-cycle skill"
+    },
+    {
+      "id": "tn-04",
+      "query": "라이브 코딩 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "Hot reload fix — belongs to ue-livecoding-fix skill"
+    },
+    {
+      "id": "tn-05",
+      "query": "Fix this build error",
+      "should_trigger": false,
+      "reason": "Build error fix — belongs to ue-debug skill"
+    },
+    {
+      "id": "tn-06",
+      "query": "Dev loop: code, build, test",
+      "should_trigger": false,
+      "reason": "Dev cycle — belongs to ue-dev-cycle skill"
+    },
+    {
+      "id": "tn-07",
+      "query": "Full workflow for issue #7000",
+      "should_trigger": false,
+      "reason": "Full lifecycle — belongs to full-cycle skill"
+    },
+    {
+      "id": "tn-08",
+      "query": "Hot reload failed, help me fix it",
+      "should_trigger": false,
+      "reason": "Hot reload fix — belongs to ue-livecoding-fix skill"
+    },
+    {
+      "id": "tn-09",
+      "query": "컴파일 에러 고쳐줘",
+      "should_trigger": false,
+      "reason": "Compilation error fix — belongs to ue-debug skill"
+    },
+    {
+      "id": "tn-10",
+      "query": "코드 빌드 테스트 자동화해줘",
+      "should_trigger": false,
+      "reason": "Code-build-test loop — belongs to ue-dev-cycle skill"
+    }
+  ]
+}

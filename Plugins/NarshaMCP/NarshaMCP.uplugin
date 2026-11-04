@@ -1,0 +1,134 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "0.13.7",
+  "FriendlyName": "NarshaMCP - AI-Powered C++ Development Tools",
+  "Description": "High-performance MCP server for UE C++ development. 24x faster PDB symbol search, 95%+ auto error resolution, 69 AI tools. Works with Claude Code, Cursor, Windsurf, and any MCP client.",
+  "Category": "Developer Tools",
+  "CreatedBy": "Claude + KangHyunWoo",
+  "CreatedByURL": "",
+  "DocsURL": "",
+  "MarketplaceURL": "",
+  "FabURL": "com.epicgames.launcher://ue/Fab/product/3aca3b01-b45d-4848-99a0-d9f1c1017b69",
+  "SupportURL": "",
+  "CanContainContent": true,
+  "IsBetaVersion": false,
+  "IsExperimentalVersion": false,
+  "Installed": false,
+  "Modules": [
+    {
+      "Name": "NarshaMCP",
+      "Type": "Editor",
+      "LoadingPhase": "PostEngineInit",
+      "PlatformAllowList": [
+        "Win64"
+      ]
+    }
+  ],
+  "Plugins": [
+    {
+      "Name": "GameplayAbilities",
+      "Enabled": false,
+      "Optional": true
+    },
+    {
+      "Name": "StateTree",
+      "Enabled": false,
+      "Optional": true
+    },
+    {
+      "Name": "GameplayStateTree",
+      "Enabled": false,
+      "Optional": true
+    },
+    {
+      "Name": "EnhancedInput",
+      "Enabled": false,
+      "Optional": true
+    },
+    {
+      "Name": "PCG",
+      "Enabled": false,
+      "Optional": true
+    },
+    {
+      "Name": "RigVM",
+      "Enabled": false,
+      "Optional": true
+    },
+    {
+      "Name": "ControlRig",
+      "Enabled": false,
+      "Optional": true
+    },
+    {
+      "Name": "WebSocketNetworking",
+      "Enabled": true
+    },
+    {
+      "Name": "RemoteControl",
+      "Enabled": true
+    },
+    {
+      "Name": "Niagara",
+      "Enabled": false,
+      "Optional": true
+    },
+    {
+      "Name": "GameplayCameras",
+      "Enabled": false,
+      "Optional": true
+    },
+    {
+      "Name": "Metasound",
+      "Enabled": false,
+      "Optional": true
+    },
+    {
+      "Name": "LevelSequenceEditor",
+      "Enabled": false,
+      "Optional": true
+    },
+    {
+      "Name": "MovieSceneAnimMixer",
+      "Enabled": false,
+      "Optional": true
+    },
+    {
+      "Name": "MovieSceneMixedControlRig",
+      "Enabled": false,
+      "Optional": true
+    },
+    {
+      "Name": "HierarchyTable",
+      "Enabled": false,
+      "Optional": true
+    },
+    {
+      "Name": "HierarchyTableAnimation",
+      "Enabled": false,
+      "Optional": true
+    },
+    {
+      "Name": "SequencerScripting",
+      "Enabled": false,
+      "Optional": true
+    },
+    {
+      "Name": "PluginWarden",
+      "Enabled": true,
+      "Optional": true
+    },
+    {
+      "Name": "PropertyBindingUtils",
+      "Enabled": false,
+      "Optional": true
+    },
+    {
+      "Name": "PythonScriptPlugin",
+      "Enabled": false,
+      "Optional": true
+    }
+  ],
+  "EngineVersion": "5.8.0"
+}

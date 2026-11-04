@@ -1,0 +1,39 @@
+{
+  "name": "character",
+  "description": "Standard ACharacter class with BeginPlay/Tick overrides. Base template for all character types. Use features parameter for GAS/replication setup.",
+  "version": "2.0.0",
+  "base_class": "ACharacter",
+  "default_specifiers": "",
+  "includes": [
+    "CoreMinimal.h",
+    "GameFramework/Character.h"
+  ],
+  "interfaces": [],
+  "molecules": [],
+  "default_overrides": [
+    {
+      "function_name": "BeginPlay",
+      "return_type": "virtual void",
+      "parameters": "",
+      "override_qualifier": "override",
+      "body": "\tSuper::BeginPlay();\n"
+    },
+    {
+      "function_name": "Tick",
+      "return_type": "virtual void",
+      "parameters": "float DeltaTime",
+      "override_qualifier": "override",
+      "body": "\tSuper::Tick(DeltaTime);\n"
+    },
+    {
+      "function_name": "SetupPlayerInputComponent",
+      "return_type": "virtual void",
+      "parameters": "UInputComponent* PlayerInputComponent",
+      "override_qualifier": "override",
+      "body": "\tSuper::SetupPlayerInputComponent(PlayerInputComponent);\n"
+    }
+  ],
+  "module_dependencies": {
+    "public": []
+  }
+}

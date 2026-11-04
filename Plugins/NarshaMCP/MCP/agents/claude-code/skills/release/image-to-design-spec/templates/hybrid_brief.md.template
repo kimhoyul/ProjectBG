@@ -1,0 +1,164 @@
+{# Hybrid GDD template for /image-to-design-spec Stage 2 #}
+{# Used when domain_distribution is mixed OR balanced across ui/system/concept #}
+{# Validated structure: pilot wf_20260429_d2e9a7 reached 9.4/10 with this layout (16 sections) #}
+{# Substitution syntax: {{var}} — Skill renderer should support: #}
+{#   {{workflow_id}} {{generated_at}} {{title_from_vision}} #}
+{#   {{intended_experience}} {{global_summary}} #}
+{#   {{emotion_spectrum_table}} {{schell_lenses_list}} {{norman_dominant}} {{mda_dominant}} #}
+{#   {{rld_indicators_table}} {{loop_signals_table}} #}
+{#   {{components_count}} {{components_table}} {{always_visible_classification}} #}
+{#   {{diegetic_fields_table}} {{art_attributes_section}} {{system_implications_section}} #}
+{#   {{warnings_list}} {{review_checklist}} #}
+
+# {{title_from_vision}}
+
+<!-- workflow-id: {{workflow_id}} -->
+<!-- ssot-version: 1.0 -->
+<!-- generated-at: {{generated_at}} -->
+<!-- stage: 2 -->
+<!-- domain: hybrid (mixed: ui_mockup + concept_art + system_diagram) -->
+<!-- ip-safety: all proper nouns are placeholders; color hex withheld; widget bbox refined to <0.95 convergence target> -->
+
+## 1. 개요 <!-- section-id: SEC-OVR-001 -->
+
+**의도된 플레이어 경험 앵커** — {{intended_experience_summary_one_sentence}}.
+
+이 기획서는 UI 정보 계층 / Art 감각 계층 / 시스템 메커니즘 계층 셋을 분리하지 않고, 의도된 경험을 anchor 로 삼아 세 계층이 서로를 강화하도록 설계합니다.
+
+## 2. 의도된 플레이어 경험 <!-- section-id: SEC-EXP-001 -->
+
+> {{intended_experience}}
+
+**감정 스펙트럼** (Plutchik 정규화):
+
+{{emotion_spectrum_table}}
+
+**Schell Lens 적용** (3개):
+{{schell_lenses_list_with_implications}}
+
+**Norman 우세 레이어**: {{norman_dominant}} — {{norman_implication_one_sentence}}
+
+**MDA 우세 레이어**: {{mda_dominant}} — {{mda_implication_one_sentence}}
+
+**레이어 omission boundary**: 이 brief 는 의도적으로 Norman {{norman_dominant}} + MDA {{mda_dominant}} primacy 에 commit 합니다. 다른 레이어 (Norman behavioral/reflective, MDA mechanics/dynamics) 는 §8 시스템 함의 + Stage 3 spec 에 위임. 평가는 결과물 정합성으로 받고 메커니즘 정확도로 받지 않습니다.
+
+## 3. 자원 / 손실 회피 / 지연 보상 <!-- section-id: SEC-RLD-001 -->
+
+**의도된 플레이어 경험에 따른 RLD 신호**:
+
+{{rld_indicators_table}}
+
+**가시성 분류** (cognitive-load → widget tier 결정):
+
+| 분류 | widget 매핑 | 이유 |
+|---|---|---|
+| **always-visible** (전투 중 풀 노출) | {{always_visible_widgets}} | "every input/resource matters" anchor 의 직접 기여 |
+| **context-fade** (전투 중 fade, 비전투 시 풀 노출) | {{context_fade_widgets}} | 오리엔테이션 정보는 보스 조우 동안 인지 부담만 가중 |
+| **state-driven pulse** (변경 시 0.5s 강조 후 fade) | {{state_driven_pulse_widgets}} | 자원 변화 순간만 attention 끌고, 평소 가시성 유지 |
+| **future-Slot 예약** | {{future_slot_widgets}} | 동적 trigger 시점에만 가시 |
+
+이 분류는 §3 cognitive-load risk 와 §4 loop-tier 결정을 직접 연결합니다 — Stage 3 에 위임하지 않고 brief 단계에서 closed-system 형성.
+
+## 4. 루프 신호 <!-- section-id: SEC-LOOP-001 -->
+
+{{loop_signals_table}}
+
+**의도된 경험에 따른 결정**: {{loop_tier_decision_one_sentence}}.
+
+## 5. UI 정보 아키텍처 ({{components_count}} widget) <!-- section-id: SEC-UI-IA -->
+
+> bbox 좌표는 `/image-bbox-refine` Skill 의 closed-loop two-tier 으로 보정됨. 모든 좌표는 0–100 percentage — Stage 3 UMG Anchor + Padding 으로 매핑.
+
+{{components_table_with_bbox_zone_interactive_intent_contribution}}
+
+**Slot 매핑 권장 (Stage 3 입력)**:
+- 모두 `Anchors` + `Padding` 기반 (해상도 적응); 절대 픽셀 위치 금지
+- {{slot_mapping_recommendations_per_component}}
+
+**visceral → behavioral 전환** (Norman 레이어 명시): {{components_count}} widget 중 {{interactive_count}} 개가 interactive — {{interactive_widget_names}}. 두 widget 은 Norman visceral (아이콘 즉각 인식) → Norman behavioral (위치-바인딩 muscle-memory) 으로 player 학습에 따라 transition. Stage 3 는 양 layer 동시에 다뤄야 함.
+
+## 6. 다이어제틱 데이터 바인딩 <!-- section-id: SEC-DATABIND-001 -->
+
+> stage1 SubAgent 가 surface 한 {{diegetic_field_count}} 개 다이어제틱 필드. **Stage 2 에서는 placeholder 유지** — 절대 literal 숫자/이름 emit 금지. Stage 3 에서 GameplayAttribute / Subsystem 매핑.
+
+{{diegetic_fields_table_placeholder_owner_attribute}}
+
+**의도된 경험과의 연결**: 모든 필드 가시 = "지속 세계 안에 있다" anchor 강화. Stage 3 UMG `INotifyFieldValueChanged` 바인딩 권장 (push, not poll).
+
+## 7. 아트 디렉션 (concept track) <!-- section-id: SEC-ART-001 -->
+
+> color hex 는 stage1 에서 격리 (메인 컨텍스트 누설 차단). Stage 2 는 의도된 경험 + art_attributes 에서 *팔레트를 새로 도출* — 원본 픽셀 복제 금지.
+
+{{art_attributes_table}}
+
+**팔레트 derivation 규칙 (Stage 3 art pass 입력)**:
+{{material_recommendations_list}}
+- 모두 `Material Parameter Collection` 기반 — 글로벌 전환 가능
+
+## 8. 게임 플레이 함의 (system track) <!-- section-id: SEC-SYS-001 -->
+
+**의도된 경험에서 도출된 시스템 요구**:
+
+{{system_implications_list}}
+
+**MDA dynamics 레이어**: {{dynamics_one_paragraph}}.
+
+## 8.A 음향 디렉션 <!-- section-id: SEC-AUDIO-001 -->
+
+> 장르 visceral 의 ~50% 는 음향이 차지. §2 emotion_spectrum 에서 직접 도출.
+
+{{audio_axes_table_combat_ambient_magic}}
+
+**Stage 3 권장**: `MetaSound` 기반. emotion_spectrum 변화에 따라 dynamic mix.
+
+## 8.B 접근성 <!-- section-id: SEC-A11Y-001 -->
+
+{{a11y_axes_table_colorblind_motion_controller_scaling}}
+
+**의도된 경험과의 정합**: 위 4 축 적용해도 anchor narrative 손상 없음.
+
+## 8.C 실패 상태 / 죽음 루프 <!-- section-id: SEC-FAILURE-001 -->
+
+{{failure_loop_steps_list_or_n_a}}
+
+**의도된 경험 강화**: failure-loop 는 §2 anchor 의 "real pressure" 를 강제.
+
+## 8.D 네트워크 범위 <!-- section-id: SEC-NETWORK-001 -->
+
+{{network_scope_table_options_recommendation}}
+
+**선택 (a) 시 Replication 전략**:
+{{replication_strategy_per_diegetic_field}}
+
+## 8.E 온보딩 패턴 <!-- section-id: SEC-ONBOARDING-001 -->
+
+{{onboarding_progressive_disclosure_table_time_widgets_learning}}
+
+**§2 anchor 보호**: progressive disclosure 는 anchor 를 약화하지 않음 — 학습 단계마다 anchor 부분 충족.
+
+## 9. Stage 3 핸드오프 가이드 <!-- section-id: SEC-HANDOFF-001 -->
+
+> Stage 3 는 도메인별 spec 으로 분기. 이 hybrid 기획서는 ui+system+art 3-track 입력을 모두 포함. domain dispatch 결정은 사용자.
+
+**ui_mockup 트랙 입력**:
+{{stage3_ui_inputs_list}}
+
+**system_diagram 트랙 입력**:
+{{stage3_system_inputs_list}}
+
+**concept_art 트랙 입력**:
+{{stage3_art_inputs_list}}
+
+## 10. 사용자 검토 요청 <!-- section-id: SEC-REVIEW -->
+
+{{review_checklist_questions_list}}
+
+## 11. 위험 + 경고 <!-- section-id: SEC-RISK-001 -->
+
+stage1 SubAgent + bbox-refine Skill 에서 surface 된 warnings + Stage 2 context 에서 강화:
+
+{{warnings_list_numbered}}
+
+---
+
+**다음 단계**: game-design-philosopher SubAgent 가 4-axis 평가 → `stage2_design_review.json` 생성. 그 후 Gate 2 체크리스트.

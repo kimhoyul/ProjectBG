@@ -1,0 +1,135 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "data_type": "engine_migrations",
+    "version": "1.0.0",
+    "generated_at": "2026-05-11T14:32:24Z",
+    "generator": "manual_curation_from_ue5_8_source_inspection",
+    "engine_version": "5.7->5.8",
+    "source_build_path": "D:/UE/ue5-58",
+    "source_build_version": "5.8.0",
+    "issue": "#11395",
+    "audit_log": [
+      {
+        "date": "2026-05-12",
+        "issue": "#11578",
+        "action": "schema_compliance_update",
+        "actor": "home-pc-aifarm03",
+        "notes": "Added verification_summary.evidence_paths.{source,target} two-sided convention. verification_status retained as MANUAL_CURATION_AGAINST_5_8_SOURCE (classifies as TARGET_ONLY_SOURCE_INFERRED in validator). HEADER_001-003 already removed via #11601; current header_relocations[] is empty so no source-side claims to attest. evidence_path singular key retained for transition compatibility."
+      },
+      {
+        "date": "2026-07-02",
+        "issue": "#18229",
+        "action": "initial_curation",
+        "actor": "Build03PC",
+        "notes": "Added CONFIG_021 (MinDesiredFrameRate removed) and CONFIG_022 ([HTTP.Curl] bForbidReuse removed) as two-sided-verified config_changes for 5.7->5.8. Evidence trees: source=C:/Program Files/Epic Games/UE_5.7, target=C:/Program Files/Epic Games/UE_5.8 (both Launcher installs with full Engine/Source + Engine/Config on Build03PC). Method per docs/development/MIGRATION_DATA_VERIFICATION.md: ConfigRedirects.ini diff (5.7 vs 5.8) + Engine/Source rg present-5.7/absent-5.8. verification_status unchanged: config_changes carries no source-side path claims (old_path/old_signature), so the #11578 two-sided ERROR check does not apply to it. The /Script/Party.SocialSettings_XboxCommonGDK -> SocialSettingsXbl SECTION rename (5.8 ConfigRedirects.ini:27, absent in 5.7) is documented as a finding, NOT added as a row: scan_deprecated matches on section+key and a whole-section rename has no fixed key; the engine ConfigRedirect auto-applies it at load. Rejected non-deprecations (documented for audit): BaseScalability.ini CVar removals (r.HeterogeneousVolumes etc. still registered in 5.8 source), BaseEngine.ini DDC config sections (still read by 5.8 source), and the 5.7-era HTTP redirects dropped in 5.8 (deprecation predates 5.7; undatable without <=5.6 engines)."
+      }
+    ]
+  },
+  "version": "1.0",
+  "source_engine": "5.7",
+  "target_engine": "5.8",
+  "generated_date": "2026-05-11T14:32:24Z",
+  "verified_date": "2026-05-12T00:00:00Z",
+  "verification_status": "MANUAL_CURATION_AGAINST_5_8_SOURCE",
+  "verification_summary": {
+    "evidence_path": "D:/UE/ue5-58",
+    "evidence_paths": {
+      "source": "C:/Program Files/Epic Games/UE_5.7 (Launcher install) or equivalent 5.7 source build",
+      "target": "D:/UE/ue5-58 (5.8 source build, KHW_PC)"
+    },
+    "total_entries": 2,
+    "note": "All entries verified against 5.8 source tree at D:/UE/ue5-58 (Build.version = 5.8.0). Issue #11574: HEADER_001/002/003 entries removed — `old_path` headers (LiveCoding.h / LiveCodingModule.h / LiveCodingSubsystem.h) never existed in 5.7's `Engine/Source/Developer/Windows/LiveCoding/Public/` (only `ILiveCodingModule.h` exists in both 5.7 and 5.8); the 5.8 `LiveCodingToolset` plugin headers are NEW UCLASS wrappers, not relocations of pre-existing 5.7 content. Issue #11578: evidence_paths.{source,target} added per two-sided verification convention."
+  },
+  "epic_release_notes_url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/unreal-engine-5.8-release-notes",
+  "deprecated_apis": [],
+  "breaking_changes": [
+    {
+      "id": "BREAK_001",
+      "category": "member_removed",
+      "old_signature": "ECABridge plugin (Editor Code Assistant Bridge)",
+      "new_signature": "MCPClientToolset (Engine/Plugins/Experimental/Toolsets/MCPClientToolset/)",
+      "change_type": "plugin_removed",
+      "auto_fixable": false,
+      "fix_strategy": "manual_migration",
+      "severity": "error",
+      "impact": "Projects that referenced ECABridge in .uproject Plugins[] or had editor automation flows wired through ECA must migrate to MCPClientToolset.",
+      "migration_steps": [
+        "Remove 'ECABridge' entry from .uproject Plugins[]",
+        "Enable MCPClientToolset via Editor Preferences > Plugins > MCP Toolset Servers",
+        "Add 'MCPClientToolset' to .uproject Plugins[] if the project needs it loaded at startup",
+        "Update any custom code calling ECA APIs to use the MCP Toolset surface (see Engine/Plugins/Experimental/Toolsets/MCPClientToolset/Source/Public/)"
+      ],
+      "plugin_specific": false,
+      "plugin_contexts": ["ECABridge"],
+      "source": "manual"
+    },
+    {
+      "id": "BREAK_002",
+      "category": "member_removed",
+      "old_signature": "AllRestrictedToolsets.uplugin (Engine/Plugins/Experimental/AllRestrictedToolsets/)",
+      "new_signature": "AllToolsets.uplugin (Engine/Plugins/Experimental/Toolsets/AllToolsets/)",
+      "change_type": "plugin_renamed_and_relocated",
+      "auto_fixable": false,
+      "fix_strategy": "manual_migration",
+      "severity": "warning",
+      "impact": "Plugins or projects that depend on the umbrella 'AllRestrictedToolsets' module via .Build.cs PluginDependencies or .uplugin Plugins[] will fail to resolve.",
+      "migration_steps": [
+        "Replace 'AllRestrictedToolsets' references with 'AllToolsets' in .uplugin Plugins[] entries",
+        "Update .Build.cs PluginDependencies to use 'AllToolsets'",
+        "Verify all individual *Toolset plugins moved under Engine/Plugins/Experimental/Toolsets/ (e.g., GASToolsets, NiagaraToolsets, StateTreeToolset)"
+      ],
+      "plugin_specific": false,
+      "plugin_contexts": ["AllRestrictedToolsets"],
+      "source": "manual"
+    }
+  ],
+  "class_removals": [],
+  "header_relocations": [],
+  "plugin_compatibility": [],
+  "plugin_breaking_changes": [],
+  "blueprint_changes": [],
+  "build_configuration_changes": [],
+  "config_changes": [
+    {
+      "id": "CONFIG_021",
+      "section": "[/Script/Engine.Engine]",
+      "key": "MinDesiredFrameRate",
+      "config_file": "DefaultEngine.ini",
+      "change_type": "removed",
+      "auto_fixable": false,
+      "severity": "warning",
+      "notes": "UEngine::MinDesiredFrameRate was removed in UE 5.8. Two-sided evidence: present in 5.7 (Engine/Source/Runtime/Engine/Classes/Engine/Engine.h:1813 UPROPERTY(config) float MinDesiredFrameRate; consumed in GameViewportClient.cpp:1252-1253 for the bDropDetail/bAggressiveLOD heuristics; Config/BaseEngine.ini:324 'MinDesiredFrameRate=35.000000'), absent from 5.8 Engine source (0 references) and 5.8 BaseEngine.ini. No direct replacement — remove the key.",
+      "deprecated_since": "5.8"
+    },
+    {
+      "id": "CONFIG_022",
+      "section": "[HTTP.Curl]",
+      "key": "bForbidReuse",
+      "config_file": "DefaultEngine.ini",
+      "change_type": "removed",
+      "auto_fixable": false,
+      "severity": "warning",
+      "notes": "[HTTP.Curl] bForbidReuse was removed in UE 5.8. Two-sided evidence: Epic's own remap declared in 5.8 Engine/Config/ConfigRedirects.ini:58-60 ('bForbidReuse has been removed, config it through http.CurlReuseConnectionEnable or change it through CVarHttpCurlReuseConnectionEnabled instead'); the redirect is absent from 5.7 ConfigRedirects.ini. Replacement key 'http.CurlReuseConnectionEnable' has inverted semantics (bForbidReuse=true corresponds to CurlReuseConnectionEnable=false), so it is not a mechanical rename.",
+      "deprecated_since": "5.8"
+    }
+  ],
+  "notes": [
+    "Issue #11395 body cited 'DefaultToolsets.uplugin' as a new file — verification against D:/UE/ue5-58 found 'AllToolsets.uplugin' at Engine/Plugins/Experimental/Toolsets/AllToolsets/ instead. Entry BREAK_002 covers this.",
+    "Issue #11395 body cited StateTree commit hashes (d25d1f85, cbea7a6b, 2bf91da0, 2cc48484, a4863512) as deprecated_apis evidence — these are not verifiable against a non-git engine mirror. Deferred to a follow-up issue when radbin/git access to engine mirror is available.",
+    "Issue #11395 body cited '[/Script/MCPClientToolset.MCPToolsetSettings]' as a new INI section — not found in Engine/Config/ default hierarchy in 5.8 source. Likely plugin-side runtime registration; deferred until observable.",
+    "BreakingChangeCategory enum is restricted to method-level variants (signature_change, parameter_added, parameter_removed, type_change, pure_virtual_added, method_made_final, member_removed). Plugin-level changes are encoded as 'member_removed' with descriptive 'change_type' free-text field.",
+    "Issue #11574: HEADER_001/002/003 entries removed. Original entries claimed LiveCoding.h / LiveCodingModule.h / LiveCodingSubsystem.h were relocated from Engine/Source/Developer/Windows/LiveCoding/Public/ to the new LiveCodingToolset plugin in 5.8.",
+    "Issue #11574 evidence: cross-verification against C:/UnrealEngine/5.7/UE_5.7 (5.7.4) and C:/UnrealEngines/UE_5.8_source (5.8.0) confirmed (a) the three old_path headers never existed in 5.7 — Public/ contained only ILiveCodingModule.h; (b) the 5.8 LiveCodingToolset plugin headers (LiveCodingToolset.h / LiveCodingToolsetModule.h / LiveCodingToolsetSubsystem.h) are NEW UCLASS wrappers exposing AICallable MCP tools, not relocated content.",
+    "Issue #11574 conclusion: ILiveCodingModule.h remains the canonical 5.7 → 5.8 path, unchanged. The new LiveCodingToolset plugin is a new optional surface, not a migration.",
+    "Issue #18229: two config_changes added for 5.7→5.8 (CONFIG_021 [/Script/Engine.Engine] MinDesiredFrameRate removed; CONFIG_022 [HTTP.Curl] bForbidReuse removed), two-sided-verified against UE_5.7 + UE_5.8 (see _metadata.audit_log 2026-07-02). The /Script/Party.SocialSettings_XboxCommonGDK → SocialSettingsXbl section rename is engine-auto-redirected (5.8 ConfigRedirects.ini) and documented, not added as a key-oriented row. BaseScalability/DDC/pre-5.7-HTTP candidates were rejected — no two-sided evidence."
+  ],
+  "statistics": {
+    "total_deprecated": 0,
+    "total_breaking": 2,
+    "total_removals": 0,
+    "total_relocations": 0,
+    "total_config_changes": 2,
+    "auto_fixable_percentage": 0.0
+  }
+}

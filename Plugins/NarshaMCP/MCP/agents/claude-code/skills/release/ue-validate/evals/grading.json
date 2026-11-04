@@ -1,0 +1,97 @@
+{
+  "skill": "ue-validate",
+  "version": "1.0.0",
+  "description": "Output quality eval for ue-validate skill — verifies asset validation using UE's FDataValidationContext",
+  "cases": [
+    {
+      "id": "qual-01",
+      "requires_live_editor": true,
+      "prompt": "에셋 검증해줘",
+      "assertions": [
+        {
+          "type": "tool_used",
+          "tool": "ue_editor_assets",
+          "description": "Should use ue_editor_assets(validate_asset) for UE data validation"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["pass", "fail", "validation", "result"],
+          "description": "Should provide Pass/Fail verdict per asset"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["issue", "warning", "error", "severity"],
+          "description": "Should report validation issues with severity levels"
+        }
+      ]
+    },
+    {
+      "id": "qual-02",
+      "requires_live_editor": true,
+      "requires_asset": ["BP_Player", "BP_Enemy"],
+      "_precondition_rationale": "Issue #19514: names project-specific Blueprints. Belt-and-suspenders — these cases are already requires_live_editor (skipped by default) and their content assertions are lenient, but the requires_asset gate makes the audit complete: under --live-editor the case runs only where BP_Player/BP_Enemy are declared present, else SKIP.",
+      "prompt": "Validate BP_Player and BP_Enemy",
+      "assertions": [
+        {
+          "type": "tool_used",
+          "tool": "ue_editor_assets",
+          "description": "Should call ue_editor_assets(validate_asset) for each specified Blueprint"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["pass", "fail", "✓", "✗"],
+          "description": "Should show a Pass/Fail verdict for each asset"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["BP_Player", "BP_Enemy", "result"],
+          "description": "Should reference both assets by name in the output"
+        }
+      ]
+    },
+    {
+      "id": "qual-03",
+      "requires_live_editor": true,
+      "prompt": "Pre-submit validation on all materials",
+      "assertions": [
+        {
+          "type": "tool_used",
+          "tool": "ue_editor_assets",
+          "description": "Should use ue_editor_assets(validate_asset) for material validation"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["material", "validation", "pass", "fail"],
+          "description": "Should validate material assets and report per-asset results"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["severity", "issue", "recommendation"],
+          "description": "Should report issues with severity and actionable recommendations"
+        }
+      ]
+    },
+    {
+      "id": "qual-04",
+      "requires_live_editor": true,
+      "prompt": "Data validation 실행해줘",
+      "assertions": [
+        {
+          "type": "tool_used",
+          "tool": "ue_editor_assets",
+          "description": "Should invoke UE's FDataValidationContext via ue_editor_assets(validate_asset)"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["validation", "result", "asset"],
+          "description": "Should produce structured validation results"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["error", "warning", "pass"],
+          "description": "Should categorize findings by severity (error/warning/pass)"
+        }
+      ]
+    }
+  ]
+}

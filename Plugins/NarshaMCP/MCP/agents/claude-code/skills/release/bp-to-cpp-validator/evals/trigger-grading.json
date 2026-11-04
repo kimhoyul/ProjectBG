@@ -1,0 +1,126 @@
+{
+  "skill": "bp-to-cpp-validator",
+  "description": "Trigger precision eval: verify bp-to-cpp-validator activates on migration validation queries and NOT on BP conversion/BP flow/code generation queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "BP_InventorySystem을 C++로 옮겼는데 로직이 원본 BP랑 동일한지 검증해줘. 특히 AddItem이랑 RemoveItem 함수가 제대로 변환됐는지 확인하고 싶어",
+      "should_trigger": true,
+      "reason": "Korean migration validation with specific BP and function names, logic equivalence check"
+    },
+    {
+      "id": "tp-02",
+      "query": "we just migrated BP_WeaponBase to AWeaponBase C++. can you run the migration validation to check if all the blueprint nodes were properly converted? there were like 15 functions in the original",
+      "should_trigger": true,
+      "reason": "English migration validation with specific BP/C++ class pair, completeness concern"
+    },
+    {
+      "id": "tp-03",
+      "query": "migration validation - BP_EnemyAI를 C++ AEnemyAI로 마이그레이션 했는데, 혹시 빠진 함수 없는지 확인해줘. 특히 OnPerceptionUpdated 콜백이 걱정돼",
+      "should_trigger": true,
+      "reason": "Korean migration verification with specific class pair and callback concern"
+    },
+    {
+      "id": "tp-04",
+      "query": "지난주에 BP_DialogManager를 C++ 마이그레이션 확인해줘. 변환 완료했는데 변환 리포트 생성해줘. QA팀한테 보여줄 수 있게",
+      "should_trigger": true,
+      "reason": "Korean conversion completeness report for QA, missing node detection"
+    },
+    {
+      "id": "tp-05",
+      "query": "migration completeness - validate that the BP_HUD → AHUD_Main migration didn't miss any widget binding logic. the original BP had SetVisibility calls in like 8 different places",
+      "should_trigger": true,
+      "reason": "English migration validation with specific concern about distributed logic"
+    },
+    {
+      "id": "tp-06",
+      "query": "BP_QuestSystem에서 C++로 옮긴 코드가 원래 블루프린트 실행 흐름이랑 일치하는지 비교 분석해줘. 특히 branching 로직이 복잡해서 놓친 거 있을 수 있어",
+      "should_trigger": true,
+      "reason": "Korean execution flow comparison, complex branching logic concern"
+    },
+    {
+      "id": "tp-07",
+      "query": "migration completeness - I converted BP_CraftingSystem to C++ manually last week. need to verify the migration - specifically check if all the BlueprintCallable functions match and if there are any broken references in other BPs that still point to the old one",
+      "should_trigger": true,
+      "reason": "English manual conversion validation, BlueprintCallable check, broken reference detection"
+    },
+    {
+      "id": "tp-08",
+      "query": "BP_HealthComponent를 UCU_HealthComponent로 변환했는데 마이그레이션 검증 돌려줘. OnHealthChanged 델리게이트 바인딩이 제대로 옮겨졌는지가 제일 궁금해",
+      "should_trigger": true,
+      "reason": "Korean migration validation with CU prefix class, delegate binding concern"
+    },
+    {
+      "id": "tp-09",
+      "query": "migration completeness - can you check if our BP_SaveSystem to C++ migration is complete? I'm worried some of the async nodes like SaveGameToSlot didn't get properly translated to the C++ async pattern",
+      "should_trigger": true,
+      "reason": "English completeness check with async node translation concern"
+    },
+    {
+      "id": "tp-10",
+      "query": "BP_PlayerController에서 C++로 옮긴 입력 처리 로직 검증해줘. Enhanced Input 관련 노드들이 12개 정도 있었는데 다 변환됐는지 migration validation report 만들어줘",
+      "should_trigger": true,
+      "reason": "Korean input handling migration validation, Enhanced Input node count, report request"
+    },
+    {
+      "id": "tn-01",
+      "query": "BP를 C++로 변환해줘",
+      "should_trigger": false,
+      "reason": "BP-to-C++ conversion (doing the migration) -> bp-to-cpp"
+    },
+    {
+      "id": "tn-02",
+      "query": "BP_Player 실행 흐름 분석해줘",
+      "should_trigger": false,
+      "reason": "BP execution flow analysis -> blueprint-flow"
+    },
+    {
+      "id": "tn-03",
+      "query": "C++ 클래스 생성해줘 AMyCharacter",
+      "should_trigger": false,
+      "reason": "C++ class generation -> code-generation"
+    },
+    {
+      "id": "tn-04",
+      "query": "BP_Enemy를 C++로 바꿔줘",
+      "should_trigger": false,
+      "reason": "BP-to-C++ conversion (active conversion) -> bp-to-cpp"
+    },
+    {
+      "id": "tn-05",
+      "query": "Blueprint 생성해줘",
+      "should_trigger": false,
+      "reason": "Blueprint creation -> blueprint-generator"
+    },
+    {
+      "id": "tn-06",
+      "query": "프로젝트 건강도 체크해줘",
+      "should_trigger": false,
+      "reason": "Project health check -> ue-audit"
+    },
+    {
+      "id": "tn-07",
+      "query": "Convert BP_Weapon to native C++",
+      "should_trigger": false,
+      "reason": "Active BP conversion -> bp-to-cpp"
+    },
+    {
+      "id": "tn-08",
+      "query": "BP_Player 구조 분석",
+      "should_trigger": false,
+      "reason": "Blueprint structure analysis -> blueprint-flow"
+    },
+    {
+      "id": "tn-09",
+      "query": "ACharacter 코드 생성해줘",
+      "should_trigger": false,
+      "reason": "Code generation -> code-generation"
+    },
+    {
+      "id": "tn-10",
+      "query": "빌드 에러 고쳐줘",
+      "should_trigger": false,
+      "reason": "Build error fix -> unreal-error-doctor"
+    }
+  ]
+}

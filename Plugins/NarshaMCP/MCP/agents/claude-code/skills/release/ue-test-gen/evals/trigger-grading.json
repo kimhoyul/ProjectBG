@@ -1,0 +1,150 @@
+{
+  "skill": "ue-test-gen",
+  "description": "Trigger precision eval: verify ue-test-gen activates on one-shot test generation queries and NOT on scenario/iterative/scaffold queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "ACharacter 테스트 생성해줘",
+      "should_trigger": true,
+      "reason": "Korean '테스트 생성' — core trigger with class name"
+    },
+    {
+      "id": "tp-02",
+      "query": "TakeDamage 테스트 만들어줘",
+      "should_trigger": true,
+      "reason": "Korean '테스트 만들어' — generate test for function"
+    },
+    {
+      "id": "tp-03",
+      "query": "테스트 생성 — 이 클래스에 대한 유닛 테스트 생성해줘",
+      "should_trigger": true,
+      "reason": "Korean '테스트 생성' — automation test generation"
+    },
+    {
+      "id": "tp-04",
+      "query": "테스트 만들어 - BeginPlay 테스트 코드 만들어줘",
+      "should_trigger": true,
+      "reason": "Korean '테스트 코드 만들어' — test code generation"
+    },
+    {
+      "id": "tp-05",
+      "query": "GetHealth 함수 유닛 테스트 생성해줘",
+      "should_trigger": true,
+      "reason": "Korean unit test generation for specific function"
+    },
+    {
+      "id": "tp-06",
+      "query": "Generate test for AMyCharacter::TakeDamage",
+      "should_trigger": true,
+      "reason": "English 'generate test for' — direct trigger"
+    },
+    {
+      "id": "tp-07",
+      "query": "Create test for the inventory system",
+      "should_trigger": true,
+      "reason": "English 'create test for' — test generation trigger"
+    },
+    {
+      "id": "tp-08",
+      "query": "테스트 생성해줘 — Generate a UE test for BP_Enemy",
+      "should_trigger": true,
+      "reason": "English 'generate test' — automation test for BP"
+    },
+    {
+      "id": "tp-09",
+      "query": "generate test - Create unit test for ApplyDamage function",
+      "should_trigger": true,
+      "reason": "English 'create unit test' — one-shot test gen"
+    },
+    {
+      "id": "tp-10",
+      "query": "generate test - Write test code for the health component",
+      "should_trigger": true,
+      "reason": "English test code generation for component"
+    },
+    {
+      "id": "tn-01",
+      "query": "캐릭터가 점프 후 착지하는 시나리오 테스트",
+      "should_trigger": false,
+      "reason": "Routes to ue-test-scenario — scenario-based test, not one-shot gen"
+    },
+    {
+      "id": "tn-02",
+      "query": "테스트 반복 실행해서 엣지 케이스 찾아줘",
+      "should_trigger": false,
+      "reason": "Routes to test-iterate — iterative edge case hunting"
+    },
+    {
+      "id": "tn-03",
+      "query": "인벤토리 시스템 만들어줘",
+      "should_trigger": false,
+      "reason": "Routes to ue-scaffold — feature creation, not test generation"
+    },
+    {
+      "id": "tn-04",
+      "query": "PIE 녹화해서 테스트 만들어줘",
+      "should_trigger": false,
+      "reason": "Routes to ue-test-record — recording-based test, not code gen"
+    },
+    {
+      "id": "tn-05",
+      "query": "테스트 실행해줘",
+      "should_trigger": false,
+      "reason": "Routes to test-run — executing tests, not generating them"
+    },
+    {
+      "id": "tn-06",
+      "query": "Test scenario: player picks up item and uses it",
+      "should_trigger": false,
+      "reason": "Routes to ue-test-scenario — scenario test, not one-shot gen"
+    },
+    {
+      "id": "tn-07",
+      "query": "Run edge case tests until 3 clean passes",
+      "should_trigger": false,
+      "reason": "Routes to test-iterate — iterative testing, not generation"
+    },
+    {
+      "id": "tn-08",
+      "query": "Create a health bar widget",
+      "should_trigger": false,
+      "reason": "Routes to ue-scaffold — feature scaffolding, not test gen"
+    },
+    {
+      "id": "tn-09",
+      "query": "Record PIE input and export test",
+      "should_trigger": false,
+      "reason": "Routes to ue-test-record — recording-based approach"
+    },
+    {
+      "id": "tn-10",
+      "query": "Run all automation tests",
+      "should_trigger": false,
+      "reason": "Routes to test-run — test execution, not generation"
+    },
+    {
+      "id": "tp-11",
+      "query": "ACharacter::TakeDamage intents으로 테스트 만들어줘",
+      "should_trigger": true,
+      "reason": "Korean 'intents으로 테스트' — intent-based multi-test trigger (Issue #10283)"
+    },
+    {
+      "id": "tp-12",
+      "query": "Generate tests from intents for AReplicatedActor::OnDamageReceived",
+      "should_trigger": true,
+      "reason": "English 'tests from intents' — intent-based dispatch trigger (Issue #10283)"
+    },
+    {
+      "id": "tn-11",
+      "query": "intent 분석해줘 — TestIntent 구조가 뭐야?",
+      "should_trigger": false,
+      "reason": "Routes to /ue-explain — explanatory query about TestIntent structure, not test generation"
+    },
+    {
+      "id": "tn-12",
+      "query": "What is the meaning of intent in the test generation pipeline?",
+      "should_trigger": false,
+      "reason": "Routes to /ue-explain — definitional query, not generation request"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "_meta": {
+    "skill_name": "ue-slate-debug",
+    "purpose": "Runtime Slate / UMG widget debugging — focus loss, hit-test failure, layout overflow, visibility, designer-vs-PIE drift.",
+    "schema_version": "1.0",
+    "capture_date": null,
+    "narshamcp_version": null,
+    "ue_version": null
+  },
+  "tools": {
+    "ue_editor_debug": {
+      "_status": "stub",
+      "operations": {},
+      "note": "Replace this stub with captured responses from ue_editor_debug. Run _capture.py to populate or paste raw MCP outputs here."
+    },
+    "ue_manage_widget": {
+      "_status": "stub",
+      "operations": {},
+      "note": "Replace this stub with captured responses from ue_manage_widget. Run _capture.py to populate or paste raw MCP outputs here."
+    },
+    "ue_check_health": {
+      "_status": "stub",
+      "operations": {},
+      "note": "Replace this stub with captured responses from ue_check_health. Run _capture.py to populate or paste raw MCP outputs here."
+    },
+    "ue_grep": {
+      "_status": "stub",
+      "operations": {},
+      "note": "Replace this stub with captured responses from ue_grep. Run _capture.py to populate or paste raw MCP outputs here."
+    }
+  }
+}

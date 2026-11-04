@@ -1,0 +1,291 @@
+{
+  "version": "1.0",
+  "source_engine": "5.2",
+  "target_engine": "5.3",
+  "generated_date": "2026-03-22T16:47:03.737123500+00:00",
+  "epic_release_notes_url": "",
+  "deprecated_apis": [
+    {
+      "id": "DEPR_RN_ee5d",
+      "category": "function",
+      "old_signature": "UPhysicsHandleComponent::GrabComponent",
+      "deprecated_since": "",
+      "replacement": {
+        "function": "UPhysicsHandleComponent::GrabComponentAtLocation",
+        "signature": "",
+        "auto_fixable": false,
+        "fix_strategy": "api_replacement"
+      },
+      "locations_in_engine": [],
+      "severity": "warning",
+      "source": "release_notes"
+    },
+    {
+      "id": "DEPR_RN_ce4c",
+      "category": "function",
+      "old_signature": "UCharacterMovementComponent::GetMaxSpeed",
+      "deprecated_since": "",
+      "replacement": {
+        "function": "UCharacterMovementComponent::GetMaxSpeedModified",
+        "signature": "",
+        "auto_fixable": false,
+        "fix_strategy": "api_replacement"
+      },
+      "locations_in_engine": [],
+      "severity": "warning",
+      "source": "release_notes"
+    },
+    {
+      "id": "DEPR_RN_6951",
+      "category": "function",
+      "old_signature": "AGameModeBase::GetDefaultPawnClassForController",
+      "deprecated_since": "",
+      "replacement": {
+        "function": "AGameModeBase::GetDefaultPawnClassForController_Implementation",
+        "signature": "",
+        "auto_fixable": false,
+        "fix_strategy": "api_replacement"
+      },
+      "locations_in_engine": [],
+      "severity": "warning",
+      "source": "release_notes"
+    },
+    {
+      "id": "DEPR_RN_fbad",
+      "category": "function",
+      "old_signature": "UWorld::SpawnActor",
+      "deprecated_since": "",
+      "replacement": {
+        "function": "UWorld::SpawnActorDeferred",
+        "signature": "",
+        "auto_fixable": false,
+        "fix_strategy": "api_replacement"
+      },
+      "locations_in_engine": [],
+      "severity": "warning",
+      "source": "release_notes"
+    },
+    {
+      "id": "DEPR_RN_90ed",
+      "category": "function",
+      "old_signature": "FBodyInstance::GetSimplePhysicalMaterial",
+      "deprecated_since": "",
+      "replacement": {
+        "function": "FBodyInstance::GetComplexPhysicalMaterial",
+        "signature": "",
+        "auto_fixable": false,
+        "fix_strategy": "api_replacement"
+      },
+      "locations_in_engine": [],
+      "severity": "warning",
+      "source": "release_notes"
+    },
+    {
+      "id": "DEPR_RN_ef6b",
+      "category": "class",
+      "old_signature": "UMovieSceneCapture",
+      "deprecated_since": "",
+      "replacement": {
+        "function": "UMovieSceneCaptureComponent",
+        "signature": "",
+        "auto_fixable": true,
+        "fix_strategy": "api_replacement"
+      },
+      "locations_in_engine": [],
+      "severity": "warning",
+      "source": "release_notes"
+    },
+    {
+      "id": "DEPR_RN_fffb",
+      "category": "class",
+      "old_signature": "FPhysicsInterface",
+      "deprecated_since": "",
+      "replacement": {
+        "function": "FPhysicsCommand",
+        "signature": "",
+        "auto_fixable": true,
+        "fix_strategy": "api_replacement"
+      },
+      "locations_in_engine": [],
+      "severity": "warning",
+      "source": "release_notes"
+    },
+    {
+      "id": "DEPR_RN_aed4",
+      "category": "function",
+      "old_signature": "FWorldPartitionStreamingPolicy::GetStreamingCells",
+      "deprecated_since": "",
+      "replacement": {
+        "function": "FWorldPartitionStreamingPolicy::GetStreamingCellsSorted",
+        "signature": "",
+        "auto_fixable": false,
+        "fix_strategy": "api_replacement"
+      },
+      "locations_in_engine": [],
+      "severity": "warning",
+      "source": "release_notes"
+    },
+    {
+      "id": "DEPR_RN_1f54",
+      "category": "function",
+      "old_signature": "UPCGComponent::Generate",
+      "deprecated_since": "",
+      "replacement": {
+        "function": "UPCGComponent::GenerateLocal",
+        "signature": "",
+        "auto_fixable": false,
+        "fix_strategy": "api_replacement"
+      },
+      "locations_in_engine": [],
+      "severity": "warning",
+      "source": "release_notes"
+    },
+    {
+      "id": "DEPR_RN_3b65",
+      "category": "function",
+      "old_signature": "FChaosPhysicsSolver::SolveConstraints",
+      "deprecated_since": "",
+      "replacement": {
+        "function": "FChaosPhysicsSolver::SolveConstraintsParallel",
+        "signature": "",
+        "auto_fixable": false,
+        "fix_strategy": "api_replacement"
+      },
+      "locations_in_engine": [],
+      "severity": "warning",
+      "source": "release_notes"
+    }
+  ],
+  "breaking_changes": [
+    {
+      "id": "BREAK_RN_cac5",
+      "category": "member_removed",
+      "old_signature": "UPhysicsConstraintComponent::SetLinearBreakable",
+      "new_signature": "",
+      "change_type": "removed",
+      "auto_fixable": false,
+      "fix_strategy": "manual",
+      "severity": "error",
+      "impact": "UPhysicsConstraintComponent::SetLinearBreakable has been removed",
+      "migration_steps": [
+        "Find and replace with new API manually"
+      ],
+      "plugin_specific": false,
+      "source": "release_notes"
+    },
+    {
+      "id": "BREAK_RN_00ba",
+      "category": "member_removed",
+      "old_signature": "AMatineeActor",
+      "new_signature": "",
+      "change_type": "removed",
+      "auto_fixable": false,
+      "fix_strategy": "manual",
+      "severity": "error",
+      "impact": "AMatineeActor has been removed",
+      "migration_steps": [
+        "Find and replace with new API manually"
+      ],
+      "plugin_specific": false,
+      "source": "release_notes"
+    },
+    {
+      "id": "BREAK_RN_4a72",
+      "category": "member_removed",
+      "old_signature": "UInterpTrackMove",
+      "new_signature": "",
+      "change_type": "removed",
+      "auto_fixable": false,
+      "fix_strategy": "manual",
+      "severity": "error",
+      "impact": "UInterpTrackMove has been removed",
+      "migration_steps": [
+        "Find and replace with new API manually"
+      ],
+      "plugin_specific": false,
+      "source": "release_notes"
+    }
+  ],
+  "class_removals": [
+    {
+      "id": "REMOVE_RN_00ba",
+      "removed_class": "AMatineeActor",
+      "removed_from": "",
+      "reason": "Removed in UE ",
+      "severity": "error",
+      "source": "release_notes"
+    },
+    {
+      "id": "REMOVE_RN_4a72",
+      "removed_class": "UInterpTrackMove",
+      "removed_from": "",
+      "reason": "Removed in UE ",
+      "severity": "error",
+      "source": "release_notes"
+    }
+  ],
+  "header_relocations": [],
+  "plugin_compatibility": [],
+  "plugin_breaking_changes": [],
+  "blueprint_changes": [],
+  "build_configuration_changes": [],
+  "deprecated_apis_rejected": [],
+  "breaking_changes_rejected": [],
+  "notes": [],
+  "statistics": {
+    "total_deprecated": 10,
+    "total_breaking": 3,
+    "total_removals": 2,
+    "total_relocations": 0,
+    "auto_fixable_percentage": 13.3,
+    "total_config_changes": 4
+  },
+  "config_changes": [
+    {
+      "id": "CONFIG_001",
+      "section": "[/Script/Engine.GarbageCollectionSettings]",
+      "key": "gc.MaxObjectsNotConsideredByGC",
+      "config_file": "DefaultEngine.ini",
+      "change_type": "renamed",
+      "new_key": "gc.MaxObjectsInGame",
+      "auto_fixable": true,
+      "severity": "warning",
+      "notes": "GC setting renamed for clarity in UE 5.3",
+      "deprecated_since": "5.3"
+    },
+    {
+      "id": "CONFIG_002",
+      "section": "[/Script/Engine.NetworkSettings]",
+      "key": "n.VerifyPeer",
+      "config_file": "DefaultEngine.ini",
+      "change_type": "section_moved",
+      "new_section": "[/Script/Engine.NetworkSettings.Platform]",
+      "auto_fixable": false,
+      "severity": "warning",
+      "notes": "Moved to platform-specific config. Manual migration required per-platform.",
+      "deprecated_since": "5.3"
+    },
+    {
+      "id": "CONFIG_003",
+      "section": "[/Script/Engine.PhysicsSettings]",
+      "key": "bEnableAsyncScene",
+      "config_file": "DefaultEngine.ini",
+      "change_type": "removed",
+      "auto_fixable": false,
+      "severity": "error",
+      "notes": "Removed with PhysX deprecation. Chaos Physics does not support async scenes.",
+      "deprecated_since": "5.1"
+    },
+    {
+      "id": "CONFIG_004",
+      "section": "[/Script/Engine.PhysicsSettings]",
+      "key": "PhysicsPrediction",
+      "config_file": "DefaultEngine.ini",
+      "change_type": "removed",
+      "auto_fixable": false,
+      "severity": "warning",
+      "notes": "PhysX prediction removed in Chaos migration. Use physics async callback instead.",
+      "deprecated_since": "5.1"
+    }
+  ]
+}

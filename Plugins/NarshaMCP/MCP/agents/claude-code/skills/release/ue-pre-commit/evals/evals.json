@@ -1,0 +1,39 @@
+{
+  "skill_name": "ue-pre-commit",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "커밋 전 분석해줘",
+      "expected_output": "Staged file analysis with change detection, function-level impact analysis, BP cross-references, and risk level verdict (SAFE/CAUTION/BLOCKED)",
+      "files": [],
+      "assertions": [
+        {"type": "content_contains_any", "values": ["staged", "스테이지", "git diff", "changed", "변경"], "description": "Should reference staged/changed files"},
+        {"type": "tool_usage", "value": "ue_analyze_symbols", "description": "Should use ue_analyze_symbols for detect_changes or impact_analysis"},
+        {"type": "content_pattern", "value": "(risk|SAFE|CAUTION|BLOCKED|위험|안전)", "description": "Should include risk level verdict"},
+        {"type": "llm_judge", "criteria": "Does the response analyze specific changed files and assess commit safety?", "threshold": 0.6, "description": "Commit safety assessment"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Is it safe to commit?",
+      "expected_output": "Clear yes/no safety verdict with supporting evidence from code analysis including affected BPs/assets",
+      "files": [],
+      "assertions": [
+        {"type": "content_contains_any", "values": ["safe", "risk", "commit", "impact", "affected", "안전", "위험"], "description": "Should address commit safety"},
+        {"type": "tool_usage", "value": "ue_analyze_symbols", "description": "Should use ue_analyze_symbols for change detection"},
+        {"type": "llm_judge", "criteria": "Does the response provide a clear yes/no verdict on commit safety with supporting evidence?", "threshold": 0.6, "description": "Clear safety verdict"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "커밋 영향 분석 — 어떤 BP가 깨질 수 있어?",
+      "expected_output": "C++ to Blueprint cross-reference analysis showing which BPs could break from staged changes",
+      "files": [],
+      "assertions": [
+        {"type": "content_contains_any", "values": ["Blueprint", "BP_", "블루프린트", "affected", "영향"], "description": "Should reference Blueprint impact"},
+        {"type": "tool_usage", "value": "ue_analyze_symbols", "description": "Should use ue_analyze_symbols for cross-BP dependency analysis"},
+        {"type": "content_pattern", "value": "(cross.ref|find_cpp_to_bp|impact_analysis|blueprint|BP_)", "description": "Should trace C++ to BP dependencies"}
+      ]
+    }
+  ]
+}

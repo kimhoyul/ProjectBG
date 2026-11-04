@@ -1,0 +1,81 @@
+{
+  "skill": "bp-cpp-project-init",
+  "description": "Trigger precision eval: verify bp-cpp-project-init activates on C++ project infrastructure setup queries (Source/, .Build.cs, .Target.cs) and NOT on BP logic conversion, BP analysis, or C++ codegen queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "우리 프로젝트 아직 BP only인데, C++ 프로젝트로 전환하려고 해. Source 폴더 구조 잡고 기본 클래스 세팅",
+      "should_trigger": true,
+      "reason": "Korean BP-only project to C++ transition with Source folder setup"
+    },
+    {
+      "id": "tp-02",
+      "query": "enable C++ for this Blueprint-only project, set up the Source directory and Build.cs",
+      "should_trigger": false,
+      "reason": "Routes to module-mapper (higher-priority overlap): Ambiguous: \"Source directory and Build.cs\" matches module-mapper (lower priority); needs more specific C++ init patterns"
+    },
+    {
+      "id": "tp-03",
+      "query": "BP only에서 C++ 프로젝트로 전환해줘. Source 디렉토리 만들고 Target.cs 파일 생성",
+      "should_trigger": true,
+      "reason": "Korean BP-only to C++ with explicit Source directory and Target.cs creation"
+    },
+    {
+      "id": "tp-04",
+      "query": "init C++ project for my Blueprint-only game, I need the basic folder structure",
+      "should_trigger": true,
+      "reason": "English C++ project initialization with folder structure request"
+    },
+    {
+      "id": "tp-05",
+      "query": "C++ 프로젝트 초기화해줘. 아직 Source 폴더가 없어서 NarshaMCP 플러그인을 못 쓰고 있어",
+      "should_trigger": false,
+      "reason": "Routes to ue-project-init (higher-priority overlap): Ambiguous: \"프로젝트 초기화해줘\" matches ue-project-init (lower priority)"
+    },
+    {
+      "id": "tn-01",
+      "query": "BP_PlayerCharacter를 C++로 변환해야 해. Tick에서 너무 많은 로직 돌리고 있어서 성능이 안 나와",
+      "should_trigger": false,
+      "reason": "BP logic conversion -> bp-to-cpp, not project init",
+      "redirect": "bp-to-cpp"
+    },
+    {
+      "id": "tn-02",
+      "query": "convert BP_WeaponBase to C++ - it has 15 functions and the casting overhead in BP is killing our frame time",
+      "should_trigger": false,
+      "reason": "BP logic to C++ conversion -> bp-to-cpp",
+      "redirect": "bp-to-cpp"
+    },
+    {
+      "id": "tn-03",
+      "query": "BP_Player 실행 흐름 분석해줘",
+      "should_trigger": false,
+      "reason": "BP execution flow analysis -> blueprint-flow"
+    },
+    {
+      "id": "tn-04",
+      "query": "C++ 캐릭터 클래스 생성해줘",
+      "should_trigger": false,
+      "reason": "C++ class generation from scratch -> code-generation"
+    },
+    {
+      "id": "tn-05",
+      "query": "BP_Enemy 구조 분석해줘",
+      "should_trigger": false,
+      "reason": "BP structure analysis -> blueprint-flow"
+    },
+    {
+      "id": "tn-06",
+      "query": "Blueprint 생성해줘",
+      "should_trigger": false,
+      "reason": "Blueprint creation -> blueprint-generator"
+    },
+    {
+      "id": "tn-07",
+      "query": "BP_InventoryManager를 네이티브로 마이그레이션해야 해. 200개 이상 노드에 ForEach 루프가 5개 있어서 GC 스파이크 심함",
+      "should_trigger": false,
+      "reason": "BP logic migration to C++ -> bp-to-cpp",
+      "redirect": "bp-to-cpp"
+    }
+  ]
+}

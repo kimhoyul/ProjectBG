@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://narshamcp.dev/schemas/design-from-image/manifest.schema.json",
+  "title": "Design-from-Image Workflow Manifest",
+  "description": "Top-level workflow metadata + per-stage status. Spec source: docs/Design/_meta/IMAGE_TO_SPEC_WORKFLOW.md. Pilots may use legacy variant (1st) or current variant (2nd/3rd) — schema is permissive-required-core with `additionalProperties: true` (variant-specific fields tolerated).",
+  "type": "object",
+  "required": [
+    "workflow_id",
+    "created_at",
+    "user_domain_hint",
+    "stages"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "$schema_version": {
+      "type": "string",
+      "description": "Schema version (e.g., '1.0', '1.1'). Spec recommended; missing in 3rd pilot — flagged as DRIFT by validate_design_schemas.py.",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "$variant": {
+      "type": "string",
+      "description": "Optional variant marker. Legacy 1st-pilot uses 'legacy'; current pilots omit."
+    },
+    "workflow_id": {
+      "type": "string",
+      "pattern": "^wf_[0-9]{8}_[0-9a-f]{6}$"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "user_domain_hint": {
+      "type": ["string", "null"]
+    },
+    "phase": {
+      "type": "string",
+      "description": "Legacy 1st-pilot field; tolerated."
+    },
+    "notes": {
+      "type": ["string", "array", "null"],
+      "description": "Legacy 1st-pilot field; tolerated."
+    },
+    "image_inputs": {
+      "type": "array",
+      "description": "Legacy 1st-pilot variant. Current variant uses input.image_paths.",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "source_path": {"type": "string"},
+          "stored_path": {"type": "string"},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "license_responsibility": {"type": "string"}
+        }
+      }
+    },
+    "input": {
+      "type": "object",
+      "description": "Current variant input section.",
+      "additionalProperties": true,
+      "properties": {
+        "image_paths": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "max_images": {
+          "type": ["integer", "null"]
+        }
+      }
+    },
+    "pilot_metadata": {
+      "type": "object",
+      "description": "Current variant: pilot_index / pilot_purpose / issue_ref / dataset etc.",
+      "additionalProperties": true
+    },
+    "downstream_gates": {
+      "type": ["object", "array"],
+      "description": "3rd-pilot-only field (gate state echo).",
+      "additionalProperties": true
+    },
+    "stages": {
+      "type": "object",
+      "description": "Per-stage status objects. Variant-tolerant: 1st adds bbox_refinement/stage2_ab_test; 2nd adds ab_test/ab_test_baseline; 3rd adds ab_test_baseline.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Stage status. Schema is permissive (no enum) since pilots use varied conventions — observed values: pending, not_started, in_progress, in_review, completed, interrupted, skipped, final, done, blocked, failed."
+          },
+          "started_at": {"type": ["string", "null"]},
+          "ended_at": {"type": ["string", "null"]},
+          "artifacts": {
+            "type": "array",
+            "items": {"type": "string"}
+          }
+        }
+      }
+    }
+  }
+}

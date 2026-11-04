@@ -1,0 +1,127 @@
+{
+  "skill": "animation-workflow",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for animation-workflow skill. Tests correct activation on AnimBP/AnimGraph/montage/animation queries, and correct rejection of Blueprint flow, material, and audio queries.",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "ABP_Hero라는 AnimBP가 있는데, Locomotion 상태 머신 안에서 IdleWalkRun BlendSpace1D가 어떻게 연결돼있는지 구조 분석해줘. 트랜지션 룰도 같이 보고 싶어",
+      "should_trigger": true,
+      "reason": "Specific AnimBP with named state machine and blend space — detailed animation graph analysis"
+    },
+    {
+      "id": "TP-02",
+      "query": "ABP_Mannequin의 AnimGraph 보고 싶은데, LinkedAnimGraph 노드가 서브 AnimBP로 뭘 참조하는지 확인해줘. 레이어드 블렌딩이 좀 복잡하게 되어있거든",
+      "should_trigger": true,
+      "reason": "AnimGraph linked layer inspection with specific asset name and node type"
+    },
+    {
+      "id": "TP-03",
+      "query": "AM_Melee_Attack 몽타주가 있는데 GA_Melee에서 PlayMontageAndWait로 재생하고 있거든. 근데 몽타주 노티파이에서 AN_HitCheck 타이밍이 좀 이상해서 슬롯 구조랑 섹션 분석해줘",
+      "should_trigger": true,
+      "reason": "Montage analysis with specific notify timing issue — animation workflow with named assets"
+    },
+    {
+      "id": "TP-04",
+      "query": "캐릭터 달리기 애니메이션이 여러 개 있을 텐데 Content/Characters/Hero/Animations 폴더에서 run이나 sprint 관련 시퀀스 찾아보고 어떤 BlendSpace에서 쓰이는지까지 추적해줘",
+      "should_trigger": true,
+      "reason": "Animation search in specific folder with blend space usage tracking"
+    },
+    {
+      "id": "TP-05",
+      "query": "새로 만든 AMyCharacter에 애니메이션 시스템 세팅해야 하는데, AnimBP 생성하고 Locomotion 상태 머신에 Idle, Walk, Run, Jump 상태 넣어줘. 기본 UE5 마네킹 스켈레톤 기준으로",
+      "should_trigger": true,
+      "reason": "Full animation workflow setup from scratch — AnimBP creation with state machine layout"
+    },
+    {
+      "id": "TP-06",
+      "query": "i have an ABP_Enemy that uses a statemachine for combat anims but the transition from Attack back to Idle feels janky. can you look at the blend settings and transition rules? maybe the blend time is too short",
+      "should_trigger": true,
+      "reason": "English AnimBP transition debugging with specific quality concern and blend settings"
+    },
+    {
+      "id": "TP-07",
+      "query": "ABP_Mannequin에서 FullBody 슬롯이랑 UpperBody 슬롯 레이어드 블렌딩이 되어있는데, 상체만 공격 몽타주 재생하면서 하체는 Locomotion 유지하는 구조가 제대로 되어있는지 확인해줘",
+      "should_trigger": true,
+      "reason": "Layered blend per bone analysis in specific AnimBP — upper/lower body separation check"
+    },
+    {
+      "id": "TP-08",
+      "query": "AM_Dodge_Roll 몽타주 만들어야 하는데, 기존 AS_DodgeRoll 시퀀스를 기반으로 하고 RootMotion 활성화해서 BP_PlayerCharacter에서 쓸 수 있게 세팅해줘. 블렌드인 0.15, 블렌드아웃 0.25로",
+      "should_trigger": true,
+      "reason": "Montage creation from existing sequence with specific root motion and blend parameters"
+    },
+    {
+      "id": "TP-09",
+      "query": "AnimGraph에서 BS_IdleWalkRun이라는 BlendSpace1D를 Speed 변수로 구동하고 있는데, AimOffset도 같이 블렌딩하고 싶어. AO_Standing 에셋 있거든. 어떻게 연결하면 될까",
+      "should_trigger": true,
+      "reason": "AnimGraph BlendSpace + AimOffset integration with specific assets and variable binding"
+    },
+    {
+      "id": "TP-10",
+      "query": "캐릭터 상태 머신에서 Jump_Start → Jump_Loop → Jump_End 세 상태 간 트랜지션이 있는데, bIsInAir 변수랑 Velocity.Z 값으로 전환 조건이 걸려있거든. 근데 가끔 Jump_End에서 Idle로 안 돌아와서 AnimBP 구조 점검 필요해",
+      "should_trigger": true,
+      "reason": "State machine transition debugging with specific states, variables, and described bug"
+    },
+    {
+      "id": "TN-01",
+      "query": "BP_Player 블루프린트 이벤트 흐름 분석",
+      "should_trigger": false,
+      "reason": "Blueprint event flow analysis — belongs to blueprint-flow skill"
+    },
+    {
+      "id": "TN-02",
+      "query": "M_Rock 머티리얼 파라미터 분석",
+      "should_trigger": false,
+      "reason": "Material parameter analysis — belongs to material-analysis skill"
+    },
+    {
+      "id": "TN-03",
+      "query": "사운드 재생 설정해줘",
+      "should_trigger": false,
+      "reason": "Sound playback setup — belongs to audio-workflow skill"
+    },
+    {
+      "id": "TN-04",
+      "query": "BP_Enemy 실행 추적해줘",
+      "should_trigger": false,
+      "reason": "Blueprint execution trace — belongs to ue-execution-trace skill"
+    },
+    {
+      "id": "TN-05",
+      "query": "ACharacter 어떻게 동작해?",
+      "should_trigger": false,
+      "reason": "Class explanation — belongs to ue-explain skill"
+    },
+    {
+      "id": "TN-06",
+      "query": "오디오 컴포넌트 추가해줘",
+      "should_trigger": false,
+      "reason": "Audio component addition — belongs to audio-workflow skill"
+    },
+    {
+      "id": "TN-07",
+      "query": "Niagara 파티클 검색",
+      "should_trigger": false,
+      "reason": "Niagara VFX search — belongs to ue_manage_niagara direct MCP call"
+    },
+    {
+      "id": "TN-08",
+      "query": "PCG 그래프 구조 분석",
+      "should_trigger": false,
+      "reason": "PCG graph analysis — belongs to pcg-workflow skill"
+    },
+    {
+      "id": "TN-09",
+      "query": "조명 추가해줘",
+      "should_trigger": false,
+      "reason": "Light placement — belongs to lighting-workflow skill"
+    },
+    {
+      "id": "TN-10",
+      "query": "GAS ability 분석해줘",
+      "should_trigger": false,
+      "reason": "GAS ability analysis — belongs to gas-development skill"
+    }
+  ]
+}

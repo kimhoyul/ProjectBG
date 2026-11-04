@@ -1,0 +1,259 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "data_type": "common_classes",
+    "version": "1.0.0",
+    "generated_at": "2026-06-08T09:38:33.796566+00:00",
+    "generator": "manual_curation",
+    "engine_version": "5.8",
+    "last_review": {
+      "reviewer": "claude",
+      "reviewed_at": "2026-06-08T09:38:33.796566+00:00",
+      "note": "Issue #14427: reviewed against UE 5.8; foundational/stable reference data, representative items verified present in 5.8 — content valid, engine_version bumped 5.6->5.8"
+    }
+  },
+  "_comment": "Common Unreal Engine classes manually curated for instant lookup",
+  "_description": "These classes are either typedefs (not captured by Doxygen) or frequently used Kismet classes",
+  "_version": "v2.7.1.1",
+  "_last_updated": "2025-10-14",
+  "UGameplayStatics": {
+    "path": "Kismet/GameplayStatics.h",
+    "module": "Engine",
+    "api": "ENGINE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Blueprint function library - not always captured by Doxygen"
+  },
+  "UKismetSystemLibrary": {
+    "path": "Kismet/KismetSystemLibrary.h",
+    "module": "Engine",
+    "api": "ENGINE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Core system utilities"
+  },
+  "UKismetMathLibrary": {
+    "path": "Kismet/KismetMathLibrary.h",
+    "module": "Engine",
+    "api": "ENGINE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Math utilities"
+  },
+  "UKismetStringLibrary": {
+    "path": "Kismet/KismetStringLibrary.h",
+    "module": "Engine",
+    "api": "ENGINE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "String utilities"
+  },
+  "UKismetArrayLibrary": {
+    "path": "Kismet/KismetArrayLibrary.h",
+    "module": "Engine",
+    "api": "ENGINE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Array utilities"
+  },
+  "FVector": {
+    "path": "Math/Vector.h",
+    "module": "Core",
+    "api": "CORE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Typedef for TVector<double> - not captured by Doxygen"
+  },
+  "FVector2D": {
+    "path": "Math/Vector2D.h",
+    "module": "Core",
+    "api": "CORE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Typedef - not captured by Doxygen"
+  },
+  "FVector4": {
+    "path": "Math/Vector4.h",
+    "module": "Core",
+    "api": "CORE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Typedef - not captured by Doxygen"
+  },
+  "FRotator": {
+    "path": "Math/Rotator.h",
+    "module": "Core",
+    "api": "CORE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Typedef for TRotator<double> - not captured by Doxygen"
+  },
+  "FTransform": {
+    "path": "Math/Transform.h",
+    "module": "Core",
+    "api": "CORE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Typedef - not captured by Doxygen"
+  },
+  "FQuat": {
+    "path": "Math/Quat.h",
+    "module": "Core",
+    "api": "CORE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Typedef for TQuat<double> - not captured by Doxygen"
+  },
+  "FMatrix": {
+    "path": "Math/Matrix.h",
+    "module": "Core",
+    "api": "CORE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Typedef - not captured by Doxygen"
+  },
+  "FColor": {
+    "path": "Math/Color.h",
+    "module": "Core",
+    "api": "CORE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "RGBA color struct"
+  },
+  "FLinearColor": {
+    "path": "Math/Color.h",
+    "module": "Core",
+    "api": "CORE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Linear space color"
+  },
+  "FString": {
+    "path": "Containers/UnrealString.h",
+    "module": "Core",
+    "api": "CORE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Typedef for TString - not captured by Doxygen"
+  },
+  "FName": {
+    "path": "UObject/NameTypes.h",
+    "module": "CoreUObject",
+    "api": "COREUOBJECT_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Interned string name"
+  },
+  "FText": {
+    "path": "Internationalization/Text.h",
+    "module": "Core",
+    "api": "CORE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Localized text"
+  },
+  "TArray": {
+    "path": "Containers/Array.h",
+    "module": "Core",
+    "api": "CORE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Dynamic array template"
+  },
+  "TMap": {
+    "path": "Containers/Map.h",
+    "module": "Core",
+    "api": "CORE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Hash map template"
+  },
+  "TSet": {
+    "path": "Containers/Set.h",
+    "module": "Core",
+    "api": "CORE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Hash set template"
+  },
+  "TSubclassOf": {
+    "path": "UObject/Class.h",
+    "module": "CoreUObject",
+    "api": "COREUOBJECT_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Type-safe UClass reference"
+  },
+  "TWeakObjectPtr": {
+    "path": "UObject/WeakObjectPtr.h",
+    "module": "CoreUObject",
+    "api": "COREUOBJECT_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Weak reference to UObject"
+  },
+  "TSharedPtr": {
+    "path": "Templates/SharedPointer.h",
+    "module": "Core",
+    "api": "CORE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Reference counted pointer"
+  },
+  "TUniquePtr": {
+    "path": "Templates/UniquePtr.h",
+    "module": "Core",
+    "api": "CORE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Unique ownership pointer"
+  },
+  "FTimerHandle": {
+    "path": "Engine/TimerHandle.h",
+    "module": "Engine",
+    "api": "ENGINE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Timer system handle"
+  },
+  "FHitResult": {
+    "path": "Engine/HitResult.h",
+    "module": "Engine",
+    "api": "ENGINE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Collision query result"
+  },
+  "FActorSpawnParameters": {
+    "path": "Engine/World.h",
+    "module": "Engine",
+    "api": "ENGINE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Actor spawning parameters"
+  },
+  "FLatentActionInfo": {
+    "path": "LatentActions.h",
+    "module": "Engine",
+    "api": "ENGINE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Blueprint latent action info"
+  },
+  "FCollisionQueryParams": {
+    "path": "Engine/EngineTypes.h",
+    "module": "Engine",
+    "api": "ENGINE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Collision query parameters"
+  },
+  "FInputActionBinding": {
+    "path": "Components/InputComponent.h",
+    "module": "Engine",
+    "api": "ENGINE_API",
+    "confidence": 1.0,
+    "source": "manual",
+    "note": "Input action binding"
+  }
+}

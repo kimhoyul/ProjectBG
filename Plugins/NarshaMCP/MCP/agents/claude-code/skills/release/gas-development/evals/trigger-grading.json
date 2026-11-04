@@ -1,0 +1,145 @@
+{
+  "skill": "gas-development",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for gas-development skill. Tests correct activation on GAS/Ability/GameplayTag/Attribute queries, and correct rejection of cross-domain flow, balance reports, and code generation queries.",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "프로젝트에 GAS가 세팅돼있는데 Ability.Combat 하위 태그들이 어떻게 구성돼있는지 분석해줘. AbilitySystemComponent는 AMyCharacter에 붙어있고 DefaultAbilities에 GA_Melee, GA_Dodge, GA_Block이 등록돼있거든",
+      "should_trigger": true,
+      "reason": "GAS query — may route to gas-development or ue-explain/ue-scaffold (non-deterministic)"
+    },
+    {
+      "id": "TP-02",
+      "query": "Ability 개발 — GA_Melee_Slash 근접 공격 만들고 GAS 분석. 쿨다운 Attribute 바인딩 포함",
+      "should_trigger": true,
+      "reason": "GAS query — may route to gas-development or ue-explain/ue-scaffold (non-deterministic)"
+    },
+    {
+      "id": "TP-03",
+      "query": "Ability.Attack.Melee 태그가 있는데 이 태그를 쓰는 GA가 뭔지 찾아줘. 그리고 Ability.Attack 상위 태그로 묶인 다른 하위 태그들도 같이 보여줘. Ability.Attack.Ranged나 Ability.Attack.Magic 같은 거",
+      "should_trigger": true,
+      "reason": "GAS query — may route to gas-development or ue-explain/ue-scaffold (non-deterministic)"
+    },
+    {
+      "id": "TP-04",
+      "query": "UCUBaseAttributeSet에 Health, MaxHealth, Mana, MaxMana, Stamina가 있는데 각 Attribute에 연결된 GameplayEffect가 뭔지 분석해줘. 특히 GE_Damage_Physical에서 Health를 어떤 Modifier로 깎는지 궁금해",
+      "should_trigger": true,
+      "reason": "GAS query — may route to gas-development or ue-explain/ue-scaffold (non-deterministic)"
+    },
+    {
+      "id": "TP-05",
+      "query": "새 프로젝트에 GAS 처음 세팅하는데 도와줘. Lyra 스타일로 하고 싶은데 AbilitySystemComponent를 PlayerState에 둘지 Character에 둘지 고민 중이야. AttributeSet은 Health/Damage/Armor 기본 세트만 먼저 만들고 싶어",
+      "should_trigger": true,
+      "reason": "GAS query — may route to gas-development or ue-explain/ue-scaffold (non-deterministic)"
+    },
+    {
+      "id": "TP-06",
+      "query": "GA_Fireball GAS 분석 — ActivateAbility 호출되면 뭘 하는지 ability trace 추적해줘",
+      "should_trigger": true,
+      "reason": "GAS query — may route to gas-development or ue-explain/ue-scaffold (non-deterministic)"
+    },
+    {
+      "id": "TP-07",
+      "query": "GA_Weapon_Fire에서 IA_Fire 인풋으로 발동하는 건 알겠는데, 내부에서 WaitTargetData로 타겟팅하고 GE_Damage_Bullet 적용하는 흐름을 분석해줘. AbilityTag가 Ability.Weapon.Fire로 되어있고 BlockTag에 뭐가 걸려있는지도 확인",
+      "should_trigger": true,
+      "reason": "GAS query — may route to gas-development or ue-explain/ue-scaffold (non-deterministic)"
+    },
+    {
+      "id": "TP-08",
+      "query": "GE_Damage_Physical이라는 GameplayEffect가 있는데 Execution Calculation으로 데미지를 계산하고 있어. UCUDamageExecCalc 클래스에서 Armor Attribute를 캡처해서 데미지 감소하는 로직이 맞는지 확인해줘",
+      "should_trigger": true,
+      "reason": "GAS query — may route to gas-development or ue-explain/ue-scaffold (non-deterministic)"
+    },
+    {
+      "id": "TP-09",
+      "query": "우리 프로젝트 GAS 구조가 좀 복잡한데, ASC는 PlayerState에 있고 AttributeSet이 3개(Base, Combat, Movement), GA가 12개 있거든. 전체적인 의존 관계랑 태그 구조를 정리해줬으면 좋겠어",
+      "should_trigger": true,
+      "reason": "GAS query — may route to gas-development or ue-explain/ue-scaffold (non-deterministic)"
+    },
+    {
+      "id": "TP-10",
+      "query": "GA_Dash 어빌리티 activation policy를 Cost로 바꾸고 싶은데, 지금 OnInputPressed로 되어있거든. 그리고 TagRequirements에 State.Movement.OnGround 태그가 있어야만 발동하게 하고 싶어. BlockTag에는 State.Movement.InAir 추가",
+      "should_trigger": true,
+      "reason": "GAS query — may route to gas-development or ue-explain/ue-scaffold (non-deterministic)"
+    },
+    {
+      "id": "TN-01",
+      "query": "Input에서 Animation까지 전체 체인 추적",
+      "should_trigger": false,
+      "reason": "Full Input→Animation chain — belongs to cross-domain-flow skill"
+    },
+    {
+      "id": "TN-02",
+      "query": "GAS 밸런스 분석 리포트 생성해줘",
+      "should_trigger": false,
+      "reason": "GAS balance report — belongs to game-design-intelligence skill"
+    },
+    {
+      "id": "TN-03",
+      "query": "AMyHero C++ 클래스 생성해줘",
+      "should_trigger": false,
+      "reason": "C++ class generation — belongs to code-generation or ue-scaffold skill"
+    },
+    {
+      "id": "TN-04",
+      "query": "BP_Player 블루프린트 노드 분석",
+      "should_trigger": false,
+      "reason": "Blueprint node analysis — belongs to blueprint-flow skill"
+    },
+    {
+      "id": "TN-05",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "Project health diagnostic — belongs to ue-audit skill"
+    },
+    {
+      "id": "TN-06",
+      "query": "AnimBP 상태 머신 분석",
+      "should_trigger": false,
+      "reason": "AnimBP state machine — belongs to animation-workflow skill"
+    },
+    {
+      "id": "TN-07",
+      "query": "APawn 변경하면 뭐가 깨져?",
+      "should_trigger": false,
+      "reason": "Impact analysis — belongs to ue-impact skill"
+    },
+    {
+      "id": "TN-08",
+      "query": "에러 해결해줘 빌드 실패",
+      "should_trigger": false,
+      "reason": "Build error resolution — belongs to ue-debug skill"
+    },
+    {
+      "id": "TN-09",
+      "query": "게임 디자인 문서 만들어줘",
+      "should_trigger": false,
+      "reason": "Game design document — belongs to game-design-intelligence skill"
+    },
+    {
+      "id": "TN-10",
+      "query": "클래스 이름 변경해줘 AEnemy를 ABaseEnemy로",
+      "should_trigger": false,
+      "reason": "Class rename — belongs to safe-class-rename skill"
+    },
+    {
+      "id": "TN-11",
+      "query": "GAS 설명해줘 — Gameplay Ability System이 뭔지 개념 알려줘",
+      "should_trigger": false,
+      "reason": "GAS explanation query — belongs to ue-explain, not gas-development workflow"
+    },
+    {
+      "id": "TN-12",
+      "query": "GAS 캐릭터 클래스 만들어줘 — AMyGASCharacter 생성",
+      "should_trigger": false,
+      "reason": "Character class creation — belongs to ue-scaffold or code-generation"
+    },
+    {
+      "id": "TN-13",
+      "query": "GA_Attack에서 입력받아서 Animation까지 전체 크로스 도메인 흐름 보여줘",
+      "should_trigger": false,
+      "reason": "Cross-domain flow from input to animation — belongs to cross-domain-flow"
+    }
+  ]
+}

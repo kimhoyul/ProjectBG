@@ -1,0 +1,96 @@
+{
+  "skill": "ue-debug",
+  "version": "1.0.0",
+  "description": "Output quality eval: verify ue-debug classifies errors, provides root cause analysis, and suggests specific fixes",
+  "cases": [
+    {
+      "id": "qual-01",
+      "prompt": "빌드 에러 해결해줘",
+      "assertions": [
+        {
+          "type": "content_pattern",
+          "value": "(compile|linker|build_system|syntax|runtime|crash)",
+          "description": "Should classify the error type"
+        },
+        {
+          "type": "tool_usage_any",
+          "value": ["ue_fix_errors", "ue_editor_debug"],
+          "description": "Should use ue_fix_errors or ue_editor_debug to gather error information"
+        },
+        {
+          "type": "content_contains",
+          "value": "root cause",
+          "description": "Should provide root cause analysis"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(step|fix|solution|resolve|workaround)",
+          "description": "Should suggest specific fix steps"
+        }
+      ]
+    },
+    {
+      "id": "qual-02",
+      "prompt": "NullPtr crash in TakeDamage",
+      "assertions": [
+        {
+          "type": "content_pattern",
+          "value": "(nullptr|null pointer|null check|IsValid|validity)",
+          "description": "Should identify null pointer as the crash category"
+        },
+        {
+          "type": "tool_usage_any",
+          "value": ["ue_analyze_symbols", "ue_fix_errors", "ue_grep", "ue_read", "ue_editor_debug"],
+          "description": "Should use a code-investigation tool to trace the crash context — symbol analysis (ue_analyze_symbols), error scan (ue_fix_errors), or source search/read (ue_grep/ue_read). The skill legitimately routes to whichever fits (Issue #14675: single-tool requirement was over-strict; signal preserved — a no-tool, from-memory answer still fails)"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(check|guard|ensure|verify|if.*nullptr|IsValid)",
+          "description": "Should suggest null safety checks as a fix"
+        },
+        {
+          "type": "content_contains",
+          "value": "TakeDamage",
+          "description": "Should reference the specific function in analysis"
+        }
+      ]
+    },
+    {
+      "id": "qual-03",
+      "prompt": "Fix this linker error: LNK2019 unresolved external symbol",
+      "assertions": [
+        {
+          "type": "content_pattern",
+          "value": "(linker|LNK2019|unresolved|external symbol|link)",
+          "description": "Should classify as a linker error"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(Build\\.cs|module|dependency|PublicDependencyModuleNames|PrivateDependencyModuleNames|include)",
+          "description": "Should suggest Build.cs module dependency or missing include as common causes"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(step 1|step 2|1\\.|2\\.|first|then|next)",
+          "description": "Should provide ordered fix steps"
+        }
+      ]
+    },
+    {
+      "id": "qual-04",
+      "prompt": "런타임 크래시 원인 찾아줘",
+      "assertions": [
+        {
+          "type": "content_pattern",
+          "value": "(runtime|crash|callstack|stack trace|log)",
+          "description": "Should reference runtime crash analysis concepts"
+        },
+        {
+          "type": "tool_usage_any",
+          "value": ["ue_fix_errors", "ue_editor_debug"],
+          "description": "Should use error diagnosis tools"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,610 @@
+{
+  "_meta": {
+    "skill_name": "ue-cinematics-audit",
+    "purpose": "Project-wide Level Sequence health audit with fail-closed coverage",
+    "schema_version": "1.0",
+    "capture_date": "2026-07-22",
+    "narshamcp_version": "narshamcp 0.12.0",
+    "ue_version": "5.8",
+    "project": "C:\\UESampleProject\\Lyra_580\\LyraStarterGame",
+    "transport": "fresh public STDIO MCP session",
+    "editor_connected": false,
+    "read_only": true,
+    "get_curve_data_fixture_note": "Issue #22998: rebuilt envelope to match sequencer_curves.rs offline json! keys; curves payload retained from prior binary capture (single key-bearing transform track).",
+    "get_curve_data_fixture_date": "2026-07-31"
+  },
+  "tools": {
+    "ue_sequencer_structure": {
+      "_status": "captured",
+      "operations": {
+        "list_sequences": {
+          "hint": "Metadata index not loaded; scanned Content/ + Plugins/ and class-checked each asset. Run reload_metadata for the fast, complete listing.",
+          "limit": 50,
+          "operation": "list_sequences",
+          "pattern": "",
+          "sequences": [
+            {
+              "file_path": "C:/UESampleProject/Lyra_580/LyraStarterGame/Plugins/GameFeatures/ShooterMaps/Content/LevelSequence/SEQ_LevelDesignShowcaseA.uasset",
+              "name": "SEQ_LevelDesignShowcaseA"
+            },
+            {
+              "file_path": "C:/UESampleProject/Lyra_580/LyraStarterGame/Plugins/GameFeatures/ShooterMaps/Content/LevelSequence/SEQ_LobbyScreen.uasset",
+              "name": "SEQ_LobbyScreen"
+            },
+            {
+              "file_path": "C:/UESampleProject/Lyra_580/LyraStarterGame/Plugins/GameFeatures/ShooterMaps/Content/LevelSequence/SEQ_LobbyScreenAnim.uasset",
+              "name": "SEQ_LobbyScreenAnim"
+            },
+            {
+              "file_path": "C:/UESampleProject/Lyra_580/LyraStarterGame/Plugins/GameFeatures/ShooterMaps/Content/LevelSequence/SEQ_LobbyScreenAnim_2.uasset",
+              "name": "SEQ_LobbyScreenAnim_2"
+            },
+            {
+              "file_path": "C:/UESampleProject/Lyra_580/LyraStarterGame/Plugins/GameFeatures/ShooterMaps/Content/LevelSequence/SEQ_ScreenCaptures.uasset",
+              "name": "SEQ_ScreenCaptures"
+            }
+          ],
+          "source": "filesystem_scan",
+          "success": true,
+          "total_found": 5,
+          "total_matching": 5,
+          "total_time_ms": 3943.0,
+          "truncated": false
+        },
+        "validate_settings": {
+          "issues": [
+            {
+              "lint": "orphan_binding",
+              "message": "Orphan binding 'CineCameraActor_0_CustomBinding_0' is referenced by no track, section, or child binding",
+              "severity": "warning"
+            }
+          ],
+          "method": "binary_parser",
+          "note": "Parsed from .uasset binary. Use use_editor=true for Editor-live validation.",
+          "operation": "validate_settings",
+          "sequence_path": "SEQ_LobbyScreen",
+          "settings": {
+            "clock_source": "Tick",
+            "display_rate_fps": 30.0,
+            "evaluation_type": "WithSubFrames",
+            "playback_end": 553164800,
+            "playback_start": 1,
+            "tick_resolution": 24000.0,
+            "ticks_per_frame": 800.0
+          },
+          "success": true,
+          "total_issues": 1,
+          "total_time_ms": 178.0,
+          "valid": true
+        },
+        "list_bindings": {
+          "bindings": [
+            {
+              "binding_guid": "0000000000000001000000AF00000000",
+              "binding_name": "ED3DE61642F81548F9C1D5B745ADBE54.6F1AC117465715C713A8D0902BCC507F",
+              "export_index": 65,
+              "name": "CineCameraActor_0_CustomBinding_0",
+              "possessed_class": "CineCameraActor",
+              "spawned_actor_class": "CineCameraActor",
+              "tags": [
+                "Cinematics"
+              ],
+              "type": "MovieSceneSpawnableActorBinding"
+            },
+            {
+              "binding_guid": "0000000000001000E0750800B0043030",
+              "binding_name": "E22BD214484CC57DCC3361B6EC3D354D.3497E08C40EAE094B0FA27AFC3D8E190",
+              "export_index": 66,
+              "name": "CineCameraActor_3_CustomBinding_0",
+              "possessed_class": "CineCameraActor",
+              "spawned_actor_class": "CineCameraActor",
+              "tags": [
+                "Cinematics"
+              ],
+              "track_indices": [
+                69,
+                70
+              ],
+              "type": "MovieSceneSpawnableActorBinding"
+            }
+          ],
+          "count": 2,
+          "method": "binary_parser",
+          "note": "Parsed from .uasset binary. Use use_editor=true for Editor-live binding IDs.",
+          "operation": "list_bindings",
+          "sequence_path": "SEQ_LobbyScreen",
+          "success": true,
+          "total_time_ms": 166.0
+        }
+      },
+      "note": "Captured from the installed UE 5.8 Lyra project with explicit offline/read-only arguments."
+    },
+    "ue_sequencer_tracks": {
+      "_status": "captured",
+      "operations": {
+        "sequence_audit": {
+          "operation": "sequence_audit",
+          "recommendations": [],
+          "sequences_analyzed": 0,
+          "success": true,
+          "summary": {
+            "empty_sequences": 0,
+            "high_binding_count": 0
+          },
+          "thresholds_used": {
+            "bindings": 20
+          },
+          "total_time_ms": 0.0,
+          "warning_count": 0,
+          "warnings": []
+        },
+        "list_tracks": {
+          "count": 14,
+          "method": "binary_parser",
+          "note": "Parsed from .uasset binary. Use use_editor=true for Editor-live data.",
+          "operation": "list_tracks",
+          "sequence_path": "SEQ_LobbyScreen",
+          "success": true,
+          "total_time_ms": 168.0,
+          "tracks": [
+            {
+              "evaluation_field_guid": "90977AF9432E8A58354BA198AA7C2A94",
+              "export_index": 12,
+              "is_eval_disabled": false,
+              "name": "MovieScene3DTransformTrack_0",
+              "row_metadata_count": 0,
+              "section_indices": [
+                9
+              ],
+              "show_vertical_frames": false,
+              "signature": "90977AF9432E8A58354BA198AA7C2A94",
+              "sorting_order": 2,
+              "track_tint": "#41ADA441",
+              "type": "MovieScene3DTransformTrack"
+            },
+            {
+              "evaluation_field_guid": "46E27D1943B2DA1A9EEC6494D0A4AF8D",
+              "export_index": 13,
+              "is_eval_disabled": false,
+              "name": "MovieScene3DTransformTrack_1",
+              "row_metadata_count": 0,
+              "section_indices": [
+                10
+              ],
+              "show_vertical_frames": false,
+              "signature": "46E27D1943B2DA1A9EEC6494D0A4AF8D",
+              "sorting_order": 1,
+              "track_tint": "#41ADA441",
+              "type": "MovieScene3DTransformTrack"
+            },
+            {
+              "evaluation_field_guid": "7B9654514B87F11CA40BE4A9C57AC4A8",
+              "export_index": 14,
+              "is_eval_disabled": false,
+              "name": "MovieScene3DTransformTrack_2",
+              "row_metadata_count": 0,
+              "section_indices": [
+                11
+              ],
+              "show_vertical_frames": false,
+              "signature": "7B9654514B87F11CA40BE4A9C57AC4A8",
+              "sorting_order": 2,
+              "track_tint": "#41ADA441",
+              "type": "MovieScene3DTransformTrack"
+            },
+            {
+              "can_blend": false,
+              "evaluation_field_guid": "306BB8D54BF1C021F80684988F1EC4DC",
+              "export_index": 47,
+              "is_eval_disabled": false,
+              "name": "MovieSceneCameraCutTrack_0",
+              "row_metadata_count": 0,
+              "section_indices": [
+                45,
+                46
+              ],
+              "show_vertical_frames": false,
+              "signature": "306BB8D54BF1C021F80684988F1EC4DC",
+              "sorting_order": 0,
+              "track_tint": "#78787841",
+              "type": "MovieSceneCameraCutTrack"
+            },
+            {
+              "display_name": "Light Color",
+              "evaluation_field_guid": "6D2AE04A497CDBCAEA18DBB60CA30773",
+              "export_index": 49,
+              "is_eval_disabled": false,
+              "name": "MovieSceneColorTrack_0",
+              "property_binding": "LightColor",
+              "row_metadata_count": 0,
+              "section_indices": [
+                48
+              ],
+              "show_vertical_frames": false,
+              "signature": "6D2AE04A497CDBCAEA18DBB60CA30773",
+              "sorting_order": 1,
+              "track_tint": "#7F7F7F00",
+              "type": "MovieSceneColorTrack",
+              "unique_track_name": "LightColor"
+            },
+            {
+              "display_name": "Current Focal Length",
+              "evaluation_field_guid": "DB33C83D497C2E23AA233891140DE5E7",
+              "export_index": 57,
+              "is_eval_disabled": false,
+              "name": "MovieSceneFloatTrack_0",
+              "property_binding": "CurrentFocalLength",
+              "row_metadata_count": 0,
+              "section_indices": [
+                50
+              ],
+              "show_vertical_frames": false,
+              "signature": "DB33C83D497C2E23AA233891140DE5E7",
+              "sorting_order": 1,
+              "track_tint": "#7F7F7F00",
+              "type": "MovieSceneFloatTrack",
+              "unique_track_name": "CurrentFocalLength"
+            },
+            {
+              "display_name": "{0} ({1})",
+              "evaluation_field_guid": "CC8EEC994A9C720A816BECAD67397EC5",
+              "export_index": 58,
+              "is_eval_disabled": false,
+              "name": "MovieSceneFloatTrack_1",
+              "property_binding": "FocusSettings.ManualFocusDistance",
+              "row_metadata_count": 0,
+              "section_indices": [
+                51
+              ],
+              "show_vertical_frames": false,
+              "signature": "CC8EEC994A9C720A816BECAD67397EC5",
+              "sorting_order": 2,
+              "track_tint": "#7F7F7F00",
+              "type": "MovieSceneFloatTrack",
+              "unique_track_name": "FocusSettings.ManualFocusDistance"
+            },
+            {
+              "display_name": "Current Aperture",
+              "evaluation_field_guid": "BE5397964390AFB3FA26EB89AD821CE9",
+              "export_index": 59,
+              "is_eval_disabled": false,
+              "name": "MovieSceneFloatTrack_2",
+              "property_binding": "CurrentAperture",
+              "row_metadata_count": 0,
+              "section_indices": [
+                52
+              ],
+              "show_vertical_frames": false,
+              "signature": "BE5397964390AFB3FA26EB89AD821CE9",
+              "sorting_order": 0,
+              "track_tint": "#7F7F7F00",
+              "type": "MovieSceneFloatTrack",
+              "unique_track_name": "CurrentAperture"
+            },
+            {
+              "display_name": "Intensity",
+              "evaluation_field_guid": "6AE421544DF5830E12C82DA29766343A",
+              "export_index": 60,
+              "is_eval_disabled": false,
+              "name": "MovieSceneFloatTrack_3",
+              "property_binding": "Intensity",
+              "row_metadata_count": 0,
+              "section_indices": [
+                53
+              ],
+              "show_vertical_frames": false,
+              "signature": "6AE421544DF5830E12C82DA29766343A",
+              "sorting_order": 0,
+              "track_tint": "#7F7F7F00",
+              "type": "MovieSceneFloatTrack",
+              "unique_track_name": "Intensity"
+            },
+            {
+              "display_name": "Current Focal Length",
+              "evaluation_field_guid": "BD0C693A4653A197377870B9802FB935",
+              "export_index": 61,
+              "is_eval_disabled": false,
+              "name": "MovieSceneFloatTrack_4",
+              "property_binding": "CurrentFocalLength",
+              "row_metadata_count": 0,
+              "section_indices": [
+                54
+              ],
+              "show_vertical_frames": false,
+              "signature": "BD0C693A4653A197377870B9802FB935",
+              "sorting_order": 1,
+              "track_tint": "#7F7F7F00",
+              "type": "MovieSceneFloatTrack",
+              "unique_track_name": "CurrentFocalLength"
+            },
+            {
+              "display_name": "{0} ({1})",
+              "evaluation_field_guid": "C4A50628424F235D33A2DDA3998E9FFC",
+              "export_index": 62,
+              "is_eval_disabled": false,
+              "name": "MovieSceneFloatTrack_5",
+              "property_binding": "FocusSettings.ManualFocusDistance",
+              "row_metadata_count": 0,
+              "section_indices": [
+                55
+              ],
+              "show_vertical_frames": false,
+              "signature": "C4A50628424F235D33A2DDA3998E9FFC",
+              "sorting_order": 2,
+              "track_tint": "#7F7F7F00",
+              "type": "MovieSceneFloatTrack",
+              "unique_track_name": "FocusSettings.ManualFocusDistance"
+            },
+            {
+              "display_name": "Current Aperture",
+              "evaluation_field_guid": "F5DCE7EB414D6AF47148E0846982FE6F",
+              "export_index": 63,
+              "is_eval_disabled": false,
+              "name": "MovieSceneFloatTrack_6",
+              "property_binding": "CurrentAperture",
+              "row_metadata_count": 0,
+              "section_indices": [
+                56
+              ],
+              "show_vertical_frames": false,
+              "signature": "F5DCE7EB414D6AF47148E0846982FE6F",
+              "sorting_order": 0,
+              "track_tint": "#7F7F7F00",
+              "type": "MovieSceneFloatTrack",
+              "unique_track_name": "CurrentAperture"
+            },
+            {
+              "evaluation_field_guid": "9A70488341A3444B72EE18A61FADF503",
+              "export_index": 69,
+              "is_eval_disabled": false,
+              "name": "MovieSceneSpawnTrack_0",
+              "object_binding_id": "ED3DE61642F81548F9C1D5B745ADBE54",
+              "parent_binding_index": 66,
+              "row_metadata_count": 0,
+              "section_indices": [
+                67
+              ],
+              "show_vertical_frames": false,
+              "signature": "9A70488341A3444B72EE18A61FADF503",
+              "sorting_order": 1,
+              "track_tint": "#2B2B9B41",
+              "type": "MovieSceneSpawnTrack"
+            },
+            {
+              "evaluation_field_guid": "71BFAF6B4724472500E54AAB36FE81DD",
+              "export_index": 70,
+              "is_eval_disabled": false,
+              "name": "MovieSceneSpawnTrack_1",
+              "object_binding_id": "3030E07543C8B004B5577081424E6578",
+              "parent_binding_index": 66,
+              "row_metadata_count": 0,
+              "section_indices": [
+                68
+              ],
+              "show_vertical_frames": false,
+              "signature": "71BFAF6B4724472500E54AAB36FE81DD",
+              "sorting_order": 1,
+              "track_tint": "#2B2B9B41",
+              "type": "MovieSceneSpawnTrack"
+            }
+          ]
+        }
+      },
+      "note": "Captured from the installed UE 5.8 Lyra project with explicit offline/read-only arguments."
+    },
+    "ue_sequencer_keyframes": {
+      "_status": "captured",
+      "operations": {
+        "get_curve_data": {
+          "success": true,
+          "operation": "get_curve_data",
+          "sequence_path": "SEQ_LobbyScreen",
+          "track_id": "all",
+          "method": "binary_parser",
+          "curves": [
+            {
+              "channel_count": 7,
+              "channels": [
+                {
+                  "channel_index": 0,
+                  "channel_type": "DoubleChannel",
+                  "default_value": 4500.0,
+                  "has_default_value": true,
+                  "key_count": 2,
+                  "keys": [
+                    {
+                      "arrive_tangent": 1.3150020837783813,
+                      "arrive_tangent_weight": 0.0,
+                      "frame": 0,
+                      "interp_mode": "Linear",
+                      "leave_tangent": -0.0007037037285044789,
+                      "leave_tangent_weight": 0.0,
+                      "tangent_mode": "Auto",
+                      "tangent_weight_mode": "None",
+                      "value": 5260.0
+                    },
+                    {
+                      "arrive_tangent": -0.0007037037285044789,
+                      "arrive_tangent_weight": 0.0,
+                      "frame": 1080000,
+                      "interp_mode": "Linear",
+                      "leave_tangent": 0.0,
+                      "leave_tangent_weight": 0.0,
+                      "tangent_mode": "Auto",
+                      "tangent_weight_mode": "None",
+                      "value": 4500.0
+                    }
+                  ],
+                  "post_infinity": "Constant",
+                  "pre_infinity": "Constant"
+                },
+                {
+                  "channel_index": 1,
+                  "channel_type": "DoubleChannel",
+                  "default_value": -250.0,
+                  "has_default_value": true,
+                  "key_count": 1,
+                  "keys": [
+                    {
+                      "arrive_tangent": 0.0,
+                      "arrive_tangent_weight": 0.0,
+                      "frame": 0,
+                      "interp_mode": "Linear",
+                      "leave_tangent": 0.0,
+                      "leave_tangent_weight": 0.0,
+                      "tangent_mode": "Auto",
+                      "tangent_weight_mode": "None",
+                      "value": -250.0
+                    }
+                  ],
+                  "post_infinity": "Constant",
+                  "pre_infinity": "Constant"
+                },
+                {
+                  "channel_index": 2,
+                  "channel_type": "DoubleChannel",
+                  "default_value": 0.0,
+                  "has_default_value": true,
+                  "key_count": 1,
+                  "keys": [
+                    {
+                      "arrive_tangent": 0.0,
+                      "arrive_tangent_weight": 0.0,
+                      "frame": 0,
+                      "interp_mode": "Linear",
+                      "leave_tangent": 0.0,
+                      "leave_tangent_weight": 0.0,
+                      "tangent_mode": "Auto",
+                      "tangent_weight_mode": "None",
+                      "value": 0.0
+                    }
+                  ],
+                  "post_infinity": "Constant",
+                  "pre_infinity": "Constant"
+                },
+                {
+                  "channel_index": 3,
+                  "channel_type": "DoubleChannel",
+                  "default_value": 180.0,
+                  "has_default_value": true,
+                  "key_count": 2,
+                  "keys": [
+                    {
+                      "arrive_tangent": 0.0,
+                      "arrive_tangent_weight": 0.0,
+                      "frame": 0,
+                      "interp_mode": "Linear",
+                      "leave_tangent": 0.0,
+                      "leave_tangent_weight": 0.0,
+                      "tangent_mode": "Auto",
+                      "tangent_weight_mode": "None",
+                      "value": 180.0
+                    },
+                    {
+                      "arrive_tangent": 0.0,
+                      "arrive_tangent_weight": 0.0,
+                      "frame": 1080000,
+                      "interp_mode": "Cubic",
+                      "leave_tangent": 0.0,
+                      "leave_tangent_weight": 0.0,
+                      "tangent_mode": "Auto",
+                      "tangent_weight_mode": "None",
+                      "value": 180.0
+                    }
+                  ],
+                  "post_infinity": "Constant",
+                  "pre_infinity": "Constant"
+                },
+                {
+                  "channel_index": 4,
+                  "channel_type": "DoubleChannel",
+                  "default_value": 1.0,
+                  "has_default_value": true,
+                  "key_count": 1,
+                  "keys": [
+                    {
+                      "arrive_tangent": 0.0,
+                      "arrive_tangent_weight": 0.0,
+                      "frame": 0,
+                      "interp_mode": "Linear",
+                      "leave_tangent": 0.0,
+                      "leave_tangent_weight": 0.0,
+                      "tangent_mode": "Auto",
+                      "tangent_weight_mode": "None",
+                      "value": 1.0
+                    }
+                  ],
+                  "post_infinity": "Constant",
+                  "pre_infinity": "Constant"
+                },
+                {
+                  "channel_index": 5,
+                  "channel_type": "DoubleChannel",
+                  "default_value": 1.0,
+                  "has_default_value": true,
+                  "key_count": 1,
+                  "keys": [
+                    {
+                      "arrive_tangent": 0.0,
+                      "arrive_tangent_weight": 0.0,
+                      "frame": 0,
+                      "interp_mode": "Linear",
+                      "leave_tangent": 0.0,
+                      "leave_tangent_weight": 0.0,
+                      "tangent_mode": "Auto",
+                      "tangent_weight_mode": "None",
+                      "value": 1.0
+                    }
+                  ],
+                  "post_infinity": "Constant",
+                  "pre_infinity": "Constant"
+                },
+                {
+                  "channel_index": 6,
+                  "channel_type": "DoubleChannel",
+                  "default_value": 1.0,
+                  "has_default_value": true,
+                  "key_count": 1,
+                  "keys": [
+                    {
+                      "arrive_tangent": 0.0,
+                      "arrive_tangent_weight": 0.0,
+                      "frame": 0,
+                      "interp_mode": "Linear",
+                      "leave_tangent": 0.0,
+                      "leave_tangent_weight": 0.0,
+                      "tangent_mode": "Auto",
+                      "tangent_weight_mode": "None",
+                      "value": 1.0
+                    }
+                  ],
+                  "post_infinity": "Constant",
+                  "pre_infinity": "Constant"
+                }
+              ],
+              "section_class": "MovieScene3DTransformSection",
+              "section_export_index": 9,
+              "section_name": "MovieScene3DTransformSection_0",
+              "track": {
+                "export_index": 12,
+                "name": "MovieScene3DTransformTrack_0",
+                "type": "MovieScene3DTransformTrack"
+              }
+            }
+          ],
+          "total_channels": 7,
+          "total_keys": 9,
+          "truncated": false,
+          "start_frame": null,
+          "end_frame": null,
+          "offset": 0,
+          "limit": null,
+          "include_tangents": true,
+          "note": "Parsed from .uasset binary. Use use_editor=true for Editor-live curve data.",
+          "total_time_ms": 192.0
+        }
+      },
+      "note": "Captured from the installed UE 5.8 Lyra project with explicit offline/read-only arguments."
+    }
+  }
+}

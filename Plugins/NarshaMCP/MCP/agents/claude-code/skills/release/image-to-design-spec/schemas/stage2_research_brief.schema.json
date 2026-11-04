@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://narshamcp.dev/schemas/design-from-image/stage2_research_brief.schema.json",
+  "title": "Design-from-Image Stage 2.5 Auto-Research Brief (S4a)",
+  "description": "Output of `.claude/agents/auto-research-comparator` SubAgent. Compares the workflow's design intent against external game/design cases (Analyst → Critic → Validator). All cited cases MUST carry at least one valid source URL (R-S4-2 hallucination guard). Issue: #9998 S4a (Phase 7).",
+  "type": "object",
+  "required": [
+    "$schema_version",
+    "workflow_id",
+    "generated_at",
+    "subagent",
+    "model",
+    "queries_used",
+    "cases_analyzed",
+    "cases",
+    "narrative_summary",
+    "stage4_section_md"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "$schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "workflow_id": {
+      "type": "string",
+      "pattern": "^wf_[0-9]{8}_[0-9a-f]{6}$"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "subagent": {
+      "type": "string",
+      "const": "auto-research-comparator"
+    },
+    "model": {
+      "type": "string",
+      "description": "Model used by the SubAgent (e.g., 'sonnet', 'opus')."
+    },
+    "queries_used": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total WebSearch invocations consumed (cap = max_queries, default 3)."
+    },
+    "cases_analyzed": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Final case count after Phase C dedup + min-similarity filter."
+    },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["rank", "title", "compared_mechanic", "source_urls"],
+        "additionalProperties": true,
+        "properties": {
+          "rank": {"type": "integer", "minimum": 1},
+          "title": {"type": "string", "minLength": 1},
+          "year": {"type": ["integer", "null"]},
+          "genre": {"type": ["string", "null"]},
+          "compared_mechanic": {"type": "string"},
+          "intent_similarity": {"type": "number", "minimum": 0, "maximum": 1},
+          "intent_similarity_adjusted": {"type": "number", "minimum": 0, "maximum": 1},
+          "source_urls": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "pattern": "^https?://[^\\s]+$"}
+          },
+          "phase_a_summary": {"type": "string"},
+          "phase_b_findings": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "successful_aspects": {"type": "array", "items": {"type": "string"}},
+              "failed_aspects": {"type": "array", "items": {"type": "string"}},
+              "applicability_caveat": {"type": "string"}
+            }
+          },
+          "phase_c_invariant_match": {
+            "type": "object",
+            "description": "Per-invariant scoring: 'success' / 'partial' / 'fail'.",
+            "additionalProperties": {
+              "type": "string",
+              "enum": ["success", "partial", "fail", "n/a"]
+            }
+          }
+        }
+      }
+    },
+    "cross_check_matrix": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "invariants": {"type": "array", "items": {"type": "string"}},
+        "case_scores": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {"type": "number"}
+          }
+        }
+      }
+    },
+    "narrative_summary": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable comparison paragraph for Stage 4 SSOT insertion."
+    },
+    "stage4_section_md": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Pre-rendered markdown for Stage 4 (SEC-RESEARCH-001 section). Stage 4 synthesizer pastes this verbatim."
+    },
+    "cost_summary": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "websearches": {"type": "integer", "minimum": 0},
+        "webfetches": {"type": "integer", "minimum": 0},
+        "estimated_usd": {"type": "number", "minimum": 0}
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  }
+}

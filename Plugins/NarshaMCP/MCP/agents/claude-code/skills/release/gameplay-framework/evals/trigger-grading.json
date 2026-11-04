@@ -1,0 +1,22 @@
+{
+  "skill": "gameplay-framework",
+  "version": "1.0.0",
+  "description": "Trigger precision eval — literal API names primary surface (avoids '방법/차이' ue-explain hijack). TN cases test rejection of sibling-skill keywords (character-movement / animation / input-system / ai-development / gas-development) and multi-class system-generation (code-generation-power territory).",
+  "cases": [
+    {"id": "TP-01", "query": "AGameMode vs AGameModeBase 차이", "should_trigger": true, "reason": "Both core class names — strongest gameplay-framework trigger surface"},
+    {"id": "TP-02", "query": "AGameState MatchState OnRep_MatchState 전이", "should_trigger": true, "reason": "MatchState namespace + replication callback — baseline failure target"},
+    {"id": "TP-03", "query": "OnPossess OnUnPossess APawn server-side possession override", "should_trigger": true, "reason": "Pawn possession override hooks — avoids 'control' substring that ue-cvar-explorer (priority 12) would steal"},
+    {"id": "TP-04", "query": "APlayerState CopyProperties seamless travel persist", "should_trigger": true, "reason": "PlayerState seamless travel API"},
+    {"id": "TP-05", "query": "APawn PostInitializeComponents BeginPlay PossessedBy 순서", "should_trigger": true, "reason": "Pawn lifecycle ordering — common confusion target"},
+    {"id": "TP-06", "query": "ROLE_Authority ROLE_AutonomousProxy ROLE_SimulatedProxy 차이", "should_trigger": true, "reason": "ENetRole enum 4-variant — network role identification"},
+    {"id": "TP-07", "query": "GetLocalRole HasAuthority server check pattern", "should_trigger": true, "reason": "Authority check on AActor — server-side gating pattern"},
+    {"id": "TP-08", "query": "GetWorld nullptr UObject WorldContextObject", "should_trigger": true, "reason": "GetWorld access pattern — #1 hard-mode probe failure pattern"},
+    {"id": "TP-09", "query": "ServerTravel seamless travel APlayerState 보존 CopyProperties", "should_trigger": true, "reason": "Server travel + actor survival via APlayerState — avoids 'control'/'transition' substrings (steal by ue-cvar-explorer / animation-workflow)"},
+    {"id": "TP-10", "query": "AGameMode HUDClass DefaultPawnClass 게임 모드 defaults 지정", "should_trigger": true, "reason": "Korean + GameMode class-defaults (HUDClass / DefaultPawnClass) — avoids 'control'/'controller' substring and UPROPERTY (in negative_patterns)"},
+    {"id": "TN-01", "query": "UCharacterMovementComponent MaxWalkSpeed 기본값", "should_trigger": false, "reason": "Character movement territory (character-movement skill #13114)"},
+    {"id": "TN-02", "query": "AnimMontage PlayMontage 호출 방법", "should_trigger": false, "reason": "Animation skill territory (animation-workflow)"},
+    {"id": "TN-03", "query": "Enhanced Input InputMappingContext UInputAction 등록", "should_trigger": false, "reason": "Input-system skill territory (#13115)"},
+    {"id": "TN-04", "query": "completely new multiplayer GAS character system from scratch AMyHero APlayerController_Hero UMyAbility multi-class", "should_trigger": false, "reason": "Multi-class system generation — code-generation-power territory"},
+    {"id": "TN-05", "query": "ABP_PlayerController Blueprint subclass 생성 create new Blueprint generator", "should_trigger": false, "reason": "Blueprint creation — blueprint-generator skill"}
+  ]
+}

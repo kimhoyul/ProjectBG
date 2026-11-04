@@ -1,0 +1,126 @@
+{
+  "skill": "ue-impact",
+  "description": "Trigger precision eval for ue-impact skill — impact analysis, cross-references, dependency tracing",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "APawn 변경하면 뭐가 깨져?",
+      "should_trigger": true,
+      "reason": "Korean 'change + what breaks' pattern — classic impact query"
+    },
+    {
+      "id": "tp-02",
+      "query": "What breaks if I change ACharacter?",
+      "should_trigger": true,
+      "reason": "English 'breaks if' trigger"
+    },
+    {
+      "id": "tp-03",
+      "query": "BP_Player 수정하면 영향 범위?",
+      "should_trigger": true,
+      "reason": "Korean '수정하면 영향' — modification impact scope"
+    },
+    {
+      "id": "tp-04",
+      "query": "어떤 BP가 Jump를 사용해?",
+      "should_trigger": true,
+      "reason": "Korean '어떤 BP가 사용' — who-uses query"
+    },
+    {
+      "id": "tp-05",
+      "query": "xref TakeDamage",
+      "should_trigger": true,
+      "reason": "Direct 'xref' keyword trigger"
+    },
+    {
+      "id": "tp-06",
+      "query": "AEnemy에 의존하는 것들 찾아줘",
+      "should_trigger": true,
+      "reason": "Korean dependency search — 'depends on' equivalent"
+    },
+    {
+      "id": "tp-07",
+      "query": "references to M_Rock",
+      "should_trigger": true,
+      "reason": "English 'references to' trigger"
+    },
+    {
+      "id": "tp-08",
+      "query": "What depends on UGameplayAbility?",
+      "should_trigger": true,
+      "reason": "English 'depends on' trigger"
+    },
+    {
+      "id": "tp-09",
+      "query": "크로스 레퍼런스 BP_Enemy",
+      "should_trigger": true,
+      "reason": "Korean '크로스 레퍼런스' trigger"
+    },
+    {
+      "id": "tp-10",
+      "query": "If I modify GetHealth(), who is affected?",
+      "should_trigger": true,
+      "reason": "English modify + affected pattern — impact analysis"
+    },
+    {
+      "id": "tn-01",
+      "query": "APawn 어떻게 동작해?",
+      "should_trigger": false,
+      "reason": "TN: '어떻게 동작' is ue-explain trigger, not impact. Asks how it works, not what breaks."
+    },
+    {
+      "id": "tn-02",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "TN: '에러 해결' is ue-debug trigger. Error fixing, not impact analysis."
+    },
+    {
+      "id": "tn-03",
+      "query": "캐릭터 만들어줘",
+      "should_trigger": false,
+      "reason": "TN: '만들어줘' is ue-scaffold trigger. Creation request, not impact."
+    },
+    {
+      "id": "tn-04",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "TN: '진단' is ue-audit trigger. Project health, not specific change impact."
+    },
+    {
+      "id": "tn-05",
+      "query": "CVar 검색해줘",
+      "should_trigger": false,
+      "reason": "TN: 'CVar 검색' is ue-cvar-explorer trigger. Config search, not dependency tracing."
+    },
+    {
+      "id": "tn-06",
+      "query": "ACharacter의 함수 목록 보여줘",
+      "should_trigger": false,
+      "reason": "TN: Listing functions is ue-explain or direct symbol search, not impact analysis."
+    },
+    {
+      "id": "tn-07",
+      "query": "search for all Blueprints with tag Ability.Fire",
+      "should_trigger": false,
+      "reason": "TN: Tag-based asset search is ue_manage_gameplay, not cross-reference impact."
+    },
+    {
+      "id": "tn-08",
+      "query": "이 에셋 유효한지 검증해줘",
+      "should_trigger": false,
+      "reason": "TN: '검증' is ue-validate trigger. Validation, not impact tracing."
+    },
+    {
+      "id": "tn-09",
+      "query": "BP_Enemy 실행 추적해줘",
+      "should_trigger": false,
+      "reason": "TN: '실행 추적' is ue-execution-trace trigger. Flow tracing, not change impact."
+    },
+    {
+      "id": "tn-10",
+      "query": "에셋 의존성 그래프 보여줘",
+      "should_trigger": false,
+      "reason": "TN: '에셋 의존성' is ue-asset-discovery trigger. Asset dependency graph, not code change impact."
+    }
+  ]
+}

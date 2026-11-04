@@ -1,0 +1,78 @@
+{
+  "skill": "ue-perf-audit",
+  "description": "Trigger precision eval: verify ue-perf-audit activates on trace-quality / performance-audit queries and NOT on static project audit, project health, deep profiling, or daemon memory queries (Issue #20596 mutual-delegation set)",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "성능 감사 돌려줘",
+      "should_trigger": true,
+      "reason": "Korean '성능 감사' — core trigger for the scored performance audit"
+    },
+    {
+      "id": "tp-02",
+      "query": "이 트레이스 품질 좀 검증해줘",
+      "should_trigger": true,
+      "reason": "Korean '트레이스 품질' — trace-quality trigger"
+    },
+    {
+      "id": "tp-03",
+      "query": "run a perf audit on the latest capture",
+      "should_trigger": true,
+      "reason": "English 'perf audit' — direct trigger"
+    },
+    {
+      "id": "tp-04",
+      "query": "validate trace before we analyze it",
+      "should_trigger": true,
+      "reason": "English 'validate trace' — Stage-1 op name as trigger"
+    },
+    {
+      "id": "tp-05",
+      "query": "runtime performance audit report please",
+      "should_trigger": true,
+      "reason": "English 'performance audit' — differentiated from performance-health-check by its negative patterns"
+    },
+    {
+      "id": "tp-06",
+      "query": "캡처 품질이 분석에 충분한지 확인해줘",
+      "should_trigger": true,
+      "reason": "Korean '캡처 품질' — capture-quality trigger"
+    },
+    {
+      "id": "tn-01",
+      "query": "프로젝트 건강도 분석해줘",
+      "should_trigger": false,
+      "reason": "Static project health → performance-health-check (negative pattern '프로젝트 건강도')"
+    },
+    {
+      "id": "tn-02",
+      "query": "빌드 시간 느린 모듈 찾아줘",
+      "should_trigger": false,
+      "reason": "Build time analysis → performance-health-check (negative pattern '빌드 시간')"
+    },
+    {
+      "id": "tn-03",
+      "query": "why is my game slow",
+      "should_trigger": false,
+      "reason": "Depth-first cause hunt → ue-insights-profiler (negative pattern 'why is my game slow')"
+    },
+    {
+      "id": "tn-04",
+      "query": "memory report for the daemon",
+      "should_trigger": false,
+      "reason": "Daemon memory → mem-report (negative pattern 'memory report')"
+    },
+    {
+      "id": "tn-05",
+      "query": "Run a full audit",
+      "should_trigger": false,
+      "reason": "Generic project audit → ue-audit ('audit' alone is not a perf-audit trigger)"
+    },
+    {
+      "id": "tn-06",
+      "query": "Epic standards violations 찾아줘",
+      "should_trigger": false,
+      "reason": "Epic standards → performance-health-check (negative pattern 'Epic standards')"
+    }
+  ]
+}

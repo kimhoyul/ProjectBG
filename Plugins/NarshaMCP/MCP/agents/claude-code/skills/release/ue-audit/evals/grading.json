@@ -1,0 +1,89 @@
+{
+  "skill": "ue-audit",
+  "version": "1.0.0",
+  "description": "Output quality eval for ue-audit skill — verifies comprehensive project health diagnostic",
+  "cases": [
+    {
+      "id": "QUAL-01",
+      "prompt": "프로젝트 진단해줘",
+      "assertions": [
+        {
+          "type": "tool_used",
+          "tool": "ue_check_health",
+          "description": "Should check server health as first diagnostic step"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["score", "diagnostic", "health", "status"],
+          "description": "Should provide a scored diagnostic report with health indicators"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response give actionable recommendations / next steps for issues it found, OR clearly conclude the project is healthy with no issues requiring action? A prioritized recommendation list AND a clean bill of health (no action needed) BOTH satisfy this — a real audit always lands on one or the other. A vague, off-topic, or non-audit response fails.",
+          "threshold": 0.6,
+          "description": "Should give recommendations OR a clean-health verdict (LLM judge; clean-project robust, Issue #14653)"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-02",
+      "prompt": "Is this project healthy?",
+      "assertions": [
+        {
+          "type": "tool_used",
+          "tool": "ue_check_health",
+          "description": "Should run health check on the project"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(##|###|---|\\*\\*.*\\*\\*:)",
+          "description": "Should organize results into diagnostic categories (server, cache, assets, config)"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["healthy", "warning", "issue", "status"],
+          "description": "Should provide clear health verdict with supporting evidence"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-03",
+      "prompt": "경고 요약해줘",
+      "assertions": [
+        {
+          "type": "content_contains_any",
+          "values": ["warning", "count", "category", "health", "status", "diagnostic", "check", "경고", "issue", "error"],
+          "description": "Should summarize warnings or health status with categorization"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response provide actionable recommendations, suggested improvements, next steps, or prioritized actions? It should go beyond just listing issues and suggest what to do about them.",
+          "threshold": 0.6,
+          "description": "Should include recommendations or suggested improvements (LLM judge)"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-04",
+      "prompt": "Run a full audit on the project",
+      "assertions": [
+        {
+          "type": "tool_used",
+          "tool": "ue_check_health",
+          "description": "Should start with server/project health check"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["audit", "diagnostic", "score", "category"],
+          "description": "Should produce multi-category scored audit report"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response either (a) surface severity-ranked audit findings such as critical issues, warnings, recommendations, or next steps, OR (b) clearly report that the project is healthy / clean with no significant findings? Either an actionable findings list or an explicit clean bill of health counts as passing; only an off-topic or non-audit response should fail.",
+          "threshold": 0.5,
+          "description": "Should report severity-ranked findings OR an explicit healthy/no-findings verdict (LLM judge)"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "$comment": "Expected bbox-refinement-checker SubAgent output contract. Drift here = stage1 schema breakage downstream.",
+  "captured_at": "2026-05-14T00:00:00Z",
+  "captures": [
+    {
+      "case": "UI mockup discrepancies + structural changes (1st pilot wf_20260429_d2e9a7)",
+      "expected_keys": ["iteration", "verdict", "convergence_score", "discrepancies", "structural_changes", "summary_narrative_for_user"],
+      "expected_verdict_enum": ["clean", "minor_issues", "major_issues"],
+      "expected_discrepancy_kinds": ["bbox", "size", "wrong_grouping", "missing"],
+      "expected_structural_actions": ["merge", "split", "remove", "add"],
+      "expected_confidence_floor": 0.6
+    },
+    {
+      "case": "system_diagram skip via F-010 domain gate (2nd pilot wf_20260501_34bf6c)",
+      "expected_decision": "SKIP",
+      "expected_reason": "system_diagram has no UI components; bbox refinement not applicable",
+      "expected_bypass_flag": "--force (operator escape hatch)"
+    }
+  ],
+  "regression_invariants": [
+    "verdict must be in clean|minor_issues|major_issues",
+    "discrepancies[*].confidence in [0.0, 1.0]",
+    "structural_changes[*].action in merge|split|remove|add",
+    "iteration starts at 1, monotonic increase per session"
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "data_type": "meta_type_rules",
+    "version": "1.0.0",
+    "generated_at": "2026-06-08T09:38:33.796566+00:00",
+    "generator": "manual_curation",
+    "engine_version": "5.8",
+    "last_review": {
+      "reviewer": "claude",
+      "reviewed_at": "2026-06-08T09:38:33.796566+00:00",
+      "note": "Issue #14427: reviewed against UE 5.8; foundational/stable reference data, representative items verified present in 5.8 — content valid, engine_version bumped 5.6->5.8"
+    }
+  },
+  "ClampMin": {
+    "allowed_types": [
+      "int32",
+      "float",
+      "double",
+      "uint32",
+      "uint8",
+      "int8",
+      "int16",
+      "uint16",
+      "int64",
+      "uint64",
+      "FScalableFloat"
+    ],
+    "description": "Clamps numeric input to minimum value",
+    "source": "Unreal Garden: \"ClampMin and ClampMax for numbers\""
+  },
+  "ClampMax": {
+    "allowed_types": [
+      "int32",
+      "float",
+      "double",
+      "uint32",
+      "uint8",
+      "int8",
+      "int16",
+      "uint16",
+      "int64",
+      "uint64",
+      "FScalableFloat"
+    ],
+    "description": "Clamps numeric input to maximum value",
+    "source": "Unreal Garden: \"ClampMin and ClampMax for numbers\""
+  },
+  "UIMin": {
+    "allowed_types": [
+      "int8",
+      "int16",
+      "int32",
+      "int64",
+      "uint8",
+      "uint16",
+      "uint32",
+      "uint64",
+      "float",
+      "double"
+    ],
+    "description": "Sets UI slider minimum value (does not clamp)",
+    "source": "UE Docs: \"UIMin and UIMax for numeric properties (all integer and floating-point types)\""
+  },
+  "UIMax": {
+    "allowed_types": [
+      "int8",
+      "int16",
+      "int32",
+      "int64",
+      "uint8",
+      "uint16",
+      "uint32",
+      "uint64",
+      "float",
+      "double"
+    ],
+    "description": "Sets UI slider maximum value (does not clamp)",
+    "source": "UE Docs: \"UIMax and UIMax for numeric properties (all integer and floating-point types)\""
+  },
+  "BindWidget": {
+    "allowed_types": [
+      "UWidget*",
+      "UButton*",
+      "UTextBlock*",
+      "UImage*",
+      "UBorder*",
+      "UCanvas*",
+      "UEditableText*",
+      "UEditableTextBox*",
+      "USlider*",
+      "UProgressBar*",
+      "UCheckBox*",
+      "UComboBox*",
+      "UScrollBox*",
+      "UVerticalBox*",
+      "UHorizontalBox*"
+    ],
+    "description": "Binds UMG widget property to widget in blueprint",
+    "source": "UE Docs: \"BindWidget meta tag for UMG widget binding\""
+  },
+  "BindWidgetOptional": {
+    "allowed_types": [
+      "UWidget*",
+      "UButton*",
+      "UTextBlock*",
+      "UImage*",
+      "UBorder*",
+      "UCanvas*",
+      "UEditableText*",
+      "UEditableTextBox*",
+      "USlider*",
+      "UProgressBar*",
+      "UCheckBox*",
+      "UComboBox*",
+      "UScrollBox*",
+      "UVerticalBox*",
+      "UHorizontalBox*"
+    ],
+    "description": "Optional widget binding (no error if widget not found)",
+    "source": "UE Docs: \"BindWidgetOptional variant\""
+  },
+  "InlineEditConditionToggle": {
+    "allowed_types": [
+      "bool"
+    ],
+    "description": "Creates inline checkbox for edit condition",
+    "source": "UE Forums: \"InlineEditConditionToggle requires bool type\""
+  },
+  "MakeEditWidget": {
+    "allowed_types": [
+      "FVector",
+      "FVector*",
+      "FTransform",
+      "FTransform*"
+    ],
+    "description": "Makes vector editable as 3D widget in viewport",
+    "source": "UE Docs: \"MakeEditWidget for FVector properties\""
+  },
+  "BindWidgetAnim": {
+    "allowed_types": [
+      "UWidgetAnimation*",
+      "TObjectPtr<UWidgetAnimation>",
+      "TSoftObjectPtr<UWidgetAnimation>",
+      "TLazyObjectPtr<UWidgetAnimation>",
+      "TWeakObjectPtr<UWidgetAnimation>"
+    ],
+    "description": "Binds UMG animation property to animation in blueprint",
+    "source": "UE Docs: \"BindWidgetAnim for UMG animation binding\""
+  },
+  "GetOptions": {
+    "allowed_types": [
+      "FName",
+      "FString",
+      "int32",
+      "uint8",
+      "uint16",
+      "uint32"
+    ],
+    "description": "Specifies function that returns dropdown options. Property stores selected value (not array).",
+    "source": "UE Docs: \"GetOptions for dynamic dropdown in Details panel\""
+  },
+  "AllowPrivateAccess": {
+    "allowed_types": [
+      "*"
+    ],
+    "description": "Allows Blueprint access to private/protected properties",
+    "source": "UE Docs: \"AllowPrivateAccess for Blueprint exposure of non-public properties\"",
+    "requires_non_public": true,
+    "expects_bool_value": true
+  },
+  "EditCondition": {
+    "allowed_types": [
+      "*"
+    ],
+    "description": "Conditionally shows property based on bool property",
+    "source": "UE Docs: \"EditCondition for conditional property visibility\"",
+    "validates_reference": true
+  },
+  "DisplayThumbnail": {
+    "allowed_types": [
+      "UTexture2D*",
+      "UMaterial*",
+      "UMaterialInstance*",
+      "UStaticMesh*",
+      "USkeletalMesh*",
+      "UBlueprint*",
+      "UAnimSequence*",
+      "TObjectPtr<UTexture2D>",
+      "TObjectPtr<UMaterial>",
+      "TObjectPtr<UMaterialInstance>",
+      "TObjectPtr<UStaticMesh>",
+      "TObjectPtr<USkeletalMesh>",
+      "TObjectPtr<UBlueprint>",
+      "TObjectPtr<UAnimSequence>",
+      "TSoftObjectPtr<UTexture2D>",
+      "TSoftObjectPtr<UMaterial>",
+      "TSoftObjectPtr<UMaterialInstance>",
+      "TSoftObjectPtr<UStaticMesh>",
+      "TSoftObjectPtr<USkeletalMesh>",
+      "TSoftObjectPtr<UBlueprint>",
+      "TSoftObjectPtr<UAnimSequence>",
+      "UObject*",
+      "USMInstance*",
+      "USMNodeInstance*",
+      "TObjectPtr<USMInstance>",
+      "TObjectPtr<USMNodeInstance>"
+    ],
+    "description": "Displays asset thumbnail in Details panel (asset types only)",
+    "source": "UE Docs: \"DisplayThumbnail for asset properties\""
+  }
+}

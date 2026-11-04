@@ -1,0 +1,126 @@
+{
+  "skill": "project-onboarding",
+  "description": "Trigger precision eval: verify project-onboarding activates on first-session/orientation queries and NOT on explain/project-init/audit queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "온보딩 해줘",
+      "should_trigger": true,
+      "reason": "Korean '온보딩' — core trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "What can you do?",
+      "should_trigger": true,
+      "reason": "English 'what can you do' — capability discovery trigger"
+    },
+    {
+      "id": "tp-03",
+      "query": "프로젝트 분석해줘",
+      "should_trigger": true,
+      "reason": "Korean '프로젝트 분석' — project analysis trigger"
+    },
+    {
+      "id": "tp-04",
+      "query": "Get started with this project",
+      "should_trigger": true,
+      "reason": "English 'get started' — first session trigger"
+    },
+    {
+      "id": "tp-05",
+      "query": "첫 세션이야",
+      "should_trigger": true,
+      "reason": "Korean '첫 세션' — first session trigger"
+    },
+    {
+      "id": "tp-06",
+      "query": "도구 추천해줘",
+      "should_trigger": true,
+      "reason": "Korean '도구 추천' — tool recommendation trigger"
+    },
+    {
+      "id": "tp-07",
+      "query": "tool recommendations for my project",
+      "should_trigger": true,
+      "reason": "English 'tool recommendations' — direct trigger"
+    },
+    {
+      "id": "tp-08",
+      "query": "프로젝트 시작해보자",
+      "should_trigger": true,
+      "reason": "Korean '프로젝트 시작' — project start trigger"
+    },
+    {
+      "id": "tp-09",
+      "query": "first session setup",
+      "should_trigger": true,
+      "reason": "English 'first session' — direct trigger"
+    },
+    {
+      "id": "tp-10",
+      "query": "뭘 할 수 있어?",
+      "should_trigger": true,
+      "reason": "Korean '뭘 할 수 있어' — capability discovery"
+    },
+    {
+      "id": "tn-01",
+      "query": "ACharacter 어떻게 동작해?",
+      "should_trigger": false,
+      "reason": "TN: '어떻게 동작' is ue-explain trigger. Specific system explanation, not onboarding."
+    },
+    {
+      "id": "tn-02",
+      "query": "프로젝트 초기화해줘",
+      "should_trigger": false,
+      "reason": "TN: '프로젝트 초기화' is ue-project-init trigger. Context file generation, not onboarding."
+    },
+    {
+      "id": "tn-03",
+      "query": "Explain how Blueprints work",
+      "should_trigger": false,
+      "reason": "TN: 'Explain how' is ue-explain trigger. Specific explanation, not general orientation."
+    },
+    {
+      "id": "tn-04",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "TN: '진단' is ue-audit trigger. Health check, not onboarding."
+    },
+    {
+      "id": "tn-05",
+      "query": "Generate project context files",
+      "should_trigger": false,
+      "reason": "TN: 'generate context' is ue-project-init trigger. Context persistence, not onboarding."
+    },
+    {
+      "id": "tn-06",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "TN: '에러 해결' is ue-debug trigger. Error fixing, not onboarding."
+    },
+    {
+      "id": "tn-07",
+      "query": "캐릭터 만들어줘",
+      "should_trigger": false,
+      "reason": "TN: '만들어줘' is ue-scaffold trigger. Feature creation, not onboarding."
+    },
+    {
+      "id": "tn-08",
+      "query": "save project info for future sessions",
+      "should_trigger": false,
+      "reason": "TN: 'save project info' is ue-project-init trigger. Persistent context, not orientation."
+    },
+    {
+      "id": "tn-09",
+      "query": "GAS 설명해줘",
+      "should_trigger": false,
+      "reason": "TN: '설명' is ue-explain trigger. Specific GAS explanation, not project orientation."
+    },
+    {
+      "id": "tn-10",
+      "query": "이슈 찾아줘",
+      "should_trigger": false,
+      "reason": "TN: '이슈 찾아' is issue-find trigger. Issue discovery, not onboarding."
+    }
+  ]
+}

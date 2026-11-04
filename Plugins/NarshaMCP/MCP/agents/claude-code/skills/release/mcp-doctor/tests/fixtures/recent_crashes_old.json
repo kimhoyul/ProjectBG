@@ -1,0 +1,41 @@
+[
+  {
+    "type": "external_kill",
+    "ts": "2026-05-08T08:30:00Z",
+    "reason": "external_kill",
+    "thread": "main",
+    "location": "n/a",
+    "message": "External kill detected (parent watcher)",
+    "has_backtrace": false,
+    "tool_call_count": 0,
+    "version": "v0.9.13",
+    "pid": 27000,
+    "exit_code": 1
+  },
+  {
+    "type": "external_kill",
+    "ts": "2026-05-08T08:35:00Z",
+    "reason": "external_kill",
+    "thread": "main",
+    "location": "n/a",
+    "message": "External kill detected (parent watcher)",
+    "has_backtrace": false,
+    "tool_call_count": 0,
+    "version": "v0.9.13",
+    "pid": 27001,
+    "exit_code": 1
+  },
+  {
+    "type": "external_kill",
+    "ts": "2026-05-08T08:40:00Z",
+    "reason": "external_kill",
+    "thread": "main",
+    "location": "n/a",
+    "message": "External kill detected (parent watcher)",
+    "has_backtrace": false,
+    "tool_call_count": 0,
+    "version": "v0.9.13",
+    "pid": 27002,
+    "exit_code": 1
+  }
+]

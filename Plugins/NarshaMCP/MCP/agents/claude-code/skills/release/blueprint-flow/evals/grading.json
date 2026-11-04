@@ -1,0 +1,77 @@
+{
+  "skill": "blueprint-flow",
+  "version": "1.1.0",
+  "description": "Output-quality (example-execution) smoke for blueprint-flow: verify the skill routes to the right MCP tool and produces the right output shape for structure analysis, execution-flow tracing, and input-to-action tracing. Added by Issue #20378 to close the trigger-only gap and refreshed by Issue #25676 with assets verified in the canonical Lyra 5.7 project. Cases are asset-gated (Issue #19514): where the named project asset is absent they SKIP rather than pass-lenient, so an offline/CI run is never a false-red and a SKIP can never mask a real routing failure (no-mask #14675).",
+  "cases": [
+    {
+      "id": "QUAL-01",
+      "prompt": "B_Hero_Default 구조 분석해줘",
+      "requires_asset": ["B_Hero_Default"],
+      "_precondition_rationale": "Issues #20378/#25676: the structure-analysis case reads a real Blueprint via ue_manage_blueprint(get_structure). B_Hero_Default is verified in the canonical Lyra 5.7 project, and the tool_usage assertion is meaningful only when it is declared present via EVAL_PROJECT_ASSETS/--project-assets. Absent -> SKIP (no project-version false-red; a SKIP cannot mask a real routing failure, no-mask #14675).",
+      "assertions": [
+        {
+          "type": "tool_usage",
+          "value": "ue_manage_blueprint",
+          "description": "Structure analysis should use ue_manage_blueprint (get_structure)"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(structure|graph|node|entry.?point|variable|function|구조|노드|그래프)",
+          "description": "Should report Blueprint structure (nodes/graph/entry points)"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-02",
+      "prompt": "B_Hero_Default 실행 흐름 추적해줘",
+      "requires_asset": ["B_Hero_Default"],
+      "_precondition_rationale": "Issues #20378/#25676: the execution-tracing case traces a real Blueprint via ue_trace_execution(trace_execution_flow). The llm_judge strictly requires a real step-by-step chain, so it may only run when the canonical Lyra 5.7 fixture B_Hero_Default is declared present; otherwise SKIP (no-mask #14675).",
+      "assertions": [
+        {
+          "type": "tool_usage",
+          "value": "ue_trace_execution",
+          "description": "Execution-flow tracing should use ue_trace_execution"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(execution.*flow|trace|chain|node|step|phase|실행.*흐름|추적)",
+          "description": "Should show an execution chain / flow"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response trace the Blueprint's execution flow as an ordered chain of nodes/steps (entry point through function calls), rather than only describing the Blueprint statically?",
+          "threshold": 0.6,
+          "description": "Sequential execution flow (LLM judge)"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-03",
+      "prompt": "SpaceBar 입력부터 액션까지 추적해줘",
+      "requires_asset": ["IA_Jump"],
+      "_precondition_rationale": "Issues #20378/#25676: the input-to-action case resolves a hardware key to its InputAction chain. Gated on IA_Jump because SpaceBar -> IA_Jump is verified in the canonical Lyra 5.7 project; absent -> SKIP. tool_usage_any accepts EITHER routing the skill documents: Method B ue_run_workflow(input-to-action) or Method A ue_trace_execution(trace_from_input) — asserting one specific tool would false-fail the other valid path.",
+      "assertions": [
+        {
+          "type": "tool_usage_any",
+          "tools": ["ue_run_workflow", "ue_trace_execution"],
+          "description": "Input-to-action should route via ue_run_workflow(input-to-action) or ue_trace_execution(trace_from_input)"
+        },
+        {
+          "type": "content_contains",
+          "value": "SpaceBar",
+          "description": "Should identify the concrete physical input key"
+        },
+        {
+          "type": "content_contains",
+          "value": "IA_Jump",
+          "description": "Should identify the concrete InputAction"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(SpaceBar[\\s\\S]{0,400}(→|->|map|mapping|mapped|bind|binding|매핑|연결)[\\s\\S]{0,400}IA_Jump|IA_Jump[\\s\\S]{0,400}(→|->|map|mapping|mapped|bind|binding|매핑|연결)[\\s\\S]{0,400}SpaceBar)",
+          "description": "Should state the SpaceBar-to-IA_Jump mapping relationship, not merely mention generic input/action terms"
+        }
+      ]
+    }
+  ]
+}

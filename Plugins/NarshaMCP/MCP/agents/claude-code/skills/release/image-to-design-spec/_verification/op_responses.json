@@ -1,0 +1,44 @@
+{
+  "$comment": "Captured image-to-spec-extractor SubAgent outputs (synthetic fixture form). For real Vision-API responses, run _capture.py against a live image with proper API credentials. This file documents the EXPECTED contract shape — schema drift in SubAgent will fail trigger_test.py + downstream stage1 schema validation.",
+  "$schema_version": "1.0",
+  "captured_at": "2026-05-14T00:00:00Z",
+  "captures": [
+    {
+      "case": "V7 fixture (wf_smoke_001) system_diagram",
+      "fixture_path": "tests/fixtures/wf_smoke_001/state/wf_20260501_a1b2c3/",
+      "expected_classification": {
+        "category": "system_diagram",
+        "confidence_floor": 0.9
+      },
+      "expected_vision_extract_keys": [
+        "title_guess",
+        "ui_subkind",
+        "components",
+        "diagram_nodes",
+        "color_palette",
+        "intended_experience"
+      ],
+      "expected_domain_signals_keys": [
+        "ui_widgets_count",
+        "diagram_nodes_count",
+        "concept_art_signals"
+      ],
+      "regression_invariants": [
+        "vision_extract.diagram_nodes[*].kind in {state, action, decision}",
+        "classification.category in {ui_mockup, system_diagram, concept_art, mixed}",
+        "$schema_version starts at '1.0'"
+      ]
+    },
+    {
+      "case": "V6 mixed-domain fixture (wf_smoke_004_mixed) 4-image",
+      "fixture_path": "tests/fixtures/wf_smoke_004_mixed/state/wf_20260502_aabbcc/",
+      "expected_classification": {
+        "category": "mixed",
+        "confidence_floor": 0.6
+      },
+      "expected_image_count": 4,
+      "expected_mixed_routing": "per-image classification with user-driven brief template selection"
+    }
+  ],
+  "contract_violations_detected": []
+}

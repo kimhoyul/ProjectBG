@@ -1,0 +1,97 @@
+{
+  "skill": "data-assets-tables",
+  "version": "1.1.0",
+  "description": "Trigger precision eval for data-assets-tables expertise skill. TP cases use literal API identifiers as primary trigger surface (avoids '방법/차이' wording that triggers ue-explain over this skill). TN cases test rejection of multi-class system-generation queries.",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "UAssetManager ChangeBundleStateForPrimaryAssets 시그니처",
+      "should_trigger": true,
+      "reason": "Direct UAssetManager API name — strongest trigger surface"
+    },
+    {
+      "id": "TP-02",
+      "query": "UPrimaryDataAsset AssetBundles meta UPROPERTY 사용 예시",
+      "should_trigger": true,
+      "reason": "UPrimaryDataAsset + AssetBundles meta — core skill content"
+    },
+    {
+      "id": "TP-03",
+      "query": "FStreamableManager RequestAsyncLoad 핸들 라이프사이클",
+      "should_trigger": true,
+      "reason": "FStreamableManager + RequestAsyncLoad — direct API"
+    },
+    {
+      "id": "TP-04",
+      "query": "TSoftClassPtr 시맨틱 — TSoftObjectPtr 와 어떻게 구별",
+      "should_trigger": true,
+      "reason": "Soft pointer family — skill section 2"
+    },
+    {
+      "id": "TP-05",
+      "query": "UDataTable FindRow FName lookup 코드 패턴",
+      "should_trigger": true,
+      "reason": "UDataTable + FindRow — direct skill content"
+    },
+    {
+      "id": "TP-06",
+      "query": "FPrimaryAssetId FPrimaryAssetType 구별",
+      "should_trigger": true,
+      "reason": "FPrimaryAssetId/Type disambiguation — skill section 3"
+    },
+    {
+      "id": "TP-07",
+      "query": "FDataTableRowHandle UPROPERTY 설계자 row 선택",
+      "should_trigger": true,
+      "reason": "FDataTableRowHandle UPROPERTY pattern — skill section 6"
+    },
+    {
+      "id": "TP-08",
+      "query": "UAssetManager DumpAssetRegistryInfo 콘솔 명령",
+      "should_trigger": true,
+      "reason": "DumpAssetRegistryInfo — skill section 3 enumeration"
+    },
+    {
+      "id": "TP-09",
+      "query": "UAssetManagerSettings DefaultGame.ini 섹션 헤더",
+      "should_trigger": true,
+      "reason": "AssetManagerSettings config — skill section 5"
+    },
+    {
+      "id": "TP-10",
+      "query": "FTableRowBase USTRUCT row 구조체 상속",
+      "should_trigger": true,
+      "reason": "FTableRowBase inheritance — skill section 1"
+    },
+    {
+      "id": "TN-01",
+      "query": "무기 시스템 전체 만들어줘. AWeaponBase 기본 클래스에 AWeaponRanged/AWeaponMelee 하위 클래스, UAmmoComponent 탄약 관리, FWeaponData 데이터 테이블 행 구조체까지 포함해서",
+      "should_trigger": false,
+      "reason": "Multi-class system generation — must route to code-generation-power"
+    },
+    {
+      "id": "TN-02",
+      "query": "generate a complete inventory system - UInventoryManagerComponent, UInventorySlot, FItemDefinition data table row, APickupActor with collision",
+      "should_trigger": false,
+      "reason": "Full inventory system — code-generation-power, not data-assets-tables"
+    },
+    {
+      "id": "TN-03",
+      "query": "Blueprint 에셋 BP_MyActor 구조 분석",
+      "should_trigger": false,
+      "reason": "Blueprint asset analysis — blueprint-flow or ue_manage_blueprint"
+    },
+    {
+      "id": "TN-04",
+      "query": "M_Stone 머터리얼 셰이더 노드 그래프 분석",
+      "should_trigger": false,
+      "reason": "Material asset — material-analysis"
+    },
+    {
+      "id": "TN-05",
+      "query": "vehicle system 전체 구현 AMyWheeledVehicle base, UVehicleInputComponent, FVehicleConfigData 데이터 테이블",
+      "should_trigger": false,
+      "reason": "Vehicle system multi-class — code-generation-power"
+    }
+  ]
+}

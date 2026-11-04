@@ -1,0 +1,126 @@
+{
+  "skill": "cross-domain-flow",
+  "description": "Trigger precision eval: verify cross-domain-flow activates on GAS/Input cross-domain chain queries and NOT on BP-only flow, single GAS analysis, or call graph queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "cross-domain-flow: GAS ability flow — GA_Melee_Primary에서 InputTag chain으로 AbilityTask_PlayMontage까지",
+      "should_trigger": false,
+      "reason": "Routes to ue-execution-trace (higher-priority overlap): Ambiguous: \"ability flow\" matches ue-execution-trace (priority 19 < cross-domain-flow)"
+    },
+    {
+      "id": "tp-02",
+      "query": "IA_LightAttack InputAction에서 GA_Combo_Attack까지 어떻게 연결되는지 추적해줘. Enhanced Input → InputTag → AbilitySpec 바인딩 경로 전체",
+      "should_trigger": true,
+      "reason": "Korean InputAction to Ability chain with Enhanced Input binding path"
+    },
+    {
+      "id": "tp-03",
+      "query": "우리 대시 어빌리티 GA_Dash가 IA_Dash 입력 받으면 → GE_DashCooldown 적용 → RootMotion montage 재생까지 전체 크로스 도메인 플로우 분석해줘",
+      "should_trigger": true,
+      "reason": "Korean dash ability cross-domain flow: input→cooldown→montage with specific asset names"
+    },
+    {
+      "id": "tp-04",
+      "query": "Input부터 Animation - 공격 콤보 시스템에서 IA_Attack 입력 → GA_ComboAttack 활성화 → GE_DamageCalc → AM_AttackMontage notify에서 다음 콤보 윈도우 열리는 전체 체인 추적",
+      "should_trigger": true,
+      "reason": "Korean combo system full chain: input→ability→effect→montage notify"
+    },
+    {
+      "id": "tp-05",
+      "query": "trace the full cross-domain flow for our block ability - IA_Block input → GA_Block activation → GE_BlockStaminaCost → plays AM_BlockStart and on AnimNotify_BlockActive sets a gameplay tag Ability.State.Blocking",
+      "should_trigger": true,
+      "reason": "English block ability cross-domain flow with specific asset names and tag setting"
+    },
+    {
+      "id": "tp-06",
+      "query": "ability flow from input: GA_FireWeapon 어빌리티가 트리거되면 GE_AmmoConsume으로 탄약 소모 → 카메라 쉐이크 → UNiagaraComponent에서 MuzzleFlash 재생까지 전체 흐름 분석",
+      "should_trigger": false,
+      "reason": "Routes to ue-execution-trace (higher-priority overlap): Ambiguous: \"ability flow from input\" matches ue-execution-trace (lower priority)"
+    },
+    {
+      "id": "tp-07",
+      "query": "InputTag.Action.Dodge가 어떤 AbilitySpec에 바인딩되어 있고, 해당 GA가 어떤 GE를 적용하고, 최종적으로 어떤 Montage를 재생하는지 전체 매핑 추적해줘",
+      "should_trigger": true,
+      "reason": "Korean InputTag→AbilitySpec→GE→Montage full mapping trace"
+    },
+    {
+      "id": "tp-08",
+      "query": "show the full ability flow for GA_HeavyAttack from Enhanced Input binding through AbilitySystemComponent::TryActivateAbility to the final GE_HeavyDamage application and hit react montage on target",
+      "should_trigger": false,
+      "reason": "Routes to ue-execution-trace (higher-priority overlap): Ambiguous: \"ability flow\" matches ue-execution-trace (lower priority)"
+    },
+    {
+      "id": "tp-09",
+      "query": "힐 어빌리티 GA_Heal 전체 흐름 좀 봐줘 - 마우스 우클릭 입력에서 시작해서, 타겟 선택 AbilityTask, GE_HealOverTime 적용, 그리고 Niagara 힐 이펙트까지",
+      "should_trigger": true,
+      "reason": "Korean heal ability cross-domain: input→targeting task→GE→VFX"
+    },
+    {
+      "id": "tp-10",
+      "query": "IA_Interact로 상호작용하면 GA_Interact가 활성화되고 → AbilityTask_WaitTargetData로 타겟 잡고 → GE_InteractEffect 적용하는데, 이 전체 Input→Ability→Effect 연결 관계 분석해줘",
+      "should_trigger": true,
+      "reason": "Korean interact ability full cross-domain chain with targeting task"
+    },
+    {
+      "id": "tn-01",
+      "query": "BP_Player 실행 흐름 분석해줘",
+      "should_trigger": false,
+      "reason": "BP-only execution flow -> blueprint-flow"
+    },
+    {
+      "id": "tn-02",
+      "query": "GAS 태그 검색해줘",
+      "should_trigger": false,
+      "reason": "Single GAS tag search -> gas-development"
+    },
+    {
+      "id": "tn-03",
+      "query": "TakeDamage 함수 호출 관계 보여줘",
+      "should_trigger": false,
+      "reason": "C++ call graph -> execution-flow-explorer"
+    },
+    {
+      "id": "tn-04",
+      "query": "BP 노드 실행 순서 추적해줘",
+      "should_trigger": false,
+      "reason": "BP node execution order -> blueprint-flow"
+    },
+    {
+      "id": "tn-05",
+      "query": "C++ 클래스 생성해줘",
+      "should_trigger": false,
+      "reason": "C++ class generation -> code-generation"
+    },
+    {
+      "id": "tn-06",
+      "query": "이 함수 deprecated 하면 영향 범위?",
+      "should_trigger": false,
+      "reason": "Refactoring impact -> caller-graph-visualizer"
+    },
+    {
+      "id": "tn-07",
+      "query": "머테리얼 분석해줘",
+      "should_trigger": false,
+      "reason": "Material analysis -> material-analysis"
+    },
+    {
+      "id": "tn-08",
+      "query": "GameplayAbility 하나 만들어줘",
+      "should_trigger": false,
+      "reason": "Single ability class creation -> code-generation"
+    },
+    {
+      "id": "tn-09",
+      "query": "BP를 C++로 변환해줘",
+      "should_trigger": false,
+      "reason": "BP to C++ conversion -> bp-cpp-project-init"
+    },
+    {
+      "id": "tn-10",
+      "query": "GAS 밸런스 리포트 생성해줘",
+      "should_trigger": false,
+      "reason": "GAS balance report -> gas-development"
+    }
+  ]
+}

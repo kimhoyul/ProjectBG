@@ -1,0 +1,111 @@
+{# Concept art / style guide template for /image-to-design-spec Stage 2 #}
+{# Used when domain_distribution.concept_art ≥ 0.6 #}
+{# Focus: art_attributes (lighting / composition / mood / fidelity) + Material / palette derivation #}
+
+# {{title_from_vision}}
+
+<!-- workflow-id: {{workflow_id}} -->
+<!-- ssot-version: 1.0 -->
+<!-- generated-at: {{generated_at}} -->
+<!-- stage: 2 -->
+<!-- domain: concept_art (≥60% art dominance) -->
+<!-- ip-safety: all proper nouns are placeholders; color hex withheld (derive in Stage 3); palette NOT copied from source -->
+
+## 1. 개요 <!-- section-id: SEC-OVR-001 -->
+
+**의도된 플레이어 경험 앵커** — {{intended_experience_summary_one_sentence}}.
+
+이 기획서는 컨셉/스타일 가이드에 집중합니다. art_attributes (lighting / composition / mood / fidelity) 가 의도된 경험을 *느낌* 으로 전달하는 감각 계층입니다.
+
+## 2. 의도된 플레이어 경험 <!-- section-id: SEC-EXP-001 -->
+
+> {{intended_experience}}
+
+**감정 스펙트럼**: {{emotion_spectrum_inline}}
+
+**Norman 우세**: {{norman_dominant}} (concept 도메인은 visceral 우세 자연스러움). behavioral 은 §5 UI 핸드오프 / reflective 는 narrative 트랙 위임.
+
+**MDA 우세**: aesthetics. mechanics / dynamics 는 별도 system_brief 위임.
+
+## 3. 아트 디렉션 4 축 <!-- section-id: SEC-ART-001 -->
+
+> 원본 픽셀 색상 hex 는 격리됨 — Stage 3 art pass 에서 *의도된 경험 + art_attributes* 로부터 *새로 derive*. 복제 금지.
+
+| 축 | 의도된 경험 매핑 | 시각 도출 |
+|---|---|---|
+| **Lighting** | {{lighting_intent_mapping}} | {{lighting_derivation_text}} |
+| **Composition** | {{composition_intent_mapping}} | {{composition_derivation_text}} |
+| **Mood** | {{mood_intent_mapping}} | {{mood_derivation_text}} |
+| **Fidelity** | {{fidelity_intent_mapping}} | {{fidelity_derivation_text}} |
+
+## 4. 팔레트 derivation 규칙 <!-- section-id: SEC-PALETTE-001 -->
+
+**의도된 경험 → 컬러 카테고리 도출** (구체 hex 는 Stage 3 art TD 결정):
+
+{{palette_categories_list_warm_cool_accent_per_emotion}}
+
+**Material 후보**:
+- `M_{{primary_lighting_name}}` — {{primary_lighting_intent}}
+- `M_{{accent_name}}` — {{accent_intent}}
+- `M_{{resource_color_name}}` — {{resource_intent}}
+- {{additional_materials_list}}
+
+**Material Parameter Collection**: `MPC_{{theme_name}}` — 글로벌 tint/saturation/glow.
+
+## 5. 스타일 가이드라인 <!-- section-id: SEC-STYLE-001 -->
+
+**자산 분류 + 폴더 구조 권장**:
+
+{{asset_folder_structure_recommendations}}
+
+**태그 후보** ({{tag_count}} 개):
+{{art_tags_list_style_mood_setting}}
+
+**파생 자산 후보**:
+{{derived_assets_list_material_instance_decal_postprocess}}
+
+## 6. 타이포그래피 / Typography <!-- section-id: SEC-TYPO-001 -->
+
+> stage1.typography_hints[] 에서 surface 된 단서. 구체 폰트 선택은 art TD 결정.
+
+{{typography_hints_table_face_register_intent}}
+
+## 7. UI / 시스템 핸드오프 (lite) <!-- section-id: SEC-HANDOFF-LITE -->
+
+> UI 정보 아키텍처 deep dive 는 ui_brief 호출 / GAS spec 은 system_brief 호출로 위임. 이 brief 는 art primary.
+
+**art → UI 가시화 영향**: {{art_to_ui_one_paragraph}}.
+
+**art → 시스템 영향**: {{art_to_system_one_paragraph}}.
+
+## 8. 환경 / 세계관 (선택) <!-- section-id: SEC-WORLD-001 -->
+
+{{world_building_section_if_applicable_or_n_a}}
+
+## 9. Stage 3 핸드오프 가이드 <!-- section-id: SEC-HANDOFF-001 -->
+
+**concept_art 트랙 입력** (이 brief 의 primary 산출):
+- 4-축 art direction (lighting/composition/mood/fidelity)
+- {{material_count}} Material 후보 + MPC 권장
+- {{tag_count}} art tag
+- 자산 폴더 권장 + 파생 자산 후보
+- 타이포그래피 단서 ({{typography_count}} 개)
+
+**Stage 3 art pass 행동 강령**:
+1. 원본 픽셀 색상 *복제 금지* — hex 는 derive only
+2. 의도된 경험 narrative 를 모든 art 결정의 anchor 로 인용
+3. Material Parameter Collection 으로 글로벌 일관성 유지
+
+**ui_mockup / system_diagram 보강 권장**: 별도 `ui_brief` / `system_brief` 호출.
+
+## 10. 사용자 검토 요청 <!-- section-id: SEC-REVIEW -->
+
+{{review_checklist_concept_focused_questions}}
+
+## 11. 위험 + 경고 <!-- section-id: SEC-RISK-001 -->
+
+{{warnings_list_numbered}}
+
+---
+
+**다음 단계**: game-design-philosopher SubAgent → `stage2_design_review.json` → Gate 2 체크리스트.

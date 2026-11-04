@@ -1,0 +1,109 @@
+{
+  "skill": "ue-widget-authoring",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for ue-widget-authoring (Issue #20001, Epic #19989 A4). TP cases exercise the offline authoring/DSL/validate trigger surface (KO+EN) — novel vocabulary measured NO_MATCH pre-#20001, plus widget-validate vocabulary claimed via minimal negative carve-outs on ue-validate/bp-to-cpp-validator (ue-data-audit #20623 same-mechanism precedent). TN cases pin the runtime twin (ue-slate-debug), BP graph generation (blueprint-generator), creation phrasing left with ue-scaffold this PR (bare forms are NO_MATCH by design post-#21420 and are not TN-pinned), and broad project validation (ue-validate).",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "위젯 DSL 내보내줘",
+      "should_trigger": true,
+      "reason": "Canonical KO trigger — widget DSL export"
+    },
+    {
+      "id": "TP-02",
+      "query": "WBP_HUD 위젯 오서링 해줘",
+      "should_trigger": true,
+      "reason": "위젯 오서링 — core authoring trigger"
+    },
+    {
+      "id": "TP-03",
+      "query": "오프라인 위젯 편집 워크플로우 돌려줘",
+      "should_trigger": true,
+      "reason": "Issue #20001 motivating query — offline widget edit workflow"
+    },
+    {
+      "id": "TP-04",
+      "query": "widget dsl export for WBP_HUD",
+      "should_trigger": true,
+      "reason": "Canonical EN trigger — widget dsl"
+    },
+    {
+      "id": "TP-05",
+      "query": "run the widget authoring workflow on WBP_ActionBar",
+      "should_trigger": true,
+      "reason": "EN authoring trigger"
+    },
+    {
+      "id": "TP-06",
+      "query": "위젯 검증해줘",
+      "should_trigger": true,
+      "reason": "Widget-validate vocabulary — carved out of ue-validate(11)/bp-to-cpp-validator(60) negatives; must reach priority 237"
+    },
+    {
+      "id": "TP-07",
+      "query": "WBP 검증 돌려줘",
+      "should_trigger": true,
+      "reason": "WBP-validate vocabulary — carve-out pair of TP-06"
+    },
+    {
+      "id": "TP-08",
+      "query": "validate widget blueprint health for WBP_HUD",
+      "should_trigger": true,
+      "reason": "EN validate trigger — must beat ue-validate's broad 'validate' via carve-out"
+    },
+    {
+      "id": "TP-09",
+      "query": "위젯 텍스트 바꿔줘",
+      "should_trigger": true,
+      "reason": "Concrete authoring intent (set_text mapping) — NO_MATCH pre-#20001"
+    },
+    {
+      "id": "TP-10",
+      "query": "WBP_HUD에 위젯 애니메이션 추가해줘",
+      "should_trigger": true,
+      "reason": "Issue #27511 KO reachability: shipped create_widget_animation authoring surface"
+    },
+    {
+      "id": "TP-11",
+      "query": "author a widget animation for WBP_HUD",
+      "should_trigger": true,
+      "reason": "Issue #27511 EN reachability: widget animation authoring"
+    },
+    {
+      "id": "TN-01",
+      "query": "버튼이 안 눌려",
+      "should_trigger": false,
+      "reason": "Runtime hit-test symptom — ue-slate-debug territory"
+    },
+    {
+      "id": "TN-02",
+      "query": "위젯 안 보임",
+      "should_trigger": false,
+      "reason": "Runtime visibility symptom — ue-slate-debug territory"
+    },
+    {
+      "id": "TN-03",
+      "query": "BP 그래프 만들어줘",
+      "should_trigger": false,
+      "reason": "BP graph generation — blueprint-generator territory"
+    },
+    {
+      "id": "TN-04",
+      "query": "위젯 만들어줘",
+      "should_trigger": false,
+      "reason": "Creation phrasing owned by ue-scaffold(47) via '만들어줘' — creation vocab deliberately unclaimed in #20001 (When-to-use documents explicit invocation)"
+    },
+    {
+      "id": "TN-05",
+      "query": "create a health bar widget",
+      "should_trigger": false,
+      "reason": "ue-scaffold TP (their suite must stay green) — creation vocab unclaimed this PR"
+    },
+    {
+      "id": "TN-06",
+      "query": "프로젝트 전체 검증해줘",
+      "should_trigger": false,
+      "reason": "Broad project validation — ue-validate core, no widget qualifier"
+    }
+  ]
+}

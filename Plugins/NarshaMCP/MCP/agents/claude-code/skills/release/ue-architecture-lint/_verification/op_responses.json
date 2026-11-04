@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "skill_name": "ue-architecture-lint",
+    "purpose": "Static architecture violation scanner for AI-generated UE C++ (11 ARCH rules).",
+    "schema_version": "1.0",
+    "capture_date": "2026-06-16",
+    "narshamcp_version": "0.10.1",
+    "ue_version": "5.7.1",
+    "project": "Lyra_5.7",
+    "capture_method": "Live in-session MCP calls against the NarshaMCP daemon (read-only ops, Lyra_5.7 indexed). Responses trimmed to representative excerpts; arrays truncated where noted. Re-capture: see _capture.py (Issue #15437)."
+  },
+  "tools": {
+    "ue_analyze_symbols": {
+      "_status": "captured",
+      "operations": {
+        "trace_hierarchy": {
+          "request": {"operation": "trace_hierarchy", "class_name": "ALyraCharacter", "direction": "up"},
+          "response": {
+            "operation": "trace_hierarchy",
+            "class_name": "ALyraCharacter",
+            "direction": "up",
+            "ancestors_count": 7,
+            "ancestors": [
+              {"depth": 1, "name": "AModularCharacter", "relation": "parent"},
+              {"depth": 2, "name": "ACharacter", "relation": "parent"},
+              {"depth": 3, "name": "APawn", "relation": "parent"},
+              {"depth": 4, "name": "AActor", "relation": "parent"}
+            ],
+            "interface_parents": ["IAbilitySystemInterface", "IGameplayCueInterface", "IGameplayTagAssetInterface", "ILyraTeamAgentInterface"],
+            "_truncated": "7 ancestors total, 4 shown"
+          }
+        }
+      },
+      "note": "Inheritance-chain depth — the input to ARCH-001 (inheritance depth) and ARCH-002 (God Class) heuristics."
+    },
+    "ue_analyze_source": {
+      "_status": "captured",
+      "operations": {
+        "detect_patterns": {
+          "request": {"operation": "detect_patterns", "class_name": "ALyraCharacter"},
+          "response": {
+            "operation": "detect_patterns",
+            "class_name": "ALyraCharacter",
+            "patterns_count": 3,
+            "patterns": [
+              {"pattern": "Component Composition", "confidence": "high", "file": "Source/LyraGame/Character/LyraCharacter.h", "evidence": ["PawnExtComponent: TObjectPtr<ULyraPawnExtensionComponent>", "HealthComponent: TObjectPtr<ULyraHealthComponent>"]},
+              {"pattern": "Observer (Delegates)", "confidence": "medium", "file": "Source/LyraGame/Character/LyraCharacter.h", "evidence": ["OnTeamChangedDelegate: FOnLyraTeamIndexChangedDelegate"]}
+            ],
+            "_truncated": "3 patterns total, 2 shown"
+          }
+        }
+      },
+      "note": "No-PDB source pattern detection — feeds ARCH-003 (missing components) and composition-vs-inheritance rules."
+    },
+    "ue_diff": {
+      "_status": "captured",
+      "operations": {
+        "diff_hierarchy": {
+          "request": {"operation": "diff_hierarchy", "class_name": "ALyraCharacter"},
+          "response": {
+            "operation": "diff_hierarchy",
+            "class_a": "ALyraCharacter",
+            "class_b": "AModularCharacter",
+            "added_methods_count": 50,
+            "added_properties_count": 7,
+            "overridden_methods_count": 7,
+            "interface_changes": {"added": ["IGameplayCueInterface", "IAbilitySystemInterface", "IGameplayTagAssetInterface", "ILyraTeamAgentInterface"], "removed": []},
+            "added_properties_sample": [
+              {"name": "HealthComponent", "type": "TObjectPtr<ULyraHealthComponent>", "visibility": "private"},
+              {"name": "CameraComponent", "type": "TObjectPtr<ULyraCameraComponent>", "visibility": "private"}
+            ],
+            "_truncated": "added_methods: 50, added_properties: 7 — counts kept, samples trimmed"
+          }
+        }
+      },
+      "note": "Subclass-vs-parent delta — the surface area an architecture review compares against the base class contract."
+    },
+    "ue_grep": {
+      "_status": "captured",
+      "operations": {
+        "source_search": {
+          "request": {"query": "UCLASS", "domain": "source", "limit": 4},
+          "response": {
+            "operation": "ue_grep",
+            "query": "UCLASS",
+            "scope": "project",
+            "total_found": 500,
+            "matches_sample": [
+              "[source] Source\\LyraEditor\\LyraEditorEngine.h:13 — UCLASS()",
+              "[source] LyraContextEffectsLibraryFactory.h:13 — UCLASS(hidecategories = Object, MinimalAPI)"
+            ],
+            "_truncated": "500 matches (capped), 2 shown"
+          }
+        }
+      },
+      "note": "Macro-site grep — ARCH rules scan UCLASS/UPROPERTY specifier sites for missing-reflection / Runtime↔Editor xref violations."
+    },
+    "ue_read": {
+      "_status": "captured",
+      "operations": {
+        "class_detail": {
+          "request": {"identifier": "ALyraCharacter"},
+          "response": {
+            "operation": "ue_read",
+            "identifier": "ALyraCharacter",
+            "type": "class",
+            "parent_class": "AModularCharacter",
+            "child_class_count": 1,
+            "pdb_source": "UnrealEditor-ShooterTestsRuntime.pdb",
+            "source_category": "Plugin"
+          }
+        }
+      },
+      "note": "Class-level read (parent, child count) — confirms the entity an ARCH rule is about to flag."
+    }
+  }
+}

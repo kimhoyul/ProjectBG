@@ -1,0 +1,86 @@
+{
+  "skill": "ue-impact",
+  "version": "1.0.0",
+  "description": "Output quality eval for ue-impact skill — verifies impact analysis completeness and accuracy",
+  "cases": [
+    {
+      "id": "qual-01",
+      "prompt": "APawn 변경하면 뭐가 깨져?",
+      "assertions": [
+        {
+          "type": "tool_used",
+          "tool": "ue_analyze_symbols",
+          "description": "Should trace callers/dependents of APawn via symbol analysis (find_callers / impact_analysis)"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["Blueprint", "BP_", "dependent", "reference", "caller", "callers", "subclass", "override", "derived"],
+          "description": "Should identify what depends on APawn — Blueprint references when present, OR C++ callers/subclasses/overrides when an engine base class has no Blueprint dependents (Issue #14675: no-BP-dependent robust; signal preserved — an off-topic, non-impact answer still matches none)"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["impact", "callers", "dependents", "scope"],
+          "description": "Should provide impact scope summary with affected entities"
+        }
+      ]
+    },
+    {
+      "id": "qual-02",
+      "prompt": "xref TakeDamage",
+      "assertions": [
+        {
+          "type": "tool_used",
+          "tool": "ue_analyze_symbols",
+          "description": "Should use symbol analysis for cross-reference lookup"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["reference", "caller", "TakeDamage"],
+          "description": "Should list all cross-references to TakeDamage"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(##|###|\\*\\*[^*]+\\*\\*|(^|\\n)\\s*[-*]\\s)",
+          "description": "Should organize results by reference type (C++ callers, BP references, overrides)"
+        }
+      ]
+    },
+    {
+      "id": "qual-03",
+      "prompt": "어떤 BP가 Jump를 사용해?",
+      "assertions": [
+        {
+          "type": "tool_used",
+          "tool": "ue_analyze_symbols",
+          "description": "Should trace Blueprint usages of Jump function (find_cross_bp_dependencies / find_cpp_to_bp / find_callers)"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["Blueprint", "BP_"],
+          "description": "Should list specific Blueprint assets that reference Jump"
+        }
+      ]
+    },
+    {
+      "id": "qual-04",
+      "prompt": "What breaks if I change GetHealth() return type?",
+      "assertions": [
+        {
+          "type": "tool_used",
+          "tool": "ue_analyze_symbols",
+          "description": "Should perform impact analysis on GetHealth"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["impact", "break", "dependent", "caller"],
+          "description": "Should identify downstream breakage from signature change"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["scope", "risk", "recommendation"],
+          "description": "Should provide impact scope summary with risk assessment"
+        }
+      ]
+    }
+  ]
+}

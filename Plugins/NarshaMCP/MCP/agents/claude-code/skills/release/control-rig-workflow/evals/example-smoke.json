@@ -1,0 +1,5 @@
+{
+  "description": "Example-execution smoke (Issue #19945, Rigging copy-paste-fail A4 regression gate): every ue_manage_rigging(...) and ue_analyze_symbols(...) example in the listed files must use real top-level schema parameters and real operations. Catches the drift this skill shipped: phantom `symbol_types=[...]` array (real param is singular `symbol_type`) and any invalid op. Consumed by tests/unit/pure/skills/test_skill_example_smoke.py. NOTE: rig_path IS a valid schema prop (CR write ops), so the rig_path-in-read-op semantic is enforced by review/docs, not by this smoke.",
+  "tools": ["ue_manage_rigging", "ue_analyze_symbols"],
+  "files": ["SKILL.md", "REFERENCE.md", "EXAMPLES.md"]
+}

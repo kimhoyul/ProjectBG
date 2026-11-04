@@ -1,0 +1,5 @@
+{
+  "description": "Example-execution smoke (Issue #20633, Mesh/Texture audit F1): every ue_modify_asset(...) example in the listed files must use real top-level schema parameters — no params={} wrapper (the dispatcher reads flat args), no phantom kwargs (asset_type/backup_path/create_backup), no phantom operations (modify/rollback). Guards against re-drifting back to the removed legacy ue_modify_assets (plural) tool. Consumed by tests/unit/pure/skills/test_skill_example_smoke.py.",
+  "tool": "ue_modify_asset",
+  "files": ["SKILL.md", "REFERENCE.md", "EXAMPLES.md", "ADVANCED.md"]
+}

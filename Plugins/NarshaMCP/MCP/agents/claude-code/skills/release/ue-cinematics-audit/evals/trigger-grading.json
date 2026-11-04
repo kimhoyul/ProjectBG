@@ -1,0 +1,127 @@
+{
+  "skill": "ue-cinematics-audit",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for the read-only, project-wide Level Sequence health audit. It must activate for aggregate Sequencer audit requests and reject authoring, single-sequence inspection, whole-project health, and runtime profiling requests.",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "프로젝트의 모든 레벨 시퀀스를 시네마틱 감사해줘. 바인딩, 트랙, 키프레임 문제를 우선순위로 보고 싶어",
+      "should_trigger": true,
+      "reason": "Explicit Korean project-wide cinematics audit with the skill's aggregate evidence scope"
+    },
+    {
+      "id": "TP-02",
+      "query": "시퀀서 건강도 리포트 만들어줘. 전체 시퀀스를 점수화하고 누락된 카메라 컷도 표시해줘",
+      "should_trigger": true,
+      "reason": "Explicit Korean Sequencer health report and scored rollup"
+    },
+    {
+      "id": "TP-03",
+      "query": "레벨 시퀀스 일괄 점검해서 오류와 경고 상위 10개를 보여줘",
+      "should_trigger": true,
+      "reason": "Exact Korean batch Level Sequence audit intent"
+    },
+    {
+      "id": "TP-04",
+      "query": "시네마틱 오디트 돌리고 실패한 오프라인 읽기는 coverage failure로 따로 정리해줘",
+      "should_trigger": true,
+      "reason": "Korean cinematics audit plus fail-closed coverage terminology"
+    },
+    {
+      "id": "TP-05",
+      "query": "시네마틱 헬스 체크가 필요해. 모든 시퀀스의 빈 바인딩과 키 없는 트랙을 찾아줘",
+      "should_trigger": true,
+      "reason": "Korean health check with derived audit signals"
+    },
+    {
+      "id": "TP-06",
+      "query": "Run a cinematics audit across the project and rank unhealthy Level Sequences",
+      "should_trigger": true,
+      "reason": "Explicit English project-wide cinematics audit"
+    },
+    {
+      "id": "TP-07",
+      "query": "Generate a sequencer health report with scores, warnings, and coverage failures",
+      "should_trigger": true,
+      "reason": "Exact English Sequencer health report intent"
+    },
+    {
+      "id": "TP-08",
+      "query": "Audit all level sequences, but only display the top 5 findings",
+      "should_trigger": true,
+      "reason": "Exact English aggregate audit intent plus display cap"
+    },
+    {
+      "id": "TP-09",
+      "query": "Run the cinematics health check offline and flag empty bindings",
+      "should_trigger": true,
+      "reason": "English offline health check with a skill-specific signal"
+    },
+    {
+      "id": "TP-10",
+      "query": "Sequencer audit for LS_ prefixed assets, including settings, bindings, tracks, and keyframes",
+      "should_trigger": true,
+      "reason": "Filtered English audit still requires the aggregate read-only workflow"
+    },
+    {
+      "id": "TN-01",
+      "query": "LS_Intro에 카메라 컷 추가하고 120프레임에 키프레임도 넣어줘",
+      "should_trigger": false,
+      "reason": "Authoring request belongs to ue-sequencer-cinematics"
+    },
+    {
+      "id": "TN-02",
+      "query": "LS_Boss 레벨 시퀀스의 트랙을 편집해서 오디오 트랙 하나 추가해줘",
+      "should_trigger": false,
+      "reason": "Single-sequence track authoring is explicitly excluded"
+    },
+    {
+      "id": "TN-03",
+      "query": "LS_Lobby 시퀀스 하나의 바인딩 구조만 보여줘",
+      "should_trigger": false,
+      "reason": "Single asset inspection belongs to the general Sequencer workflow"
+    },
+    {
+      "id": "TN-04",
+      "query": "프로젝트 전체 건강도와 C++ 모듈 의존성을 감사해줘",
+      "should_trigger": false,
+      "reason": "Whole-project systems health belongs to performance-health-check or ue-audit"
+    },
+    {
+      "id": "TN-05",
+      "query": "시네마틱 렌더링 중 프레임 드랍을 Unreal Insights로 프로파일링해줘",
+      "should_trigger": false,
+      "reason": "Runtime performance profiling belongs to ue-insights-profiler"
+    },
+    {
+      "id": "TN-06",
+      "query": "Add a camera cut and two transform keyframes to LS_Opening",
+      "should_trigger": false,
+      "reason": "English authoring request belongs to ue-sequencer-cinematics"
+    },
+    {
+      "id": "TN-07",
+      "query": "Edit sequence LS_Menu and add an audio track",
+      "should_trigger": false,
+      "reason": "Explicit English edit and add-track negatives"
+    },
+    {
+      "id": "TN-08",
+      "query": "Show the playback range and bindings for LS_Intro",
+      "should_trigger": false,
+      "reason": "Single-sequence structure inspection is not an aggregate health audit"
+    },
+    {
+      "id": "TN-09",
+      "query": "Run a whole project audit for warnings, configs, and source changes",
+      "should_trigger": false,
+      "reason": "Whole-project diagnostic belongs to ue-audit"
+    },
+    {
+      "id": "TN-10",
+      "query": "Render LS_Trailer to a movie and configure output resolution",
+      "should_trigger": false,
+      "reason": "Movie rendering/output setup is outside the read-only audit scope"
+    }
+  ]
+}

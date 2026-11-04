@@ -1,0 +1,127 @@
+{
+  "skill": "performance-health-check",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for performance-health-check skill. Tests correct activation on project health/optimization/standards queries, and correct rejection of runtime profiling, asset validation, project audit, and material queries.",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "프로젝트 건강도 전체적으로 봐줘. 블루프린트 복잡도 + 모듈 의존성 + Epic 표준 위반 체크",
+      "should_trigger": true,
+      "reason": "Project health analysis with specific scale context and tech debt concern"
+    },
+    {
+      "id": "TP-02",
+      "query": "we're preparing for a milestone review and need to identify optimization opportunities. the project has 80 BPs, 15 modules, and build time keeps creeping up. what should we prioritize?",
+      "should_trigger": true,
+      "reason": "Optimization discovery with milestone context, specific counts, and prioritization request"
+    },
+    {
+      "id": "TP-03",
+      "query": "Epic에서 마켓플레이스 제출하려면 코딩 표준 맞춰야 하는데, 현재 프로젝트가 Epic standards 위반하는 부분 검사해줘. UPROPERTY 카테고리 누락이나 BlueprintCallable 없는 public 함수 같은 거",
+      "should_trigger": true,
+      "reason": "Epic standards check with marketplace submission context and specific violation examples"
+    },
+    {
+      "id": "TP-04",
+      "query": "optimization opportunities: performance analysis for the whole project. we have 5 GameFeaturePlugins, a custom GAS setup, and about 120 C++ files. i want to know if there are any anti-patterns like tick-heavy actors or expensive BP nativization candidates",
+      "should_trigger": true,
+      "reason": "Full project analysis with specific architecture details and anti-pattern detection"
+    },
+    {
+      "id": "TP-05",
+      "query": "빌드 시간이 요즘 5분 넘게 걸리는데 원래 3분이었거든. 어떤 모듈이 빌드 시간 잡아먹는지 분석해줘. 특히 GameCore 모듈이 헤더 의존성이 많아서 의심되는데",
+      "should_trigger": true,
+      "reason": "Build time regression analysis with before/after context and suspect module"
+    },
+    {
+      "id": "TP-06",
+      "query": "BP_PlayerCharacter가 EventGraph에 노드 400개 넘고 BP_EnemyAI도 300개 넘는데, 전체 프로젝트 블루프린트 복잡도 분석해서 C++로 네이티브화해야 할 후보 정리해줘",
+      "should_trigger": true,
+      "reason": "Blueprint complexity audit with specific node counts and nativization candidate ranking"
+    },
+    {
+      "id": "TP-07",
+      "query": "C++ 모듈 의존성이 꼬여있는 것 같아. GameCore → GameCombat → GameUI → GameCore로 순환 의존이 있을 수도 있고, 불필요한 #include가 많아서 빌드도 느려. 의존성 그래프 분석해줘",
+      "should_trigger": true,
+      "reason": "C++ dependency analysis with suspected circular dependency and include bloat concern"
+    },
+    {
+      "id": "TP-08",
+      "query": "Blueprint 복잡도 분석 - 곧 QA에 넘길 건데 최적화 가능한 부분 미리 파악하고 싶어. Tick 쓰는 Actor가 몇 개인지, 비싼 BP 함수 호출이 있는지, 메모리 많이 먹는 에셋이 뭔지 전체적으로 스캔해줘",
+      "should_trigger": true,
+      "reason": "Pre-QA optimization scan covering tick actors, expensive calls, and memory hogs"
+    },
+    {
+      "id": "TP-09",
+      "query": "코드 품질 메트릭 뽑아줘. 함수 평균 길이, 클래스당 메서드 수, 순환 복잡도 높은 함수 Top 10, UPROPERTY/UFUNCTION 비율 같은 거. Epic의 Coding Standard 기준으로 평가해줬으면 좋겠어",
+      "should_trigger": true,
+      "reason": "Code quality metrics with specific requested dimensions and Epic standard scoring"
+    },
+    {
+      "id": "TP-10",
+      "query": "전체 프로젝트 성능 리포트 만들어줘. 지난달이랑 비교해서 BP 복잡도 추이, 빌드 시간 변화, 새로 추가된 모듈의 의존성 상태, Epic 표준 준수율을 카테고리별로 정리해줘",
+      "should_trigger": true,
+      "reason": "Full performance report with trend comparison, category breakdown, and standards compliance"
+    },
+    {
+      "id": "TN-01",
+      "query": "왜 느려? 프레임 드랍 분석해줘",
+      "should_trigger": false,
+      "reason": "Runtime frame drop profiling — belongs to ue-insights-profiler skill"
+    },
+    {
+      "id": "TN-02",
+      "query": "에셋 검증해줘 유효한지",
+      "should_trigger": false,
+      "reason": "Asset validation — belongs to ue-validate skill"
+    },
+    {
+      "id": "TN-03",
+      "query": "프로젝트 진단해줘 경고 요약",
+      "should_trigger": false,
+      "reason": "Project diagnostic with warning summary — belongs to ue-audit skill"
+    },
+    {
+      "id": "TN-04",
+      "query": "M_Metal 머티리얼 분석해줘",
+      "should_trigger": false,
+      "reason": "Material analysis — belongs to material-analysis skill"
+    },
+    {
+      "id": "TN-05",
+      "query": "utrace 분석해줘 병목 찾기",
+      "should_trigger": false,
+      "reason": "Unreal Insights trace analysis — belongs to ue-insights-profiler skill"
+    },
+    {
+      "id": "TN-06",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "Build error resolution — belongs to ue-debug skill"
+    },
+    {
+      "id": "TN-07",
+      "query": "GAS 분석해줘",
+      "should_trigger": false,
+      "reason": "GAS analysis — belongs to gas-development skill"
+    },
+    {
+      "id": "TN-08",
+      "query": "DDC 상태 확인해줘",
+      "should_trigger": false,
+      "reason": "DDC health check — belongs to ue-project-ops skill"
+    },
+    {
+      "id": "TN-09",
+      "query": "auto fix warnings 실행해줘",
+      "should_trigger": false,
+      "reason": "Auto fix warnings — belongs to ue-audit skill"
+    },
+    {
+      "id": "TN-10",
+      "query": "hot function 프로파일링",
+      "should_trigger": false,
+      "reason": "Hot function profiling — belongs to ue-insights-profiler skill"
+    }
+  ]
+}

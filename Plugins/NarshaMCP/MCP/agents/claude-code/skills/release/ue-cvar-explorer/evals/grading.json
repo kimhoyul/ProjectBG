@@ -1,0 +1,122 @@
+{
+  "skill": "ue-cvar-explorer",
+  "version": "1.1.0",
+  "description": "Output quality eval for ue-cvar-explorer skill. Validates that CVar exploration produces complete metadata including ECVF flags, scalability groups, and impact explanations.",
+  "cases": [
+    {
+      "id": "QUAL-01",
+      "prompt": "r.Shadow.MaxResolution 뭐야?",
+      "assertions": [
+        {
+          "type": "tool_used",
+          "tool": "ue_analyze_config",
+          "description": "Must use ue_analyze_config to retrieve CVar metadata"
+        },
+        {
+          "type": "output_contains",
+          "value": "ECVF",
+          "description": "Should display ECVF flags (e.g., ECVF_Scalability, ECVF_RenderThreadSafe)"
+        },
+        {
+          "type": "output_contains_any",
+          "values": ["scalability", "Scalability", "sg."],
+          "description": "Should mention scalability group association if applicable"
+        },
+        {
+          "type": "output_contains_any",
+          "values": ["shadow", "Shadow", "resolution", "Resolution"],
+          "description": "Should explain the CVar's purpose and impact on shadow rendering"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-02",
+      "prompt": "CVar search Shadow",
+      "assertions": [
+        {
+          "type": "tool_used",
+          "tool": "ue_analyze_config",
+          "description": "Must use ue_analyze_config for CVar search"
+        },
+        {
+          "type": "output_format",
+          "format": "list_or_table",
+          "description": "Should present multiple matching CVars in a structured list or table"
+        },
+        {
+          "type": "output_contains_any",
+          "values": ["r.Shadow", "sg.Shadow"],
+          "description": "Should include shadow-related CVar names in results"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-03",
+      "prompt": "그래픽 설정 분석해줘",
+      "assertions": [
+        {
+          "type": "tool_used",
+          "tool": "ue_analyze_config",
+          "description": "Must use ue_analyze_config to explore graphics CVars"
+        },
+        {
+          "type": "output_contains_any",
+          "values": ["scalability", "Scalability", "sg.", "quality"],
+          "description": "Should reference scalability groups (sg.ViewDistanceQuality, sg.ShadowQuality, etc.)"
+        },
+        {
+          "type": "output_contains_any",
+          "values": ["ECVF", "flag", "Flag"],
+          "description": "Should mention ECVF flags for at least some CVars"
+        },
+        {
+          "type": "output_contains_any",
+          "values": ["impact", "영향", "performance", "성능", "GPU", "rendering"],
+          "description": "Should explain performance impact of key graphics settings"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-04",
+      "prompt": "sg.ShadowQuality 뭐야?",
+      "assertions": [
+        {
+          "type": "tool_used",
+          "tool": "ue_analyze_config",
+          "description": "Must use ue_analyze_config for scalability group CVar"
+        },
+        {
+          "type": "output_contains_any",
+          "values": ["scalability", "Scalability", "quality level", "0", "1", "2", "3"],
+          "description": "Should explain scalability quality levels (Low=0, Medium=1, High=2, Epic=3)"
+        },
+        {
+          "type": "output_contains_any",
+          "values": ["r.Shadow", "child", "controlled", "affects"],
+          "description": "Should mention which child CVars are controlled by this scalability group"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-05",
+      "prompt": "What does r.Streaming.PoolSize control?",
+      "assertions": [
+        {
+          "type": "tool_used",
+          "tool": "ue_analyze_config",
+          "description": "Must use ue_analyze_config for CVar lookup"
+        },
+        {
+          "type": "output_contains_any",
+          "values": ["texture", "Texture", "streaming", "Streaming", "memory", "pool"],
+          "description": "Should explain texture streaming pool size purpose"
+        },
+        {
+          "type": "output_contains_any",
+          "values": ["MB", "memory", "VRAM", "budget"],
+          "description": "Should mention the unit (MB) and memory budget implications"
+        }
+      ]
+    }
+  ]
+}

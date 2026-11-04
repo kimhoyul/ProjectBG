@@ -1,0 +1,87 @@
+{
+  "skill": "ue-build-automate",
+  "version": "1.0.0",
+  "description": "Output quality eval: verify ue-build-automate produces build pipeline execution with platform/config parameters and results",
+  "cases": [
+    {
+      "id": "QUAL-01",
+      "prompt": "프로젝트 빌드해줘",
+      "assertions": [
+        {
+          "type": "tool_usage",
+          "value": "ue_build_pipeline",
+          "description": "Should use ue_build_pipeline for build execution"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(build_editor|Development|Shipping|Win64|configuration|platform|target)",
+          "description": "Should reference build configuration and platform"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response confirm build parameters (configuration, platform) and present build results or progress? It should not just explain what building is but actually execute or prepare to execute the build.",
+          "threshold": 0.6,
+          "requires_tools": ["ue_build_pipeline"],
+          "description": "Should execute build with proper parameters (LLM judge)"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-02",
+      "prompt": "Cook for Windows",
+      "assertions": [
+        {
+          "type": "tool_usage",
+          "value": "ue_build_pipeline",
+          "description": "Should use ue_build_pipeline for cooking"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["cook", "Windows", "platform", "content", "쿡"],
+          "description": "Should reference cooking for Windows platform"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(cook|platform.*Windows|Win64|Development|Shipping)",
+          "description": "Should specify platform and configuration for cooking"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the final response identify the actual cook operation, Windows platform, configuration, authoritative status, and concrete result/progress/failure evidence from ue_build_pipeline? It must not treat request submission as proven success.",
+          "threshold": 0.6,
+          "requires_tools": ["ue_build_pipeline"],
+          "description": "Should report an evidence-backed cook receipt (LLM judge)"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-03",
+      "prompt": "커맨드릿 CompileAllBlueprints 실행해줘",
+      "timeout": 900,
+      "assertions": [
+        {
+          "type": "tool_usage",
+          "value": "ue_build_pipeline",
+          "description": "Should use ue_build_pipeline for commandlet execution"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["commandlet", "CompileAllBlueprints", "커맨드릿", "run_commandlet"],
+          "description": "Should reference the specific commandlet"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(run_commandlet|commandlet_name|result|success|fail|complete)",
+          "description": "Should show commandlet execution with results"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the final response explicitly report Operation: run_commandlet, the exact CompileAllBlueprints commandlet, status, and concrete completion/progress/failure evidence from ue_build_pipeline? It must not claim success when the authoritative response proves only submission, timeout, partial progress, or failure.",
+          "threshold": 0.6,
+          "requires_tools": ["ue_build_pipeline"],
+          "description": "Should report an evidence-backed commandlet receipt (LLM judge)"
+        }
+      ]
+    }
+  ]
+}

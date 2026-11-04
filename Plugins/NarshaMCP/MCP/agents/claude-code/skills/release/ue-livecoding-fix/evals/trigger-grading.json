@@ -1,0 +1,126 @@
+{
+  "skill": "ue-livecoding-fix",
+  "description": "Trigger precision eval: verify ue-livecoding-fix activates on live coding/hot reload failure queries and NOT on general debug/build/scaffold queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "라이브 코딩 실패",
+      "should_trigger": true,
+      "reason": "Korean '라이브 코딩 실패' — core trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "hot reload failed 다시 시도",
+      "should_trigger": true,
+      "reason": "English 'hot reload failed' — direct trigger (avoids 'error' → ue-debug, 'build' → ue-scaffold)"
+    },
+    {
+      "id": "tp-03",
+      "query": "핫 리로드 실패",
+      "should_trigger": true,
+      "reason": "Korean '핫 리로드' — hot reload trigger (avoids '에러' → ue-debug)"
+    },
+    {
+      "id": "tp-04",
+      "query": "live coding 실패 C2011",
+      "should_trigger": true,
+      "reason": "English 'live coding' with specific code (avoids 'error' → ue-debug)"
+    },
+    {
+      "id": "tp-05",
+      "query": "패치 실패했어",
+      "should_trigger": true,
+      "reason": "Korean '패치 실패' — patch failed trigger"
+    },
+    {
+      "id": "tp-06",
+      "query": "Live coding patch failed",
+      "should_trigger": true,
+      "reason": "English 'live coding' + 'patch failed' — combined trigger"
+    },
+    {
+      "id": "tp-07",
+      "query": "라이브 코딩 패치 실패했어",
+      "should_trigger": true,
+      "reason": "Korean '라이브 코딩' + '패치 실패' — combined triggers (avoids '안돼' → ue-debug)"
+    },
+    {
+      "id": "tp-08",
+      "query": "hot reload failed on latest change",
+      "should_trigger": true,
+      "reason": "English 'hot reload failed' — exact pattern match (avoids unmatched 'failing')"
+    },
+    {
+      "id": "tp-09",
+      "query": "핫 리로드 실패 원인 찾아줘",
+      "should_trigger": false,
+      "reason": "Routes to ue-debug (higher-priority overlap): Ambiguous: \"원인 찾아줘\" matches ue-debug (lower priority); need \"핫 리로드 실패\" to be more specific"
+    },
+    {
+      "id": "tp-10",
+      "query": "patch failed after modifying AMyCharacter",
+      "should_trigger": true,
+      "reason": "English 'patch failed' — specific context"
+    },
+    {
+      "id": "tn-01",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "TN: '에러 해결' is ue-debug trigger. General build error, not live coding specific."
+    },
+    {
+      "id": "tn-02",
+      "query": "NullPtr crash in TakeDamage",
+      "should_trigger": false,
+      "reason": "TN: Runtime crash is ue-debug trigger. Not live coding/hot reload."
+    },
+    {
+      "id": "tn-03",
+      "query": "프로젝트 빌드해줘",
+      "should_trigger": false,
+      "reason": "TN: '빌드' is ue-build-automate trigger. Full build, not live coding patch."
+    },
+    {
+      "id": "tn-04",
+      "query": "캐릭터 만들어줘",
+      "should_trigger": false,
+      "reason": "TN: '만들어줘' is ue-scaffold trigger. Creation, not hot reload fix."
+    },
+    {
+      "id": "tn-05",
+      "query": "Explain how live coding works in UE",
+      "should_trigger": false,
+      "reason": "TN: 'Explain how' is ue-explain trigger. Understanding live coding, not fixing it."
+    },
+    {
+      "id": "tn-06",
+      "query": "LNK2019 unresolved external symbol",
+      "should_trigger": false,
+      "reason": "TN: Linker error is ue-debug trigger. General compile error, not live coding."
+    },
+    {
+      "id": "tn-07",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "TN: '진단' is ue-audit trigger. Project health, not live coding fix."
+    },
+    {
+      "id": "tn-08",
+      "query": "Cook for Windows",
+      "should_trigger": false,
+      "reason": "TN: Cook/package is ue-build-automate trigger. Build pipeline, not hot reload."
+    },
+    {
+      "id": "tn-09",
+      "query": "ACharacter 리팩터링해줘",
+      "should_trigger": false,
+      "reason": "TN: '리팩터링' is ue-cpp-refactor trigger. Code refactoring, not hot reload fix."
+    },
+    {
+      "id": "tn-10",
+      "query": "컴파일 에러 상세 분석",
+      "should_trigger": false,
+      "reason": "TN: Compile error analysis is ue-debug trigger. General compile, not live coding patch."
+    }
+  ]
+}

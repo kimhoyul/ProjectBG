@@ -1,0 +1,5 @@
+{
+  "description": "Example-execution smoke (Issue #20380 / #22948): every ue_manage_project_ops(...) example in the listed files must use real top-level schema parameters — no phantom kwargs (e.g. AStaticMeshActor-style reflection prefixes are fine as VALUES but class_name/asset/include/category/data_layer must be declared schema keys). Consumed by tests/unit/pure/skills/test_skill_example_smoke.py.",
+  "tool": "ue_manage_project_ops",
+  "files": ["SKILL.md", "REFERENCE.md"]
+}

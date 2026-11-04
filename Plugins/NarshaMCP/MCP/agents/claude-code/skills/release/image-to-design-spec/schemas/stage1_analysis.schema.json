@@ -1,0 +1,148 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "stage1_analysis.schema.json",
+  "title": "Stage 1 Analysis — Vision Extraction Result",
+  "description": "Output of image-to-spec-extractor SubAgent. Single source of truth for Stage 1 data contract.",
+  "type": "object",
+  "required": ["$schema_version", "workflow_id", "vision_model", "user_domain_hint", "images", "global_summary", "domain_distribution", "next_stage_recommendation"],
+  "properties": {
+    "$schema_version": {"type": "string", "const": "1.0"},
+    "workflow_id": {"type": "string", "pattern": "^wf_[0-9]{8}_[a-f0-9]{6}$"},
+    "vision_model": {"type": "string"},
+    "user_domain_hint": {"type": "string", "enum": ["auto", "ui", "system", "art"]},
+    "images": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["image_id", "stored_path", "sha256", "classification", "vision_extract", "domain_signals"],
+        "properties": {
+          "image_id": {"type": "string"},
+          "stored_path": {"type": "string"},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "vision_called_at": {"type": ["string", "null"]},
+          "cache_hit": {"type": "boolean"},
+          "alias_of": {"type": ["string", "null"]},
+          "classification": {
+            "type": "object",
+            "required": ["category", "confidence"],
+            "properties": {
+              "category": {"type": "string", "enum": ["ui_mockup", "concept_art", "system_diagram", "mixed"]},
+              "confidence": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+              "secondary_signals": {"type": "array", "items": {"type": "string"}},
+              "rationale": {"type": "string"},
+              "user_override": {"type": ["string", "null"]}
+            }
+          },
+          "vision_extract": {
+            "type": "object",
+            "required": ["title_guess"],
+            "properties": {
+              "title_guess": {"type": ["string", "null"]},
+              "ui_subkind": {
+                "type": ["string", "null"],
+                "enum": ["general", "hud", "menu", "dialog", "economy_ui", "onboarding", "settings", null]
+              },
+              "components": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["type", "name_guess"],
+                  "properties": {
+                    "type": {"type": "string"},
+                    "name_guess": {"type": "string"},
+                    "label": {"type": ["string", "null"]},
+                    "bbox": {
+                      "type": "array",
+                      "items": {"type": "number"},
+                      "minItems": 4,
+                      "maxItems": 4
+                    },
+                    "z_order_hint": {"type": "integer"},
+                    "interactive": {"type": "boolean"},
+                    "children_guess": {"type": "array", "items": {"type": "string"}}
+                  }
+                }
+              },
+              "text_strings": {"type": "array", "items": {"type": "string"}},
+              "color_palette": {"type": "array", "items": {"type": "string", "pattern": "^#[A-F0-9]{6}$"}},
+              "typography_hints": {"type": "array"},
+              "interaction_hints": {"type": "array", "items": {"type": "string"}},
+              "art_attributes": {"type": ["object", "null"]},
+              "diagram_nodes": {"type": ["array", "null"]},
+              "diagram_edges": {"type": ["array", "null"]},
+              "design_intent": {
+                "type": "object",
+                "properties": {
+                  "intended_experience": {"type": ["string", "null"]},
+                  "challenge_kind": {
+                    "type": ["string", "null"],
+                    "enum": ["hot_stimulation", "cold_strategy", "mixed", "none", null]
+                  },
+                  "flow_zone_target": {
+                    "type": ["string", "null"],
+                    "enum": ["novice", "intermediate", "hardcore", null]
+                  },
+                  "emotion_spectrum": {
+                    "type": ["object", "null"],
+                    "properties": {
+                      "joy":         {"type": "number", "minimum": 0, "maximum": 1},
+                      "anger":       {"type": "number", "minimum": 0, "maximum": 1},
+                      "sadness":     {"type": "number", "minimum": 0, "maximum": 1},
+                      "fear":        {"type": "number", "minimum": 0, "maximum": 1},
+                      "inspiration": {"type": "number", "minimum": 0, "maximum": 1}
+                    }
+                  },
+                  "psychology_signals": {"type": "array", "items": {"type": "string"}, "maxItems": 3},
+                  "mda_layer_dominant": {
+                    "type": ["string", "null"],
+                    "enum": ["mechanics", "dynamics", "aesthetics", null]
+                  },
+                  "norman_dominant_layer": {
+                    "type": ["string", "null"],
+                    "enum": ["visceral", "behavioral", "reflective", null]
+                  },
+                  "schell_lens_applicable": {"type": "array", "items": {"type": "string"}, "maxItems": 3},
+                  "flow_tunnel_width": {
+                    "type": ["string", "null"],
+                    "enum": ["narrow", "medium", "wide", null]
+                  },
+                  "learning_curve_slope": {
+                    "type": ["string", "null"],
+                    "enum": ["gentle", "moderate", "steep", null]
+                  }
+                }
+              },
+              "economy_attributes": {"type": ["object", "null"]},
+              "rld_indicators": {"type": ["object", "null"]},
+              "loop_signals": {"type": ["object", "null"]},
+              "raw_text_fallback": {"type": ["string", "null"]}
+            }
+          },
+          "domain_signals": {
+            "type": "object",
+            "properties": {
+              "ui_widgets_count": {"type": "integer"},
+              "diagram_arrows_count": {"type": "integer"},
+              "art_style_score": {"type": "number", "minimum": 0, "maximum": 1}
+            }
+          }
+        }
+      }
+    },
+    "global_summary": {"type": "string"},
+    "domain_distribution": {
+      "type": "object",
+      "properties": {
+        "ui_mockup":      {"type": "integer"},
+        "concept_art":    {"type": "integer"},
+        "system_diagram": {"type": "integer"},
+        "mixed":          {"type": "integer"}
+      }
+    },
+    "next_stage_recommendation": {"type": "string"},
+    "warnings": {"type": "array", "items": {"type": "string"}}
+  }
+}

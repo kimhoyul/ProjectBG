@@ -1,0 +1,41 @@
+[
+  {
+    "type": "panic",
+    "ts": "2026-05-08T09:58:00Z",
+    "reason": "called Option::unwrap on None",
+    "thread": "tokio-runtime",
+    "location": "MCP/native/mcp_server/src/tools/check_health.rs:120",
+    "message": "called Option::unwrap on None",
+    "has_backtrace": true,
+    "tool_call_count": 5,
+    "version": "v0.9.13",
+    "pid": 27360,
+    "exit_code": 101
+  },
+  {
+    "type": "external_kill",
+    "ts": "2026-05-08T09:59:00Z",
+    "reason": "external_kill",
+    "thread": "main",
+    "location": "n/a",
+    "message": "External kill detected",
+    "has_backtrace": false,
+    "tool_call_count": 0,
+    "version": "v0.9.13",
+    "pid": 27361,
+    "exit_code": 1
+  },
+  {
+    "type": "panic",
+    "ts": "2026-05-08T09:59:45Z",
+    "reason": "index out of bounds",
+    "thread": "tokio-runtime",
+    "location": "MCP/native/mcp_server/src/cache.rs:42",
+    "message": "index out of bounds: the len is 0 but the index is 0",
+    "has_backtrace": true,
+    "tool_call_count": 2,
+    "version": "v0.9.13",
+    "pid": 27362,
+    "exit_code": 101
+  }
+]

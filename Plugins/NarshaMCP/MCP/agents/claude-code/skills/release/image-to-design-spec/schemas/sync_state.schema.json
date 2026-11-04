@@ -1,0 +1,158 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://narshamcp.dev/schemas/design-from-image/sync_state.schema.json",
+  "title": "Design-from-Image Stage 4 Sync State (v1.1)",
+  "description": "On-disk format that design-doc-synthesizer writes after Stage 4. SSOT for required-field set: `_sync_state_schema.py` constants REQUIRED_TOP_LEVEL=(workflow_id, ssot_path, github, confluence), REQUIRED_GITHUB=(enabled, section_to_issue), REQUIRED_CONFLUENCE=(enabled, section_to_page). Schema is permissive (additionalProperties: true) to tolerate (a) legacy v1.0 fields preserved during migration and (b) future fields. Cross-test `tests/skills/test_design_schemas.py::test_sync_state_required_constants_in_sync` verifies schema required[] matches the Python module constants.",
+  "type": "object",
+  "required": [
+    "workflow_id",
+    "ssot_path",
+    "github",
+    "confluence"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "$schema_version": {
+      "type": "string",
+      "enum": ["1.0", "1.1"],
+      "description": "Migration target version. Spec recommended; legacy 2nd-pilot v1.0 still observed (DRIFT). After synthesizer call always 1.1."
+    },
+    "workflow_id": {
+      "type": "string",
+      "pattern": "^wf_[0-9]{8}_[0-9a-f]{6}$"
+    },
+    "ssot_path": {
+      "type": "string",
+      "description": "Absolute path to SSOT MD."
+    },
+    "ssot_path_relative": {
+      "type": "string",
+      "description": "Repo-relative SSOT path."
+    },
+    "ssot_slug": {
+      "type": "string"
+    },
+    "stage4_generated_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "stage4_reentry_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "Set on re-entry (e.g., V1 verification re-call)."
+    },
+    "dry_run": {
+      "type": "boolean"
+    },
+    "github": {
+      "type": "object",
+      "required": ["enabled", "section_to_issue"],
+      "additionalProperties": true,
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "skipped_reason": {"type": ["string", "null"]},
+        "epic_issue": {"type": ["integer", "null"]},
+        "phase_issues": {
+          "type": "array",
+          "items": {"type": "integer"}
+        },
+        "section_to_issue": {
+          "type": "object",
+          "additionalProperties": {"type": "integer"}
+        },
+        "last_pushed_at": {"type": ["string", "null"]},
+        "last_pushed_md_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^([0-9a-f]{64})?$"
+        },
+        "epic_planner_call": {
+          "type": ["object", "null"],
+          "additionalProperties": true,
+          "properties": {
+            "args": {"type": "string"},
+            "executed_at": {"type": ["string", "null"]},
+            "result": {
+              "type": "string",
+              "enum": ["planned", "skipped", "applied", "failed"]
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "description": "When enabled=true, must populate at least one of epic_issue or section_to_issue.",
+          "if": {"properties": {"enabled": {"const": true}}},
+          "then": {
+            "anyOf": [
+              {"properties": {"epic_issue": {"type": "integer", "minimum": 1}}},
+              {
+                "properties": {
+                  "section_to_issue": {
+                    "type": "object",
+                    "minProperties": 1
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "confluence": {
+      "type": "object",
+      "required": ["enabled", "section_to_page"],
+      "additionalProperties": true,
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "skipped_reason": {"type": ["string", "null"]},
+        "space_key": {"type": ["string", "null"]},
+        "page_id_root": {"type": ["string", "integer", "null"]},
+        "section_to_page": {
+          "type": "object",
+          "additionalProperties": {"type": ["integer", "string"]}
+        },
+        "last_pushed_at": {"type": ["string", "null"]},
+        "atlassian_mcp_authenticated": {
+          "type": ["boolean", "null"],
+          "description": "Tri-state: null=not attempted, true=auth ok, false=auth failed."
+        },
+        "page_create_call": {
+          "type": ["object", "null"],
+          "additionalProperties": true,
+          "properties": {
+            "args": {"type": "string"},
+            "executed_at": {"type": ["string", "null"]},
+            "result": {
+              "type": "string",
+              "enum": ["planned", "skipped", "applied", "failed"]
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "description": "When enabled=true, space_key must be a non-null string.",
+          "if": {"properties": {"enabled": {"const": true}}},
+          "then": {
+            "properties": {
+              "space_key": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      ]
+    },
+    "cost_summary": {
+      "type": ["object", "null"],
+      "additionalProperties": true
+    },
+    "lint_results_persisted": {
+      "type": ["object", "null"],
+      "additionalProperties": true,
+      "description": "1st-pilot legacy field; preserved by migrate_legacy_sync_state()."
+    },
+    "next_actions_user": {
+      "type": ["array", "null"],
+      "items": {"type": "string"}
+    }
+  }
+}

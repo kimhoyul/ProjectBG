@@ -1,0 +1,242 @@
+{
+  "_metadata": {
+    "version": "4.3.1",
+    "total_patterns": 23,
+    "source": "Real project analysis (Phase 7) + UE 5.0-5.6 breaking changes",
+    "updated": "2025-10-18",
+    "changelog": "v4.3.1: Removed 6 patterns - Delegate_DECLARE_Missing (90% FP) + PCH_Include_Order (100% FP) + Missing_CoreMinimal_Include (100% FP) + Missing_Category_UPROPERTY/UFUNCTION (100% FP - pattern checks outside parentheses) + EditAnywhere_Without_Blueprint (100% FP)",
+    "generated_at": "2025-12-20T11:12:02.930793+00:00"
+  },
+  "FAssetData": {
+    "type": "class_to_struct",
+    "ue_version": "5.6.0",
+    "severity": "error",
+    "pattern": "class\\s+FAssetData\\s*;",
+    "fix_pattern": "struct FAssetData;",
+    "confidence": 0.95,
+    "description": "UE 5.6: FAssetData changed from 'class' to 'struct' (AnimNotify include removal side-effect)",
+    "documentation": "https://docs.unrealengine.com/5.6/",
+    "auto_fixable": true
+  },
+  "AnimNotify_Include_Removed": {
+    "type": "removed_include",
+    "ue_version": "5.6.0",
+    "severity": "warning",
+    "pattern": "#include.*AnimNotifies/",
+    "confidence": 0.75,
+    "description": "UE 5.6: AnimNotify includes reorganized - may cause indirect type changes (e.g., FAssetData)",
+    "documentation": "https://docs.unrealengine.com/5.6/",
+    "auto_fixable": false
+  },
+  "FGameplayTag_FORCEINLINE_Removed": {
+    "type": "modifier_removed",
+    "ue_version": "5.4.0",
+    "severity": "warning",
+    "pattern": "FORCEINLINE.*FGameplayTag",
+    "confidence": 0.7,
+    "description": "UE 5.4: FORCEINLINE removed from FGameplayTag functions",
+    "documentation": "https://docs.unrealengine.com/5.4/",
+    "auto_fixable": false
+  },
+  "UBlueprintFunctionLibrary_Deprecated": {
+    "type": "deprecation",
+    "ue_version": "5.3.0",
+    "severity": "warning",
+    "pattern": "UFUNCTION.*BlueprintPure.*BlueprintCallable",
+    "confidence": 0.65,
+    "description": "UE 5.3: BlueprintPure and BlueprintCallable together is redundant (BlueprintPure implies BlueprintCallable)",
+    "documentation": "https://docs.unrealengine.com/5.3/",
+    "auto_fixable": false
+  },
+  "deprecated_UMETA_DisplayName": {
+    "type": "deprecation",
+    "ue_version": "5.1.0",
+    "severity": "warning",
+    "pattern": "UMETA\\(DisplayName\\s*=",
+    "confidence": 0.6,
+    "description": "UE 5.1: Consider using UMETA(DisplayName=\"...\") with quotes for clarity",
+    "documentation": "https://docs.unrealengine.com/5.1/",
+    "auto_fixable": false
+  },
+  "StaticMesh_LoadObject_Deprecated": {
+    "type": "api_change",
+    "ue_version": "5.0.0",
+    "severity": "warning",
+    "pattern": "LoadObject<UStaticMesh>",
+    "confidence": 0.7,
+    "description": "UE 5.0: LoadObject<UStaticMesh> is slow and discouraged - prefer LoadAsset or AssetRegistry",
+    "documentation": "https://docs.unrealengine.com/5.0/",
+    "auto_fixable": false
+  },
+  "FVector_Add_Deprecated": {
+    "type": "api_change",
+    "ue_version": "5.2.0",
+    "severity": "info",
+    "pattern": "\\.Add\\(\\s*FVector",
+    "confidence": 0.55,
+    "description": "UE 5.2: Consider using += operator instead of .Add() for FVector (more idiomatic)",
+    "documentation": "https://docs.unrealengine.com/5.2/",
+    "auto_fixable": false
+  },
+  "UInputTriggerTimedBase_Missing_MinimalAPI": {
+    "type": "missing_api_macro",
+    "ue_version": "5.6.0",
+    "severity": "error",
+    "pattern": "class\\s+UInputTriggerTimedBase\\s*:",
+    "confidence": 0.9,
+    "description": "UE 5.6: UInputTriggerTimedBase missing ENHANCEDINPUT_API causing link errors",
+    "documentation": "https://forums.unrealengine.com/t/from-ue-5-3-to-ue-5-6-cant-compile-old-project/2590699",
+    "auto_fixable": true
+  },
+  "Constexpr_Delegate_BuildMask": {
+    "type": "cpp20_compatibility",
+    "ue_version": "5.6.0",
+    "severity": "error",
+    "pattern": "constexpr.*BuildMask.*FLoadPackageAsyncProgressDelegate",
+    "confidence": 0.85,
+    "description": "UE 5.6: MSVC 14.38 C++20 constexpr compatibility issue with delegate BuildMask",
+    "documentation": "https://forums.unrealengine.com/t/from-ue-5-3-to-ue-5-6-cant-compile-old-project/2590699",
+    "auto_fixable": false
+  },
+  "SharedPCH_InclOrderUnreal5_3": {
+    "type": "include_order",
+    "ue_version": "5.6.0",
+    "severity": "error",
+    "pattern": "SharedPCH.*InclOrderUnreal5_3",
+    "confidence": 0.75,
+    "description": "UE 5.6: Include order violation in SharedPCH (Unreal5_3 ordering)",
+    "documentation": "https://forums.unrealengine.com/t/compile-error-with-ue-5-6-preview/2580654",
+    "auto_fixable": false
+  },
+  "UFUNCTION_Unsupported_Reference_Return": {
+    "type": "blueprint_limitation",
+    "ue_version": "all",
+    "severity": "warning",
+    "pattern": "UFUNCTION\\([^)]*(?:BlueprintCallable|BlueprintPure)[^)]*\\)[^{]*&[^{]*\\(",
+    "confidence": 0.75,
+    "description": "UFUNCTION with BlueprintCallable/BlueprintPure should not return references (Blueprint limitation)",
+    "documentation": "https://docs.unrealengine.com/programming/blueprints/",
+    "auto_fixable": false,
+    "source": "Phase 7 real project (3 warnings)"
+  },
+  "FText_Deprecated_FromString": {
+    "type": "deprecation",
+    "ue_version": "5.0.0",
+    "severity": "warning",
+    "pattern": "FText::FromString\\(",
+    "confidence": 0.8,
+    "description": "UE 5.0: FText::FromString() discouraged - prefer LOCTEXT/NSLOCTEXT for localization",
+    "documentation": "https://docs.unrealengine.com/5.0/localization/",
+    "auto_fixable": false
+  },
+  "TArray_AddUnique_Performance": {
+    "type": "performance",
+    "ue_version": "all",
+    "severity": "info",
+    "pattern": "TArray.*\\.AddUnique\\(",
+    "confidence": 0.6,
+    "description": "TArray::AddUnique() is O(n) - consider TSet for frequent uniqueness checks",
+    "documentation": "https://docs.unrealengine.com/programming/containers/",
+    "auto_fixable": false
+  },
+  "UObject_Constructor_Warning": {
+    "type": "best_practice",
+    "ue_version": "all",
+    "severity": "warning",
+    "pattern": "FObjectInitializer.*CreateDefaultSubobject.*\\(",
+    "confidence": 0.7,
+    "description": "CreateDefaultSubobject should only be called in constructor with FObjectInitializer",
+    "documentation": "https://docs.unrealengine.com/programming/objects/",
+    "auto_fixable": false
+  },
+  "Deprecated_NewObject": {
+    "type": "deprecation",
+    "ue_version": "5.0.0",
+    "severity": "warning",
+    "pattern": "\\bNewObject<(?!UPackage)",
+    "confidence": 0.65,
+    "description": "UE 5.0: NewObject<> discouraged outside special cases - prefer ConstructObject or Spawn",
+    "documentation": "https://docs.unrealengine.com/5.0/",
+    "auto_fixable": false
+  },
+  "FName_Comparison_Performance": {
+    "type": "performance",
+    "ue_version": "all",
+    "severity": "info",
+    "pattern": "FName.*==.*FString|FString.*==.*FName",
+    "confidence": 0.7,
+    "description": "Comparing FName with FString is inefficient - convert FString to FName first",
+    "documentation": "https://docs.unrealengine.com/programming/",
+    "auto_fixable": false
+  },
+  "GEngine_Null_Check": {
+    "type": "null_safety",
+    "ue_version": "all",
+    "severity": "warning",
+    "pattern": "GEngine->(?!IsValid|Exec)",
+    "confidence": 0.6,
+    "description": "GEngine can be null - add null check before usage",
+    "documentation": "https://docs.unrealengine.com/programming/",
+    "auto_fixable": false
+  },
+  "UPROPERTY_Config_Without_ConfigFile": {
+    "type": "config_error",
+    "ue_version": "all",
+    "severity": "error",
+    "pattern": "UPROPERTY\\([^)]*Config[^)]*\\).*\\n.*class\\s+(?!.*UCLASS\\([^)]*Config)",
+    "confidence": 0.75,
+    "description": "UPROPERTY with Config requires UCLASS with Config specifier",
+    "documentation": "https://docs.unrealengine.com/programming/configuration/",
+    "auto_fixable": false
+  },
+  "BlueprintReadWrite_Private": {
+    "type": "access_violation",
+    "ue_version": "all",
+    "severity": "warning",
+    "pattern": "private:[^{]*UPROPERTY\\([^)]*BlueprintReadWrite[^)]*\\)",
+    "confidence": 0.85,
+    "description": "UPROPERTY with BlueprintReadWrite in private section - Blueprints cannot access",
+    "documentation": "https://docs.unrealengine.com/programming/blueprints/",
+    "auto_fixable": false
+  },
+  "GENERATED_BODY_Missing": {
+    "type": "ue_macro_error",
+    "ue_version": "all",
+    "severity": "error",
+    "pattern": "UCLASS\\([^}]*\\}[^}]*(?!GENERATED_BODY)",
+    "confidence": 0.9,
+    "description": "UCLASS/USTRUCT must have GENERATED_BODY() or GENERATED_UCLASS_BODY()",
+    "documentation": "https://docs.unrealengine.com/programming/",
+    "auto_fixable": true
+  },
+  "WorldContext_Without_Meta": {
+    "type": "blueprint_error",
+    "ue_version": "all",
+    "severity": "error",
+    "pattern": "UFUNCTION\\([^)]*BlueprintCallable[^)]*\\)[^{]*UObject\\s*\\*\\s*WorldContext(?![^)]*meta\\s*=\\s*\\([^)]*WorldContext)",
+    "confidence": 0.75,
+    "description": "WorldContext parameter requires meta=(WorldContext=\"WorldContext\") for BlueprintCallable static functions",
+    "documentation": "https://docs.unrealengine.com/programming/blueprints/",
+    "auto_fixable": true
+  },
+  "TWeakObjectPtr_UObject_Check": {
+    "type": "null_safety",
+    "ue_version": "all",
+    "severity": "warning",
+    "pattern": "TWeakObjectPtr<[^>]*>.*->(?!IsValid|Get)",
+    "confidence": 0.7,
+    "description": "TWeakObjectPtr should check IsValid() or use Get() before dereferencing",
+    "documentation": "https://docs.unrealengine.com/programming/smart-pointers/",
+    "auto_fixable": false
+  },
+  "Enum_BlueprintType_Missing": {
+    "type": "blueprint_limitation",
+    "ue_version": "all",
+    "severity": "warning",
+    "pattern": "UENUM\\((?![^)]*BlueprintType)[^)]*\\).*enum\\s+(?:class\\s+)?E[A-Z]",
+    "confidence": 0.75,
+    "description": "UENUM without BlueprintType - cannot be used in Blueprints",
+    "documentation": "https://docs.unrealengine.com/programming/blueprints/",
+    "auto_fixable": true
+  }
+}

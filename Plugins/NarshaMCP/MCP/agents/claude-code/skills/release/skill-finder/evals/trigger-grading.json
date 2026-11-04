@@ -1,0 +1,126 @@
+{
+  "skill": "skill-finder",
+  "description": "Trigger precision eval: verify skill-finder activates on skill recommendation queries and NOT on skill creation/evaluation/general UE queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "어떤 스킬 쓸까?",
+      "should_trigger": true,
+      "reason": "Korean '어떤 스킬' pattern - core trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "스킬 추천해줘",
+      "should_trigger": true,
+      "reason": "Korean '스킬 추천' pattern - core trigger"
+    },
+    {
+      "id": "tp-03",
+      "query": "find skill for tracing execution flow",
+      "should_trigger": false,
+      "reason": "Routes to ue-execution-trace (higher-priority overlap): Ambiguous: \"execution flow\" in query matches ue-execution-trace (lower priority than skill-finder)"
+    },
+    {
+      "id": "tp-04",
+      "query": "which skill should I use for debugging?",
+      "should_trigger": true,
+      "reason": "English 'which skill' pattern - core trigger"
+    },
+    {
+      "id": "tp-05",
+      "query": "recommend skill for Blueprint analysis",
+      "should_trigger": true,
+      "reason": "English 'recommend skill' pattern - core trigger"
+    },
+    {
+      "id": "tp-06",
+      "query": "스킬 찾아줘 빌드 에러 해결하는",
+      "should_trigger": false,
+      "reason": "Routes to unreal-error-doctor (higher-priority overlap): Ambiguous: \"빌드 에러 해결\" matches unreal-error-doctor (priority 3 < skill-finder)"
+    },
+    {
+      "id": "tp-07",
+      "query": "무슨 스킬이 있어?",
+      "should_trigger": true,
+      "reason": "Korean '무슨 스킬' pattern"
+    },
+    {
+      "id": "tp-08",
+      "query": "what skill handles network auditing?",
+      "should_trigger": false,
+      "reason": "Routes to ue-audit (higher-priority overlap): Ambiguous: \"network auditing\" matches ue-audit (lower priority than skill-finder)"
+    },
+    {
+      "id": "tp-09",
+      "query": "suggest skill for performance profiling",
+      "should_trigger": false,
+      "reason": "Routes to ue-insights-profiler (higher-priority overlap): Ambiguous: \"performance profiling\" matches ue-insights-profiler (lower priority than skill-finder)"
+    },
+    {
+      "id": "tp-10",
+      "query": "skill for refactoring C++ code",
+      "should_trigger": false,
+      "reason": "Routes to ue-cpp-refactor (higher-priority overlap): Ambiguous: \"refactoring C++\" matches ue-cpp-refactor (lower priority than skill-finder)"
+    },
+    {
+      "id": "tp-11",
+      "query": "스킬 뭐 써야 해?",
+      "should_trigger": true,
+      "reason": "Korean '스킬 뭐' pattern"
+    },
+    {
+      "id": "tp-12",
+      "query": "어떤 명령 쓰면 돼?",
+      "should_trigger": true,
+      "reason": "Korean '어떤 명령' pattern"
+    },
+    {
+      "id": "tn-01",
+      "query": "스킬 만들어줘",
+      "should_trigger": false,
+      "reason": "Negative pattern: '스킬 만들어' → mcp-skill-builder, not skill-finder"
+    },
+    {
+      "id": "tn-02",
+      "query": "create skill for material analysis",
+      "should_trigger": false,
+      "reason": "Negative pattern: 'create skill' → mcp-skill-builder"
+    },
+    {
+      "id": "tn-03",
+      "query": "스킬 평가해줘",
+      "should_trigger": false,
+      "reason": "Negative pattern: '스킬 평가' → ns-skills-evaluator"
+    },
+    {
+      "id": "tn-04",
+      "query": "evaluate skill accuracy",
+      "should_trigger": false,
+      "reason": "Negative pattern: 'evaluate skill' → ns-skills-evaluator"
+    },
+    {
+      "id": "tn-05",
+      "query": "build skill for PCG workflow",
+      "should_trigger": false,
+      "reason": "Negative pattern: 'build skill' → mcp-skill-builder"
+    },
+    {
+      "id": "tn-06",
+      "query": "스킬 빌더 실행",
+      "should_trigger": false,
+      "reason": "Negative pattern: '스킬 빌더' → mcp-skill-builder"
+    },
+    {
+      "id": "tn-07",
+      "query": "BP_Player 설명해줘",
+      "should_trigger": false,
+      "reason": "No skill-finder trigger patterns matched; routes to ue-explain"
+    },
+    {
+      "id": "tn-08",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "No skill-finder trigger patterns matched; routes to ue-debug"
+    }
+  ]
+}

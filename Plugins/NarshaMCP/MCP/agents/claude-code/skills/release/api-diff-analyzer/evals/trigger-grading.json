@@ -1,0 +1,127 @@
+{
+  "skill": "api-diff-analyzer",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for api-diff-analyzer skill — UE API change analyzer for version migration",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "API 변경점 분석해줘",
+      "should_trigger": true,
+      "reason": "API change analysis"
+    },
+    {
+      "id": "TP-02",
+      "query": "API diff analyzer",
+      "should_trigger": true,
+      "reason": "API diff analyzer"
+    },
+    {
+      "id": "TP-03",
+      "query": "engine API differences: UE 버전 마이그레이션 가이드",
+      "should_trigger": true,
+      "reason": "UE version migration guide"
+    },
+    {
+      "id": "TP-04",
+      "query": "api-diff-analyzer 실행",
+      "should_trigger": true,
+      "reason": "Direct skill invocation"
+    },
+    {
+      "id": "TP-05",
+      "query": "API 변경 문서 생성",
+      "should_trigger": true,
+      "reason": "Generate API change docs"
+    },
+    {
+      "id": "TP-06",
+      "query": "version migration analysis... [engine API differences] ",
+      "should_trigger": true,
+      "reason": "Version migration analysis"
+    },
+    {
+      "id": "TP-07",
+      "query": "엔진 API 차이점",
+      "should_trigger": true,
+      "reason": "Engine API differences"
+    },
+    {
+      "id": "TP-08",
+      "query": "API_CHANGES.md 생성",
+      "should_trigger": true,
+      "reason": "Generate API_CHANGES.md"
+    },
+    {
+      "id": "TP-09",
+      "query": "UE version upgrade API diff",
+      "should_trigger": true,
+      "reason": "UE version upgrade API diff"
+    },
+    {
+      "id": "TP-10",
+      "query": "API 변경 이력 분석",
+      "should_trigger": true,
+      "reason": "API change history analysis"
+    },
+    {
+      "id": "TN-01",
+      "query": "breaking change 탐지",
+      "should_trigger": false,
+      "reason": "Breaking changes — belongs to breaking-change-analyzer"
+    },
+    {
+      "id": "TN-02",
+      "query": "영향 분석",
+      "should_trigger": false,
+      "reason": "Impact analysis — belongs to ue-impact"
+    },
+    {
+      "id": "TN-03",
+      "query": "모듈 분석",
+      "should_trigger": false,
+      "reason": "Module analysis — belongs to module-analyzer"
+    },
+    {
+      "id": "TN-04",
+      "query": "예제 추출",
+      "should_trigger": false,
+      "reason": "Example extraction — belongs to example-extractor"
+    },
+    {
+      "id": "TN-05",
+      "query": "문서 검증",
+      "should_trigger": false,
+      "reason": "Doc verify — belongs to source-doc-verify"
+    },
+    {
+      "id": "TN-06",
+      "query": "릴리즈 자동화",
+      "should_trigger": false,
+      "reason": "Release — belongs to release-automation"
+    },
+    {
+      "id": "TN-07",
+      "query": "코드 리뷰",
+      "should_trigger": false,
+      "reason": "Code review — belongs to ns-review"
+    },
+    {
+      "id": "TN-08",
+      "query": "README 업데이트",
+      "should_trigger": false,
+      "reason": "README — belongs to readme-update"
+    },
+    {
+      "id": "TN-09",
+      "query": "엔진 문서 품질",
+      "should_trigger": false,
+      "reason": "Engine doc — belongs to ns-engine-doc-quality-cycle"
+    },
+    {
+      "id": "TN-10",
+      "query": "네비게이션 생성",
+      "should_trigger": false,
+      "reason": "Navigation — belongs to navigation-generator"
+    }
+  ]
+}

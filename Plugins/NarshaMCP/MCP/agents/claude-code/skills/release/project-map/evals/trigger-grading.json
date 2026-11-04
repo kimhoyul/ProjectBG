@@ -1,0 +1,127 @@
+{
+  "skill": "project-map",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for project-map skill.",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "프로젝트 구조 문서 생성해줘",
+      "should_trigger": true,
+      "reason": "Direct Korean trigger: project structure doc generation"
+    },
+    {
+      "id": "TP-02",
+      "query": "프로젝트 맵 만들어줘",
+      "should_trigger": false,
+      "reason": "Routes to ue-scaffold (higher-priority overlap): Ambiguous: \"만들어줘\" matches ue-scaffold (lower priority); project-map needs more specific patterns"
+    },
+    {
+      "id": "TP-03",
+      "query": "폴더 트리 보여줘",
+      "should_trigger": true,
+      "reason": "Direct Korean trigger: folder tree"
+    },
+    {
+      "id": "TP-04",
+      "query": "모듈 맵 생성",
+      "should_trigger": true,
+      "reason": "Issue #21420: bare 생성 no longer steals to ue-scaffold; module-map creation is project-map intent"
+    },
+    {
+      "id": "TP-05",
+      "query": "Generate project map",
+      "should_trigger": true,
+      "reason": "Direct English trigger: project map"
+    },
+    {
+      "id": "TP-06",
+      "query": "Create project structure docs",
+      "should_trigger": false,
+      "reason": "Routes to pr-create (higher-priority overlap): Ambiguous: \"Create\" matches pr-create (lower priority)"
+    },
+    {
+      "id": "TP-07",
+      "query": "Generate folder tree for this project",
+      "should_trigger": true,
+      "reason": "English trigger: folder tree"
+    },
+    {
+      "id": "TP-08",
+      "query": "프로젝트 구조 업데이트해줘",
+      "should_trigger": true,
+      "reason": "Korean trigger with update intent: project structure update"
+    },
+    {
+      "id": "TP-09",
+      "query": "module map for this project",
+      "should_trigger": true,
+      "reason": "English trigger: module map"
+    },
+    {
+      "id": "TP-10",
+      "query": "클래스 맵 생성해줘",
+      "should_trigger": false,
+      "reason": "Routes to ue-scaffold (higher-priority overlap): Ambiguous: \"생성해줘\" matches ue-scaffold (lower priority)"
+    },
+    {
+      "id": "TN-01",
+      "query": "프로젝트 초기화해줘",
+      "should_trigger": false,
+      "reason": "Routes to /ue-project-init (domain context, not structural docs)"
+    },
+    {
+      "id": "TN-02",
+      "query": "프로젝트 분석해줘",
+      "should_trigger": false,
+      "reason": "Routes to /project-onboarding (tool recommendations)"
+    },
+    {
+      "id": "TN-03",
+      "query": "모듈 분석해줘",
+      "should_trigger": false,
+      "reason": "Routes to /module-analyzer (engine module docs)"
+    },
+    {
+      "id": "TN-04",
+      "query": "링커 에러 모듈 찾아줘",
+      "should_trigger": false,
+      "reason": "Routes to /module-mapper (linker error resolution)"
+    },
+    {
+      "id": "TN-05",
+      "query": "Generate project context",
+      "should_trigger": false,
+      "reason": "Routes to /ue-project-init ('generate context' is negative pattern)"
+    },
+    {
+      "id": "TN-06",
+      "query": "What can you do for this project?",
+      "should_trigger": false,
+      "reason": "Routes to /project-onboarding (first-session orientation)"
+    },
+    {
+      "id": "TN-07",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "Routes to /ue-audit (project health diagnostic)"
+    },
+    {
+      "id": "TN-08",
+      "query": "캐릭터 만들어줘",
+      "should_trigger": false,
+      "reason": "Routes to /ue-scaffold (UE feature creation, not project docs)"
+    },
+    {
+      "id": "TN-09",
+      "query": "컨텍스트 생성해줘",
+      "should_trigger": false,
+      "reason": "Routes to /ue-project-init ('컨텍스트 생성' is negative pattern)"
+    },
+    {
+      "id": "TN-10",
+      "query": "Analyze this module's dependencies",
+      "should_trigger": false,
+      "reason": "Routes to /module-mapper or direct MCP call (specific analysis, not doc generation)"
+    }
+  ]
+}

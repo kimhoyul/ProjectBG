@@ -1,0 +1,12 @@
+[
+  {
+    "pid": 22060,
+    "command_line": "C:/Codebase/D/ue-code-mcp/MCP/native/build/thin-lto/narshamcp.exe daemon --project-path C:/LCP_A --port 19679",
+    "executable_path": "C:/Codebase/D/ue-code-mcp/MCP/native/build/thin-lto/narshamcp.exe"
+  },
+  {
+    "pid": 22061,
+    "command_line": "C:/Codebase/A/ue-code-mcp/MCP/native/build/thin-lto/narshamcp.exe daemon --project-path C:/LCP_A --port 19680",
+    "executable_path": "C:/Codebase/A/ue-code-mcp/MCP/native/build/thin-lto/narshamcp.exe"
+  }
+]

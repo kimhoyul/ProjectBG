@@ -1,0 +1,7 @@
+[
+  {
+    "pid": 12345,
+    "command_line": "C:/CURRENT_WORKTREE/MCP/native/build/thin-lto/narshamcp.exe daemon --project-path C:/Projects/MyProj --port 19674",
+    "executable_path": "C:/CURRENT_WORKTREE/MCP/native/build/thin-lto/narshamcp.exe"
+  }
+]

@@ -1,0 +1,5 @@
+{
+  // user settings — JSONC with a comment to prove the regex parser tolerates it
+  "editor.fontSize": 13,
+  "window.restoreWindows": "all",
+}

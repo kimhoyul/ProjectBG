@@ -1,0 +1,33 @@
+{
+  "name": "data_asset",
+  "description": "UPrimaryDataAsset with validation and const specifier",
+  "version": "2.0.0",
+  "base_class": "UPrimaryDataAsset",
+  "default_specifiers": "Const",
+  "includes": [
+    "CoreMinimal.h",
+    "Engine/DataAsset.h"
+  ],
+  "interfaces": [],
+  "default_overrides": [
+    {
+      "function_name": "GetPrimaryAssetId",
+      "return_type": "virtual FPrimaryAssetId",
+      "parameters": "",
+      "override_qualifier": "const override",
+      "body": "\treturn FPrimaryAssetId(GetClass()->GetFName(), GetFName());\n"
+    }
+  ],
+  "editor_only_overrides": [
+    {
+      "function_name": "IsDataValid",
+      "return_type": "virtual EDataValidationResult",
+      "parameters": "TArray<FText>& ValidationErrors",
+      "override_qualifier": "override",
+      "body": "\treturn Super::IsDataValid(ValidationErrors);\n"
+    }
+  ],
+  "module_dependencies": {
+    "public": []
+  }
+}

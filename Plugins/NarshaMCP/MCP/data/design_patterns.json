@@ -1,0 +1,47 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "data_type": "design_patterns",
+    "version": "1.0.0",
+    "generated_at": "2026-06-08T09:38:33.796566+00:00",
+    "generator": "manual_curation",
+    "engine_version": "5.8",
+    "last_review": {
+      "reviewer": "claude",
+      "reviewed_at": "2026-06-08T09:38:33.796566+00:00",
+      "note": "Issue #14427: reviewed against UE 5.8; foundational/stable reference data, representative items verified present in 5.8 — content valid, engine_version bumped 5.6->5.8"
+    }
+  },
+  "version": "1.0.0",
+  "description": "UE Design Pattern Validation Rules",
+  "patterns": [
+    {
+      "id": "callineditor_editorutility_conflict",
+      "name": "CallInEditor on UEditorUtilityObject descendant",
+      "severity": "error",
+      "category": "design_pattern",
+      "description": "CallInEditor buttons don't appear in Details panel for UEditorUtilityObject-based classes. UEditorUtilityObject is designed for Blutility scripts that run via Asset Actions, not Details panel buttons.",
+      "detection": {
+        "function_meta": "CallInEditor",
+        "forbidden_ancestors": [
+          "UEditorUtilityObject",
+          "UAssetActionUtility",
+          "UEditorUtilityWidget"
+        ]
+      },
+      "fix_suggestion": {
+        "primary": "Use UActorActionUtility with SupportedClasses meta specifier instead",
+        "example": "UCLASS()\nclass UMyActorAction : public UActorActionUtility\n{\n    GENERATED_BODY()\npublic:\n    UFUNCTION(CallInEditor)\n    void MyAction();\n};\n// And set SupportedClasses in Blueprint",
+        "reference": "https://docs.unrealengine.com/5.6/en-US/API/Editor/Blutility/UActorActionUtility/"
+      },
+      "confidence": 0.9,
+      "enabled": true
+    }
+  ],
+  "metadata": {
+    "author": "UECodeGen MCP",
+    "created": "2025-10-22",
+    "last_updated": "2025-10-22",
+    "total_patterns": 1
+  }
+}

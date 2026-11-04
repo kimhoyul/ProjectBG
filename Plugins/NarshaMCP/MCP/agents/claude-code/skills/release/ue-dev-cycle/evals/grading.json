@@ -1,0 +1,64 @@
+{
+  "skill": "ue-dev-cycle",
+  "version": "1.1.0",
+  "description": "Output quality eval: verify ue-dev-cycle produces multi-phase development loop (analyze, implement, build, fix, test) with actual code generation and build execution. NOTE (Issue #16492 + #16603): the full generate->build->test cycle (a) exceeds the 300s global headless turn cap (QUAL-01 measured ~480s) AND (b) WAS STATEFUL — it writes real C++ classes into the project, so a re-run on a persistent (non-reset) project found them already present and short-circuited with 'net file change zero'. Issue #16603 fixes (b) via isolate_project:true (RepoTreeGuard keeps the ue-code-mcp repo tree clean + ProjectTreeIsolator snapshot/restores the daemon-resolved project so a --live-editor re-run is clean). requires_live_editor:true STAYS because (a) — the 300s turn-cap gate — is independent of statefulness and is NOT addressed here (AC#3 deferred; dropping the flag needs the turn-cap raised, a separate issue). The per-case \"timeout\" (read by output_quality_eval.run_skill_eval) + lightweight single-class feature give those --live-editor runs an adequate, bounded budget.",
+  "cases": [
+    {
+      "id": "QUAL-01",
+      "requires_live_editor": true,
+      "isolate_project": true,
+      "prompt": "개발 루프 돌려줘, AHealthPickup 액터",
+      "timeout": 600,
+      "assertions": [
+        {
+          "type": "tool_usage",
+          "value": "ue_generate_code",
+          "description": "Should use ue_generate_code for code implementation"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(Phase|ANALYZE|IMPLEMENT|BUILD|FIX|TEST|SUMMARY|단계|분석|구현|빌드|테스트)",
+          "description": "Should show multi-phase development workflow"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response execute a multi-phase development cycle that ACTUALLY GENERATES new C++ code (a new class .h/.cpp), then builds AND tests it? A build attempt with no generated code does NOT meet the criteria — code generation is required, not just a build or scaffold.",
+          "threshold": 0.6,
+          "requires_tools": ["ue_generate_code:derive_class"],
+          "description": "Should execute multi-phase dev cycle with real codegen (LLM judge)"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-02",
+      "requires_live_editor": true,
+      "isolate_project": true,
+      "prompt": "Dev cycle: implement a new ADamageVolume actor class",
+      "timeout": 600,
+      "assertions": [
+        {
+          "type": "tool_usage",
+          "value": "ue_generate_code",
+          "description": "Should use ue_generate_code for implementation"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["build", "test", "generate", "compile", "빌드", "테스트"],
+          "description": "Should reference both build and test phases"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(derive_class|build_editor|generate_test|Dev Cycle|damage)",
+          "description": "Should use code gen and build pipeline operations"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response GENERATE actual C++ source for a new class (not just scaffolding or commentary) AND then attempt to build it? A build attempt with no generated code does NOT meet the criteria — real code generation must precede the build.",
+          "threshold": 0.6,
+          "requires_tools": ["ue_generate_code:derive_class"],
+          "description": "Should build after generating real code (LLM judge)"
+        }
+      ]
+    }
+  ]
+}

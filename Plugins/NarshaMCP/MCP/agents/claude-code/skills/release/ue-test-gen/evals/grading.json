@@ -1,0 +1,133 @@
+{
+  "skill": "ue-test-gen",
+  "version": "1.1.0",
+  "description": "Output quality eval: verify ue-test-gen produces compilable UE automation test code with proper macros and assertions. v1.1.0 adds intent-based multi-test cases (QUAL-03/04, Issue #10283).",
+  "cases": [
+    {
+      "id": "QUAL-01",
+      "prompt": "ACharacter 테스트 생성해줘",
+      "assertions": [
+        {
+          "type": "tool_usage",
+          "value": "ue_generate_code",
+          "description": "Should use ue_generate_code for test generation"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(generate_test|test_target|bdd_spec|simple|complex_latent|functional)",
+          "description": "Should reference test type or generation operation"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["ACharacter", "test", "테스트", "automation", "spec"],
+          "description": "Should reference the target class and test context"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response produce a clearly labeled, complete, unmodified tool-returned C++ seed with UE automation test macros and an evidence-backed receipt naming the ACharacter target, single-shot generate_test derivation mode, test type/framework, output path/state, transformations, assertions, and honest verification status? Token-only or non-contiguous excerpts do not count as the generated artifact. Any assistant-enriched final artifact must be labeled separately and shown completely. TODO-only, in-memory, or unbuilt output must be PARTIAL rather than fully verified.",
+          "threshold": 0.6,
+          "max_output_chars": 20000,
+          "requires_tools": ["ue_generate_code:generate_test"],
+          "description": "Should produce compilable UE test code (LLM judge)"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-02",
+      "prompt": "Generate test for TakeDamage",
+      "assertions": [
+        {
+          "type": "tool_usage",
+          "value": "ue_generate_code",
+          "description": "Should use ue_generate_code for test generation"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["TakeDamage", "test", "spec", "assertion", "damage"],
+          "description": "Should reference TakeDamage and test assertions"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(TestEqual|TestTrue|TestNotNull|TestNearlyEqual|IMPLEMENT_|BEGIN_DEFINE_SPEC|DEFINE_SPEC)",
+          "description": "Should include UE test assertion macros"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response show a clearly labeled, complete, unmodified tool-returned TakeDamage seed plus a receipt naming target, single-shot generate_test mode, framework/test type, output path/state, transformations, assertion evidence, and honest verification status? Token-only or non-contiguous excerpts do not count as the generated artifact. Any assistant-enriched final artifact must be labeled separately and shown completely. It must not claim a file was written or a test passed without authoritative evidence.",
+          "threshold": 0.6,
+          "max_output_chars": 20000,
+          "requires_tools": ["ue_generate_code:generate_test"],
+          "description": "Should report the TakeDamage generation result honestly (LLM judge)"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-03",
+      "prompt": "ACharacter::TakeDamage intents으로 테스트 만들어줘 (intent 기반 멀티테스트 모드)",
+      "assertions": [
+        {
+          "type": "tool_usage",
+          "value": "ue_analyze_symbols",
+          "description": "Intent-based mode (Issue #10283) calls derive_test_intents BEFORE generate_test"
+        },
+        {
+          "type": "tool_usage",
+          "value": "ue_generate_code",
+          "description": "After intent derivation, dispatches one generate_test call per framework_hint group"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(derive_test_intents|TestIntent|framework_hint|intents)",
+          "description": "Response should reference the intent-mapping pipeline by name"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["SimpleAutomation", "ComplexAutomation", "NetworkAutomation", "Spec", "CQTest"],
+          "description": "Should mention at least one canonical TestFramework value from the mapping table"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response (1) call derive_test_intents before generate_test, (2) report the authoritative intent count and derivation mode, (3) explain framework_hint -> test_type grouping, and (4) show a clearly labeled complete tool-returned C++ seed (not token-only/non-contiguous snippets) with macro/assertion and per-output status? Intent-injected or enriched final artifacts must be labeled separately and shown completely. If zero intents are returned, it must explicitly label a zero-intent fallback and must NOT claim the fallback was seeded from assertion_template records; if intents exist, each generated group must preserve them.",
+          "threshold": 0.6,
+          "max_output_chars": 20000,
+          "requires_tools": ["ue_generate_code:generate_test"],
+          "description": "Intent-based multi-test pipeline (LLM judge)"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-04",
+      "prompt": "다음 5개 intents으로 테스트 생성해줘 (mixed-framework grouping): NumericParam (SimpleAutomation), UPropertyReplicated (NetworkAutomation, x2), TimerOrLatent (ComplexAutomation), branch coverage (CQTest)",
+      "assertions": [
+        {
+          "type": "tool_usage",
+          "value": "ue_generate_code",
+          "description": "Multi-framework dispatch fires multiple generate_test calls"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(group_by|framework_hint|simple|complex_latent|cqtest)",
+          "description": "Response should describe the per-framework grouping logic"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["SimpleAutomation", "NetworkAutomation", "ComplexAutomation", "CQTest"],
+          "description": "Should reference at least 2 of the 5 framework_hint enum values to demonstrate grouping"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(complex_latent|TEST_METHOD|TEST_CLASS|IMPLEMENT_SIMPLE|IMPLEMENT_COMPLEX|BEGIN_DEFINE_SPEC)",
+          "description": "Should reference at least 2 distinct test_type values OR multiple UE macro families"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response group all 5 supplied intent labels by framework_hint, prove at least 2 distinct clearly labeled complete unmodified tool-returned seed .cpp outputs with framework-appropriate macros (token-only/non-contiguous excerpts do not count), distinguish any intent-injected or assistant-enriched final artifacts from those seeds and show each final artifact completely, and report every group's mapping, path, status, transformation, assertion evidence, and verification honestly? The prompt supplies intent labels but no assertion_template strings, so the response must NOT invent templates: it may earn full grading credit by explicitly reporting the absent templates and PARTIAL status while preserving each supplied intent label. A failed or empty group must make the aggregate status PARTIAL/FAILED.",
+          "threshold": 0.6,
+          "max_output_chars": 20000,
+          "requires_tools": ["ue_generate_code:generate_test"],
+          "description": "Mixed-framework grouping correctness (LLM judge)"
+        }
+      ]
+    }
+  ]
+}

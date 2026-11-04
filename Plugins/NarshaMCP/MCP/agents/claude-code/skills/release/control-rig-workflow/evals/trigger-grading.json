@@ -1,0 +1,127 @@
+{
+  "skill": "control-rig-workflow",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for control-rig-workflow skill. Tests correct activation on Control Rig orchestration queries (batch audit, A/B comparison, C++ integration), and correct rejection of IK rig analysis, concept explanation, and performance profiling.",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "리그 성능 감사해줘",
+      "should_trigger": true,
+      "reason": "Rig performance audit — core skill trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "컨트롤 리그 비교해줘",
+      "should_trigger": true,
+      "reason": "Control rig A/B comparison — core purpose"
+    },
+    {
+      "id": "tp-03",
+      "query": "리그 C++ 연동 분석해줘",
+      "should_trigger": true,
+      "reason": "Rig C++ integration analysis — explicit trigger"
+    },
+    {
+      "id": "tp-04",
+      "query": "배치 리그 분석 실행",
+      "should_trigger": true,
+      "reason": "Batch rig analysis — multi-rig orchestration"
+    },
+    {
+      "id": "tp-05",
+      "query": "컨트롤 리그 비교 - CR_Mannequin 성능 감사해줘",
+      "should_trigger": true,
+      "reason": "Named Control Rig performance audit"
+    },
+    {
+      "id": "tp-06",
+      "query": "Compare control rigs CR_Hero and CR_Enemy",
+      "should_trigger": true,
+      "reason": "English A/B rig comparison request"
+    },
+    {
+      "id": "tp-07",
+      "query": "Rig performance audit for CR_Mannequin",
+      "should_trigger": true,
+      "reason": "English rig performance audit"
+    },
+    {
+      "id": "tp-08",
+      "query": "Analyze rig C++ integration for CR_Player",
+      "should_trigger": true,
+      "reason": "English C++ integration analysis"
+    },
+    {
+      "id": "tp-09",
+      "query": "컨트롤 리그 비교 — Batch analyze all control rigs in the project",
+      "should_trigger": true,
+      "reason": "Batch rig analysis across project"
+    },
+    {
+      "id": "tp-10",
+      "query": "컨트롤 리그 A/B 비교 분석 실행해줘",
+      "should_trigger": true,
+      "reason": "Explicit A/B comparison — Control Rig orchestration"
+    },
+    {
+      "id": "tn-01",
+      "query": "IK_Mannequin 분석해줘",
+      "should_trigger": false,
+      "reason": "IK Rig analysis — belongs to ue-ik-rig-analysis skill"
+    },
+    {
+      "id": "tn-02",
+      "query": "리타게터 분석해줘",
+      "should_trigger": false,
+      "reason": "IK Retargeter analysis — belongs to ue-ik-rig-analysis skill"
+    },
+    {
+      "id": "tn-03",
+      "query": "Control Rig이 뭐야?",
+      "should_trigger": false,
+      "reason": "Concept explanation — belongs to ue-explain skill"
+    },
+    {
+      "id": "tn-04",
+      "query": "왜 느려? 프로파일링해줘",
+      "should_trigger": false,
+      "reason": "Performance profiling — belongs to ue-insights-profiler skill"
+    },
+    {
+      "id": "tn-05",
+      "query": "IK solver 설정 확인해줘",
+      "should_trigger": false,
+      "reason": "IK solver inspection — belongs to ue-ik-rig-analysis skill"
+    },
+    {
+      "id": "tn-06",
+      "query": "Explain how Control Rig works",
+      "should_trigger": false,
+      "reason": "Concept explanation — belongs to ue-explain skill"
+    },
+    {
+      "id": "tn-07",
+      "query": "Analyze IK Rig chains for IK_Hero",
+      "should_trigger": false,
+      "reason": "IK chain analysis — belongs to ue-ik-rig-analysis skill"
+    },
+    {
+      "id": "tn-08",
+      "query": "Profile the animation system bottleneck",
+      "should_trigger": false,
+      "reason": "Performance profiling — belongs to ue-insights-profiler skill"
+    },
+    {
+      "id": "tn-09",
+      "query": "Compare IK Rigs between two skeletons",
+      "should_trigger": false,
+      "reason": "IK Rig comparison — belongs to ue-ik-rig-analysis skill"
+    },
+    {
+      "id": "tn-10",
+      "query": "리그 구조 설명해줘",
+      "should_trigger": false,
+      "reason": "Rig concept explanation — belongs to ue-explain skill"
+    }
+  ]
+}

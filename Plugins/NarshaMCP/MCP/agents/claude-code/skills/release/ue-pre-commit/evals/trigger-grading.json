@@ -1,0 +1,163 @@
+{
+  "skill": "ue-pre-commit",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for ue-pre-commit skill. Tests correct activation on pre-commit safety check queries for staged C++ changes, and correct rejection of CI checks, issue verification, impact analysis, and build pipeline.",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "커밋 전 분석해줘",
+      "should_trigger": true,
+      "reason": "Pre-commit analysis — direct trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "커밋 검사해줘",
+      "should_trigger": true,
+      "reason": "Commit check — pre-commit safety"
+    },
+    {
+      "id": "tp-03",
+      "query": "커밋 영향 분석",
+      "should_trigger": true,
+      "reason": "Commit impact — pre-commit scope"
+    },
+    {
+      "id": "tp-04",
+      "query": "커밋해도 안전한가?",
+      "should_trigger": true,
+      "reason": "Safe to commit — pre-commit safety check"
+    },
+    {
+      "id": "tp-05",
+      "query": "커밋해도 안전 - 푸시 전 검사해줘",
+      "should_trigger": true,
+      "reason": "Push check — pre-push safety"
+    },
+    {
+      "id": "tp-06",
+      "query": "Pre-commit check on my staged changes",
+      "should_trigger": true,
+      "reason": "English pre-commit check"
+    },
+    {
+      "id": "tp-07",
+      "query": "Is it safe to commit these changes?",
+      "should_trigger": true,
+      "reason": "English safe-to-commit query"
+    },
+    {
+      "id": "tp-08",
+      "query": "Run commit check before I push",
+      "should_trigger": true,
+      "reason": "English commit check before push"
+    },
+    {
+      "id": "tp-09",
+      "query": "safe to commit - Analyze commit impact for staged files",
+      "should_trigger": true,
+      "reason": "English commit impact analysis"
+    },
+    {
+      "id": "tp-10",
+      "query": "이 변경사항 커밋해도 될까?",
+      "should_trigger": true,
+      "reason": "Safe to commit question — pre-commit check"
+    },
+    {
+      "id": "tn-01",
+      "query": "CI 상태 확인해줘",
+      "should_trigger": false,
+      "reason": "CI status check — belongs to ci-verify skill"
+    },
+    {
+      "id": "tn-02",
+      "query": "이슈 목표 달성 확인",
+      "should_trigger": false,
+      "reason": "Issue goal verification — belongs to ci-verify skill"
+    },
+    {
+      "id": "tn-03",
+      "query": "APawn 변경하면 뭐가 깨져?",
+      "should_trigger": false,
+      "reason": "Impact analysis (not commit-scoped) — belongs to ue-impact skill"
+    },
+    {
+      "id": "tn-04",
+      "query": "프로젝트 빌드해줘",
+      "should_trigger": false,
+      "reason": "Build pipeline — belongs to ue-build-automate skill"
+    },
+    {
+      "id": "tn-05",
+      "query": "Check if CI passed for this PR",
+      "should_trigger": false,
+      "reason": "CI pass check — belongs to ci-verify skill"
+    },
+    {
+      "id": "tn-06",
+      "query": "What breaks if I change ACharacter?",
+      "should_trigger": false,
+      "reason": "Impact analysis — belongs to ue-impact skill"
+    },
+    {
+      "id": "tn-07",
+      "query": "이슈 검증해줘",
+      "should_trigger": false,
+      "reason": "Issue verification — belongs to issue-test-verify skill"
+    },
+    {
+      "id": "tn-08",
+      "query": "Build the project for Windows",
+      "should_trigger": false,
+      "reason": "Build pipeline — belongs to ue-build-automate skill"
+    },
+    {
+      "id": "tn-09",
+      "query": "코드 리뷰해줘",
+      "should_trigger": false,
+      "reason": "Code review — belongs to ns-review skill"
+    },
+    {
+      "id": "tn-10",
+      "query": "PR 만들어줘",
+      "should_trigger": false,
+      "reason": "PR creation — belongs to pr-create skill"
+    },
+    {
+      "id": "tp-11",
+      "query": "/ue-pre-commit --intents-only",
+      "should_trigger": true,
+      "reason": "Issue #10284 Phase 6 — explicit --intents-only flag invocation. Must route to ue-pre-commit even though Phases 0-5 are skipped."
+    },
+    {
+      "id": "tp-12",
+      "query": "커밋 전에 staged 변경에 대한 테스트 인텐트 제안 받고 싶어",
+      "should_trigger": true,
+      "reason": "Issue #10284 Phase 6 — staged-scoped test intent suggestion. 'staged' + 'commit' context binds this to ue-pre-commit, not ue-test-gen."
+    },
+    {
+      "id": "tp-13",
+      "query": "Suggest test intents for my staged C++ changes before pushing",
+      "should_trigger": true,
+      "reason": "Issue #10284 Phase 6 — English equivalent of tp-12. The 'staged' + 'before pushing' context anchors to pre-commit, not function-scoped test gen."
+    },
+    {
+      "id": "tn-11",
+      "query": "ACharacter::TakeDamage에 대한 테스트 인텐트 추출해줘",
+      "should_trigger": false,
+      "reason": "Issue #10284 boundary case — function-scoped 'intent' query routes to ue-test-gen (--intents-from), NOT ue-pre-commit Phase 6. The presence of a specific FQN should disambiguate away from staged-scope."
+    },
+    {
+      "id": "tn-12",
+      "query": "/ue-test-gen --intents-from ACharacter::Foo",
+      "should_trigger": false,
+      "reason": "Issue #10284 boundary case — explicit ue-test-gen invocation with --intents-from. Phase 6 description must not steal this trigger."
+    },
+    {
+      "id": "tn-13",
+      "query": "Generate test intents from ACharacter::TakeDamage",
+      "should_trigger": false,
+      "reason": "Issue #10284 boundary case — English function-scoped intent generation. Routes to ue-test-gen (--intents-from), not ue-pre-commit."
+    }
+  ]
+}

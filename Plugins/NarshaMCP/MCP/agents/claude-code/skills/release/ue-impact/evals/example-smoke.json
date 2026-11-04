@@ -1,0 +1,5 @@
+{
+  "description": "Example-execution smoke (Issue #20380): every ue_analyze_symbols(...) example in the listed files must use real top-level schema parameters — no params={} wrapper (the dispatcher does not unwrap it), no phantom kwargs (e.g. target=), no phantom operations. Consumed by tests/unit/pure/skills/test_skill_example_smoke.py; add more skills by dropping an example-smoke.json into their evals/ dir.",
+  "tool": "ue_analyze_symbols",
+  "files": ["SKILL.md", "XREF_REFERENCE.md"]
+}

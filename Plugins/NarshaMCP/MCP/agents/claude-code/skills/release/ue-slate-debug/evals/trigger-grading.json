@@ -1,0 +1,126 @@
+{
+  "skill": "ue-slate-debug",
+  "description": "Trigger precision eval: verify ue-slate-debug activates on widget runtime debugging queries (focus/hit-test/layout/visibility/designer-vs-PIE) and NOT on widget creation, general crashes, or static .uasset analysis",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "위젯이 안 눌려",
+      "should_trigger": true,
+      "reason": "Korean '위젯 클릭 안됨' equivalent — core hit-test trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "Slate hit test failing",
+      "should_trigger": true,
+      "reason": "English 'slate' + 'hit test' — direct trigger phrase combination"
+    },
+    {
+      "id": "tp-03",
+      "query": "위젯 안 보임",
+      "should_trigger": true,
+      "reason": "Korean visibility trigger"
+    },
+    {
+      "id": "tp-04",
+      "query": "포커스 안 받음 디버그",
+      "should_trigger": true,
+      "reason": "Korean focus trigger + 디버그 (debug context)"
+    },
+    {
+      "id": "tp-05",
+      "query": "WBP_HealthBar designer vs PIE 색이 다름",
+      "should_trigger": true,
+      "reason": "Korean designer-vs-PIE drift trigger ('디자이너랑 PIE랑 달라')"
+    },
+    {
+      "id": "tp-06",
+      "query": "focus chain debug",
+      "should_trigger": true,
+      "reason": "English focus chain trigger"
+    },
+    {
+      "id": "tp-07",
+      "query": "런타임 위젯 트리 디버그",
+      "should_trigger": true,
+      "reason": "Korean '런타임 위젯' + '위젯 트리 디버그' — combined runtime + tree trigger"
+    },
+    {
+      "id": "tp-08",
+      "query": "UMG runtime 디버그",
+      "should_trigger": true,
+      "reason": "English 'umg runtime' + 디버그 — UMG runtime debugging"
+    },
+    {
+      "id": "tp-09",
+      "query": "버튼 클릭 안됨 hit test",
+      "should_trigger": true,
+      "reason": "Korean '위젯 클릭 안됨' equivalent + 'hit test' — combined hit-test triggers"
+    },
+    {
+      "id": "tp-10",
+      "query": "WBP designer vs pie diff 분석",
+      "should_trigger": true,
+      "reason": "English 'wbp designer vs pie diff' — designer-drift trigger"
+    },
+    {
+      "id": "tn-01",
+      "query": "위젯 만들어줘",
+      "should_trigger": false,
+      "reason": "TN: '위젯 만들어' is /blueprint-generator trigger. Creation, not debugging. Negative pattern in routing.json."
+    },
+    {
+      "id": "tn-02",
+      "query": "WBP_HUD 분석해줘",
+      "should_trigger": false,
+      "reason": "TN: 'WBP 분석' is direct ue_manage_widget(get_structure) call. Static analysis, not runtime debug. Negative pattern."
+    },
+    {
+      "id": "tn-03",
+      "query": "런타임 크래시 났어",
+      "should_trigger": false,
+      "reason": "TN: General runtime crash is /ue-debug trigger. Not widget-specific."
+    },
+    {
+      "id": "tn-04",
+      "query": "위젯 애니메이션 추가해줘",
+      "should_trigger": false,
+      "reason": "TN: 'widget animation' is widget creation/authoring, not debug. Negative pattern in routing.json."
+    },
+    {
+      "id": "tn-05",
+      "query": "캐릭터 만들어줘",
+      "should_trigger": false,
+      "reason": "TN: '만들어줘' is /ue-scaffold trigger. Character creation, unrelated to widgets."
+    },
+    {
+      "id": "tn-06",
+      "query": "BP_Player 어떻게 동작해?",
+      "should_trigger": false,
+      "reason": "TN: '어떻게 동작' is /ue-explain trigger. Understanding, not debugging."
+    },
+    {
+      "id": "tn-07",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "TN: '진단' is /ue-audit trigger. Project-wide health, not widget debug."
+    },
+    {
+      "id": "tn-08",
+      "query": "create widget for inventory",
+      "should_trigger": false,
+      "reason": "TN: 'create widget' is widget creation (negative pattern). Routes to /blueprint-generator."
+    },
+    {
+      "id": "tn-09",
+      "query": "BP 그래프 만들어줘",
+      "should_trigger": false,
+      "reason": "TN: 'BP 그래프 만들어' is /blueprint-generator trigger. Graph creation, not runtime debug."
+    },
+    {
+      "id": "tn-10",
+      "query": "WBP 구조 보여줘",
+      "should_trigger": false,
+      "reason": "TN: 'WBP 구조' is direct ue_manage_widget(get_structure) call. Static structure inspection. Negative pattern."
+    }
+  ]
+}

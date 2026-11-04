@@ -1,0 +1,126 @@
+{
+  "skill": "ue-ik-rig-analysis",
+  "description": "Trigger precision eval: verify ue-ik-rig-analysis activates on IK Rig/retargeter queries and NOT on control-rig-workflow/explain/scaffold queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "IK 리그 분석해줘",
+      "should_trigger": true,
+      "reason": "Korean 'IK 리그 분석' — core trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "IK Rig analysis for IK_Mannequin",
+      "should_trigger": true,
+      "reason": "English 'IK Rig analysis' — exact trigger pattern from routing.json"
+    },
+    {
+      "id": "tp-03",
+      "query": "IK 솔버 분석",
+      "should_trigger": true,
+      "reason": "Korean 'IK 솔버' — IK solver trigger"
+    },
+    {
+      "id": "tp-04",
+      "query": "리타게터 분석해줘",
+      "should_trigger": true,
+      "reason": "Korean '리타게터' — retargeter trigger"
+    },
+    {
+      "id": "tp-05",
+      "query": "IK chain analysis",
+      "should_trigger": true,
+      "reason": "English 'IK chain' — IK chain trigger"
+    },
+    {
+      "id": "tp-06",
+      "query": "IK chain layout between two rigs",
+      "should_trigger": true,
+      "reason": "English 'IK chain' — exact trigger pattern from routing.json"
+    },
+    {
+      "id": "tp-07",
+      "query": "IK 체인 구조 보여줘",
+      "should_trigger": true,
+      "reason": "Korean 'IK 체인' — IK chain structure trigger"
+    },
+    {
+      "id": "tp-08",
+      "query": "retargeter analysis for IK_Custom",
+      "should_trigger": true,
+      "reason": "English 'retargeter analysis' — direct trigger"
+    },
+    {
+      "id": "tp-09",
+      "query": "IK 리그 분석 비교해줘",
+      "should_trigger": true,
+      "reason": "Korean 'IK 리그 분석' — exact trigger pattern from routing.json"
+    },
+    {
+      "id": "tp-10",
+      "query": "IK solver goals and chains",
+      "should_trigger": true,
+      "reason": "English 'IK solver' + 'goals' + 'chains' — IK analysis trigger"
+    },
+    {
+      "id": "tn-01",
+      "query": "리그 성능 감사",
+      "should_trigger": false,
+      "reason": "TN: '리그 성능 감사' is control-rig-workflow trigger. Performance audit, not IK structure analysis."
+    },
+    {
+      "id": "tn-02",
+      "query": "Compare control rigs",
+      "should_trigger": false,
+      "reason": "TN: 'control rigs' is control-rig-workflow trigger. Control Rig A/B, not IK Rig analysis."
+    },
+    {
+      "id": "tn-03",
+      "query": "Control Rig C++ 연동 분석",
+      "should_trigger": false,
+      "reason": "TN: 'Control Rig C++ 연동' is control-rig-workflow trigger. C++ integration, not IK analysis."
+    },
+    {
+      "id": "tn-04",
+      "query": "CR_Mannequin 성능 감사",
+      "should_trigger": false,
+      "reason": "TN: CR_ prefix + '성능 감사' is control-rig-workflow trigger. Control Rig perf, not IK analysis."
+    },
+    {
+      "id": "tn-05",
+      "query": "ACharacter 어떻게 동작해?",
+      "should_trigger": false,
+      "reason": "TN: '어떻게 동작' is ue-explain trigger. Explanation, not IK analysis."
+    },
+    {
+      "id": "tn-06",
+      "query": "캐릭터 만들어줘",
+      "should_trigger": false,
+      "reason": "TN: '만들어줘' is ue-scaffold trigger. Creation, not IK analysis."
+    },
+    {
+      "id": "tn-07",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "TN: '에러 해결' is ue-debug trigger. Error fixing, not IK analysis."
+    },
+    {
+      "id": "tn-08",
+      "query": "rig A/B comparison for performance",
+      "should_trigger": false,
+      "reason": "TN: 'rig A/B' + 'performance' is control-rig-workflow trigger. Control Rig perf, not IK."
+    },
+    {
+      "id": "tn-09",
+      "query": "애니메이션 블루프린트 분석",
+      "should_trigger": false,
+      "reason": "TN: AnimBP analysis is ue_manage_blueprint MCP tool. Animation BP, not IK Rig."
+    },
+    {
+      "id": "tn-10",
+      "query": "리그 C++ 연동",
+      "should_trigger": false,
+      "reason": "TN: '리그 C++ 연동' is control-rig-workflow trigger. C++ integration, not IK structure."
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "skill": "ue-automation-test-builder",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for ue-automation-test-builder skill. Tests correct activation on UE Automation Test 6-phase iterative creation queries, and correct rejection of one-shot test gen, scenario tests, record tests, and edge case iteration.",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "오토메이션 테스트 — 자동화 테스트 6-Phase로 만들어줘",
+      "should_trigger": true,
+      "reason": "Automation test creation — direct trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "오토메이션 테스트 빌드해줘",
+      "should_trigger": true,
+      "reason": "Automation test build — explicit keyword"
+    },
+    {
+      "id": "tp-03",
+      "query": "오토메이션 테스트 — UE 자동화 유닛 테스트 6-Phase 프레임워크로",
+      "should_trigger": true,
+      "reason": "Unit test creation — UE automation context"
+    },
+    {
+      "id": "tp-04",
+      "query": "오토메이션 테스트 해줘",
+      "should_trigger": true,
+      "reason": "UE automation test creation — explicit UE prefix"
+    },
+    {
+      "id": "tp-05",
+      "query": "오토메이션 테스트 — 기능 테스트 6-Phase 자동화 프레임워크",
+      "should_trigger": true,
+      "reason": "Functional test creation — UE automation context"
+    },
+    {
+      "id": "tp-06",
+      "query": "Create an automation test for AMyCharacter",
+      "should_trigger": true,
+      "reason": "English automation test creation"
+    },
+    {
+      "id": "tp-07",
+      "query": "Build a functional test for the inventory system",
+      "should_trigger": true,
+      "reason": "English functional test build request"
+    },
+    {
+      "id": "tp-08",
+      "query": "Create UE automation test builder for combat",
+      "should_trigger": true,
+      "reason": "English automation test builder — explicit keyword"
+    },
+    {
+      "id": "tp-09",
+      "query": "Set up automation test for BP_Player movement",
+      "should_trigger": true,
+      "reason": "Automation test setup — iterative creation"
+    },
+    {
+      "id": "tp-10",
+      "query": "오토메이션 테스트 — 6-Phase 자동화 테스트 프레임워크로 캐릭터 테스트",
+      "should_trigger": true,
+      "reason": "Automation test framework — iterative build"
+    },
+    {
+      "id": "tn-01",
+      "query": "ACharacter 테스트 생성해줘",
+      "should_trigger": false,
+      "reason": "One-shot test generation — belongs to ue-test-gen skill"
+    },
+    {
+      "id": "tn-02",
+      "query": "캐릭터 점프 시나리오 테스트해줘",
+      "should_trigger": false,
+      "reason": "Scenario test — belongs to ue-test-scenario skill"
+    },
+    {
+      "id": "tn-03",
+      "query": "PIE 입력 녹화해서 테스트 만들어줘",
+      "should_trigger": false,
+      "reason": "Record test — belongs to ue-test-record skill"
+    },
+    {
+      "id": "tn-04",
+      "query": "엣지 케이스 테스트 추가해줘",
+      "should_trigger": false,
+      "reason": "Edge case iteration — belongs to test-iterate skill"
+    },
+    {
+      "id": "tn-05",
+      "query": "Generate test for TakeDamage function",
+      "should_trigger": false,
+      "reason": "One-shot test generation — belongs to ue-test-gen skill"
+    },
+    {
+      "id": "tn-06",
+      "query": "Test scenario: move 10m then jump",
+      "should_trigger": false,
+      "reason": "Scenario test — belongs to ue-test-scenario skill"
+    },
+    {
+      "id": "tn-07",
+      "query": "Record gameplay and export test",
+      "should_trigger": false,
+      "reason": "Record test — belongs to ue-test-record skill"
+    },
+    {
+      "id": "tn-08",
+      "query": "캐릭터 만들어줘",
+      "should_trigger": false,
+      "reason": "UE feature creation — belongs to ue-scaffold skill"
+    },
+    {
+      "id": "tn-09",
+      "query": "기존 테스트 실행해줘",
+      "should_trigger": false,
+      "reason": "Test execution — belongs to test-run skill, not test creation"
+    },
+    {
+      "id": "tn-10",
+      "query": "빌드 에러 테스트 해줘",
+      "should_trigger": false,
+      "reason": "Build error test — belongs to build-error-mystery-test skill"
+    }
+  ]
+}

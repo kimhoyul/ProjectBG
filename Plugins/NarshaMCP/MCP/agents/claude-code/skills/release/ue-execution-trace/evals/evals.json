@@ -1,0 +1,42 @@
+{
+  "skill_name": "ue-execution-trace",
+  "_note": "requires_asset here is DOCUMENTARY only — the output-quality harness (output_quality_eval.py) reads grading.json, not this file. The enforced project-asset precondition lives in evals/grading.json (Issue #19514); this mirror carries requires_asset so the two stay in sync for a human reader.",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "B_Hero_Default 실행 추적해줘",
+      "expected_output": "Step-by-step execution chain from BP entry points (BeginPlay, Events) through function calls with node types",
+      "files": [],
+      "requires_asset": ["B_Hero_Default"],
+      "assertions": [
+        {"type": "tool_usage", "value": "ue_trace_execution", "description": "Should use ue_trace_execution for Blueprint flow tracing"},
+        {"type": "content_pattern", "value": "(execution.*flow|trace|chain|node|step|event|Event)", "description": "Should show execution chain with steps or nodes"},
+        {"type": "llm_judge", "criteria": "Does the response show a step-by-step execution chain for B_Hero_Default with numbered steps or nodes?", "threshold": 0.6, "description": "Sequential execution flow"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "GA_Weapon_Fire 어빌리티 플로우 추적",
+      "expected_output": "GAS ability lifecycle trace: activate → commit → end with effects, montages, tags, costs, cooldowns",
+      "files": [],
+      "requires_asset": ["GA_Weapon_Fire"],
+      "assertions": [
+        {"type": "tool_usage", "value": "ue_trace_execution", "description": "Should use ue_trace_execution for ability flow tracing"},
+        {"type": "content_contains_any", "values": ["ability", "GA_Weapon_Fire", "어빌리티", "flow", "activate", "commit", "end"], "description": "Should reference ability lifecycle stages"},
+        {"type": "content_pattern", "value": "(activate|commit|end|gameplay.?effect|montage|tag|cost|cooldown)", "description": "Should trace GAS ability lifecycle"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "IA_Jump 입력부터 추적해줘",
+      "expected_output": "Input-to-action chain: InputAction → InputMappingContext → Character function → gameplay result",
+      "files": [],
+      "requires_asset": ["IA_Jump"],
+      "assertions": [
+        {"type": "tool_usage", "value": "ue_trace_execution", "description": "Should use ue_trace_execution for input chain tracing"},
+        {"type": "content_contains_any", "values": ["IA_Jump", "input", "입력", "action", "mapping", "InputAction"], "description": "Should reference input action and mapping context"},
+        {"type": "llm_judge", "criteria": "Does the response trace the chain from input action (IA_Jump) through the input mapping context to the actual gameplay action?", "threshold": 0.6, "description": "Complete input-to-action chain"}
+      ]
+    }
+  ]
+}

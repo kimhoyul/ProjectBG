@@ -1,0 +1,31 @@
+{
+  "name": "component",
+  "description": "Standard UActorComponent class with BlueprintSpawnableComponent specifier",
+  "version": "2.0.0",
+  "base_class": "UActorComponent",
+  "default_specifiers": "BlueprintSpawnableComponent",
+  "includes": [
+    "CoreMinimal.h",
+    "Components/ActorComponent.h"
+  ],
+  "interfaces": [],
+  "default_overrides": [
+    {
+      "function_name": "BeginPlay",
+      "return_type": "virtual void",
+      "parameters": "",
+      "override_qualifier": "override",
+      "body": "\tSuper::BeginPlay();\n"
+    },
+    {
+      "function_name": "TickComponent",
+      "return_type": "virtual void",
+      "parameters": "float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction",
+      "override_qualifier": "override",
+      "body": "\tSuper::TickComponent(DeltaTime, TickType, ThisTickFunction);\n"
+    }
+  ],
+  "module_dependencies": {
+    "public": []
+  }
+}

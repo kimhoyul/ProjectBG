@@ -1,0 +1,126 @@
+{
+  "skill": "ue-create-system",
+  "description": "Cross-domain system generation (C++ + BP + VFX + Material + UI) with ECABridge.",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "데미지 시스템 이펙트 포함 만들어줘",
+      "should_trigger": true,
+      "reason": "'이펙트 포함' + '시스템 만들어' triggers; ue-scaffold excludes '이펙트 포함'"
+    },
+    {
+      "id": "tp-02",
+      "query": "Create projectile system with VFX",
+      "should_trigger": true,
+      "reason": "'create system with' + 'VFX' triggers"
+    },
+    {
+      "id": "tp-03",
+      "query": "인벤토리 시스템 UI 포함해서 만들어",
+      "should_trigger": true,
+      "reason": "'시스템' + 'UI 포함' triggers"
+    },
+    {
+      "id": "tp-04",
+      "query": "전체 무기 시스템 VFX 포함 생성해줘",
+      "should_trigger": true,
+      "reason": "'VFX 포함' + '시스템 생성' triggers; ue-scaffold excludes 'VFX 포함'"
+    },
+    {
+      "id": "tp-05",
+      "query": "Complete damage system with effects and UI",
+      "should_trigger": true,
+      "reason": "'complete system' trigger"
+    },
+    {
+      "id": "tp-06",
+      "query": "이펙트 포함 시스템 만들어줘",
+      "should_trigger": true,
+      "reason": "'이펙트 포함' trigger"
+    },
+    {
+      "id": "tp-07",
+      "query": "Build a full system with VFX and material",
+      "should_trigger": true,
+      "reason": "'full system' + 'system with VFX' triggers"
+    },
+    {
+      "id": "tp-08",
+      "query": "머티리얼 포함 무기 시스템 만들어",
+      "should_trigger": true,
+      "reason": "'머티리얼 포함' + '시스템 만들어' triggers"
+    },
+    {
+      "id": "tp-09",
+      "query": "HUD 시스템 UI 포함해서 생성",
+      "should_trigger": true,
+      "reason": "'시스템' + 'UI 포함' triggers"
+    },
+    {
+      "id": "tp-10",
+      "query": "cross-domain system with Blueprint and Niagara",
+      "should_trigger": true,
+      "reason": "'cross-domain system' trigger"
+    },
+    {
+      "id": "tn-01",
+      "query": "캐릭터 만들어줘",
+      "should_trigger": false,
+      "reason": "No '시스템' qualifier -> ue-scaffold"
+    },
+    {
+      "id": "tn-02",
+      "query": "시스템 어떻게 동작해?",
+      "should_trigger": false,
+      "reason": "Negative: '시스템 설명' equivalent -> ue-explain"
+    },
+    {
+      "id": "tn-03",
+      "query": "파워 코드 생성 무기 시스템",
+      "should_trigger": false,
+      "reason": "Negative: '파워 코드 생성' -> code-generation-power"
+    },
+    {
+      "id": "tn-04",
+      "query": "시스템 진단해줘",
+      "should_trigger": false,
+      "reason": "Negative: '시스템 진단' -> ue-audit"
+    },
+    {
+      "id": "tn-05",
+      "query": "Explain how the damage system works",
+      "should_trigger": false,
+      "reason": "'Explain' triggers ue-explain, not create"
+    },
+    {
+      "id": "tn-06",
+      "query": "시스템 분석해줘",
+      "should_trigger": false,
+      "reason": "Negative: '시스템 분석' -> ue-explain"
+    },
+    {
+      "id": "tn-07",
+      "query": "Build an inventory feature",
+      "should_trigger": false,
+      "reason": "No 'system' qualifier -> ue-scaffold"
+    },
+    {
+      "id": "tn-08",
+      "query": "GAS 캐릭터 시나리오 생성",
+      "should_trigger": false,
+      "reason": "Negative: '시나리오 생성' -> code-generation-power"
+    },
+    {
+      "id": "tn-09",
+      "query": "ACharacter 뭐야?",
+      "should_trigger": false,
+      "reason": "Explanation query -> ue-explain"
+    },
+    {
+      "id": "tn-10",
+      "query": "데미지 시스템 설명해줘",
+      "should_trigger": false,
+      "reason": "Negative: '시스템 설명' -> ue-explain"
+    }
+  ]
+}

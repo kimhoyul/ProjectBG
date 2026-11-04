@@ -1,0 +1,390 @@
+{
+  "_meta": {
+    "capture_date": "2026-04-26",
+    "capture_sessions": [
+      "PIE_172042 (Phase 2)",
+      "PIE_173313 (Phase 2.5)"
+    ],
+    "narshamcp_version": "0.9.12",
+    "ue_version": "5.7",
+    "project": "Lyra_5.7",
+    "world": "L_DefaultEditorOverview",
+    "purpose": "Issue #9332 Phase 2 — empirical evidence for /ue-slate-debug EXAMPLES.md response shapes; ground truth for include_slate behavior.",
+    "raw_capture_paths": {
+      "tree_default": "C:\\UESampleProject\\Lyra_5.7\\Intermediate\\NarshaMCP\\large_outputs\\ue_editor_debug_20260426_082059.json",
+      "tree_with_slate": "C:\\UESampleProject\\Lyra_5.7\\Intermediate\\NarshaMCP\\large_outputs\\ue_editor_debug_20260426_082106.json",
+      "runtime_geometry": "C:\\UESampleProject\\Lyra_5.7\\Intermediate\\NarshaMCP\\large_outputs\\ue_manage_widget_20260426_082144.json"
+    }
+  },
+  "verdicts": {
+    "include_slate_effect": {
+      "verdict": "OUTCOME_BETA_CONFIRMED — no-op",
+      "evidence": "include_slate=true and include_slate=false responses are byte-identical (both 65121 bytes), differing only in total_time_ms (timing field). Phase 1 plan was correct; schema description ('Include raw SWidget data (verbose)') is misleading.",
+      "follow_up": "File issue against editor_debug.rs schema description OR implement SWidget walker in CUWebSocketEditorSubsystem.cpp HandleGetWidgetTree (~2-3 days, deferred per issue #9332 Out of Scope)."
+    },
+    "pie_required_ops": {
+      "verdict": "CONFIRMED — get_widget_tree, search_widgets, find_widget_at_position, get_runtime_geometry all return populated data ONLY when PIE is active.",
+      "pre_pie_baseline": "All three returned widget_count=0 / match_count=0 / considered_widget_count=0 with is_pie=false.",
+      "post_pie_results": "widget_count=62, search match_count=8, considered_widget_count=162."
+    }
+  },
+  "captures": {
+    "get_widget_tree_default": {
+      "summary": {
+        "user_widgets_count": 10,
+        "widget_count": 62,
+        "max_depth_observed": 4,
+        "is_pie": true,
+        "capped": false
+      },
+      "diversity": {
+        "slot_classes": [
+          "BorderSlot",
+          "ButtonSlot",
+          "OverlaySlot",
+          "SizeBoxSlot",
+          "VerticalBoxSlot"
+        ],
+        "visibility_values": [
+          "Collapsed",
+          "HitTestInvisible",
+          "SelfHitTestInvisible",
+          "Visible"
+        ],
+        "widget_classes_observed": [
+          "Border",
+          "CommonActivatableWidgetStack",
+          "CommonButtonInternalBase",
+          "Overlay",
+          "SizeBox",
+          "Spacer",
+          "SubtitleDisplay",
+          "VerticalBox"
+        ]
+      },
+      "shape_proof": {
+        "user_widget_class": "W_OverallUILayout_C",
+        "user_widget_name": "W_OverallUILayout_C_0",
+        "root_widget_keys": [
+          "absolute_position",
+          "children",
+          "clipping",
+          "desired_size",
+          "effective_visibility",
+          "geometry_available",
+          "is_enabled",
+          "is_visible",
+          "parent_name",
+          "render_opacity",
+          "size",
+          "visibility",
+          "widget_class",
+          "widget_name"
+        ],
+        "root_widget_sample": {
+          "absolute_position": {
+            "x": 3.0,
+            "y": 163.0
+          },
+          "size": {
+            "height": 1083.0,
+            "width": 1920.0
+          },
+          "visibility": "SelfHitTestInvisible",
+          "effective_visibility": "SelfHitTestInvisible",
+          "widget_class": "Overlay",
+          "widget_name": "MainOverlay",
+          "children_count": 4,
+          "first_child_keys": [
+            "absolute_position",
+            "children",
+            "clipping",
+            "desired_size",
+            "effective_visibility",
+            "geometry_available",
+            "is_enabled",
+            "is_visible",
+            "parent_name",
+            "render_opacity",
+            "size",
+            "slot",
+            "visibility",
+            "widget_class",
+            "widget_name"
+          ]
+        }
+      }
+    },
+    "get_widget_tree_with_slate": {
+      "summary": "byte-identical to get_widget_tree_default (see verdict above)"
+    },
+    "search_widgets_button_visible": {
+      "method": "editor_websocket",
+      "operation": "search_widgets",
+      "query": {
+        "widget_class": "Button",
+        "visibility_filter": "visible"
+      },
+      "result_summary": {
+        "match_count": 8,
+        "all_duplicates_of": "W_LyraExperienceTileButton_C/InternalRootButtonBase"
+      },
+      "match_keys": [
+        "absolute_position",
+        "is_enabled",
+        "is_hovered",
+        "is_pressed",
+        "is_visible",
+        "path",
+        "size",
+        "visibility",
+        "widget_class",
+        "widget_name"
+      ],
+      "sample_match": {
+        "absolute_position": {
+          "x": 8.0,
+          "y": 32.0
+        },
+        "is_enabled": true,
+        "is_hovered": false,
+        "is_pressed": false,
+        "is_visible": true,
+        "path": "W_LyraExperienceTileButton_C/InternalRootButtonBase",
+        "size": {
+          "height": 320.0,
+          "width": 512.0
+        },
+        "visibility": "Visible",
+        "widget_class": "CommonButtonInternalBase",
+        "widget_name": "InternalRootButtonBase"
+      }
+    },
+    "find_widget_at_position_center": {
+      "method": "editor_websocket",
+      "operation": "find_widget_at_position",
+      "query": {
+        "screen_x": 960.0,
+        "screen_y": 540.0
+      },
+      "result": {
+        "hit": false,
+        "is_pie": true,
+        "query": {
+          "screen_x": 960.0,
+          "screen_y": 540.0
+        },
+        "scope": null,
+        "verification": {
+          "aabb_epic_mismatches": 0,
+          "considered_widget_count": 162,
+          "hit_detection_method": "FGeometry::IsUnderLocation",
+          "mismatch_samples": []
+        },
+        "widget_at_position": null
+      },
+      "_interpretation": "Viewport center (960,540) landed on game world (no UI), so hit=false despite 162 widgets being walked. To produce hit=true, query coords from search_widgets matches (e.g. screen_x=8, screen_y=32 for the InternalRootButtonBase)."
+    },
+    "get_runtime_geometry_default": {
+      "summary": {
+        "user_widgets_count": 10,
+        "is_pie": true,
+        "raw_size_bytes": 264029
+      },
+      "shape_note": "Identical structure to get_widget_tree but with finer granularity (e.g. additional offscreen widgets). Use this when you need pixel-perfect cached geometry for layout debugging."
+    }
+  },
+  "field_inventory": {
+    "user_widget_entry": [
+      "root_widget",
+      "user_widget_class",
+      "user_widget_name"
+    ],
+    "widget_node_get_widget_tree": [
+      "absolute_position",
+      "children",
+      "clipping",
+      "desired_size",
+      "effective_visibility",
+      "geometry_available",
+      "is_enabled",
+      "is_visible",
+      "parent_name",
+      "render_opacity",
+      "size",
+      "visibility",
+      "widget_class",
+      "widget_name"
+    ],
+    "widget_node_find_widget_at_position": [
+      "abs_pos",
+      "depth",
+      "path",
+      "size",
+      "user_widget_class",
+      "user_widget_name",
+      "widget_class",
+      "widget_name"
+    ],
+    "search_widgets_match": [
+      "absolute_position",
+      "is_enabled",
+      "is_hovered",
+      "is_pressed",
+      "is_visible",
+      "path",
+      "size",
+      "visibility",
+      "widget_class",
+      "widget_name"
+    ],
+    "find_widget_at_position_response": [
+      "hit",
+      "is_pie",
+      "query",
+      "scope",
+      "verification",
+      "widget_at_position"
+    ],
+    "get_anchors_response": [
+      "anchors",
+      "blueprint_name",
+      "count",
+      "filter_class",
+      "limit",
+      "source",
+      "total_found"
+    ],
+    "get_preview_response": [
+      "capture_mode",
+      "file_path",
+      "height",
+      "width",
+      "widget_name"
+    ],
+    "_field_naming_inconsistencies": {
+      "find_widget_at_position uses 'abs_pos'": "short form",
+      "get_widget_tree uses 'absolute_position'": "long form (sibling op, same concept, different key)"
+    }
+  },
+  "phase_2_5_additional_captures": {
+    "find_widget_at_position_hit_true": {
+      "session": "PIE_173313 (2026-04-26 Phase 2.5)",
+      "query": {
+        "screen_x": 100.0,
+        "screen_y": 100.0
+      },
+      "result": {
+        "hit": true,
+        "is_pie": true,
+        "verification": {
+          "aabb_epic_mismatches": 8,
+          "considered_widget_count": 162,
+          "hit_detection_method": "FGeometry::IsUnderLocation",
+          "mismatch_sample": "InternalRootButtonBase.ButtonHeightSB.VerticalBox_3.ButtonBorder.Overlay_1.VerticalBox_2.Overlay_0.ScaleBox_1.KeyArt|aabb=miss|epic=hit"
+        },
+        "widget_at_position_keys": [
+          "abs_pos",
+          "depth",
+          "path",
+          "size",
+          "user_widget_class",
+          "user_widget_name",
+          "widget_class",
+          "widget_name"
+        ],
+        "widget_at_position_sample": {
+          "abs_pos": {
+            "x": 8.0,
+            "y": 40.0
+          },
+          "depth": 3,
+          "path": "InternalRootButtonBase.ButtonHeightSB.VerticalBox_3.ButtonBorder",
+          "size": {
+            "height": 304.0,
+            "width": 512.0
+          },
+          "user_widget_class": "W_LyraExperienceTileButton_C",
+          "user_widget_name": "ExperienceTileButton",
+          "widget_class": "Border",
+          "widget_name": "ButtonBorder"
+        }
+      },
+      "_observation": "Field naming inconsistency: find_widget_at_position uses 'abs_pos' (short) while get_widget_tree uses 'absolute_position' (long). Document both shapes in EXAMPLES.md."
+    },
+    "get_anchors_no_canvas_panel": {
+      "query": {
+        "widget_name": "W_LyraExperienceTileButton",
+        "filter_class": "*"
+      },
+      "result": {
+        "anchors": [],
+        "blueprint_name": "W_LyraExperienceTileButton",
+        "count": 0,
+        "filter_class": "*",
+        "limit": 50,
+        "source": "uasset_metadata_cache",
+        "total_found": 0,
+        "total_time_ms": 1896.4
+      },
+      "_observation": "get_anchors only returns CanvasPanelSlot children. WBPs using other layouts (Vertical/HorizontalBox, Overlay, etc.) return empty. Op reads from offline uasset_metadata_cache, not live PIE."
+    },
+    "get_preview_active_window": {
+      "query": {
+        "widget_name": "/Game/UI/Foundation/Logo/W_LyraLogo_LoadingScreen",
+        "settle_ms": 800,
+        "close_after": true
+      },
+      "result": {
+        "capture_mode": "active_window",
+        "file_path": "../../../../../../UESampleProject/Lyra_5.7/Saved/Screenshots/MCP_20260426_173335.png",
+        "height": 760,
+        "width": 1286,
+        "widget_name": "/Game/UI/Foundation/Logo/W_LyraLogo_LoadingScreen"
+      },
+      "_observation": "Response shape: {capture_mode, file_path, height, width, widget_name}. NOT {widget_size: {w, h}}. PNG content was the active editor viewport (Lyra startup overview level), NOT the WBP Designer view in isolation — the op uses OS-level active window capture (per schema description for asset editors w/o panel IDs)."
+    },
+    "capture_widget_screenshot_BROKEN": {
+      "query_attempts": [
+        {
+          "widget_name": "InternalRootButtonBase",
+          "result": "timeout 15s, total 48s"
+        },
+        {
+          "widget_name": "ButtonBorder",
+          "user_widget_name": "ExperienceTileButton",
+          "result": "timeout 15s, total 48s"
+        }
+      ],
+      "_observation": "Op consistently times out (48s) on Lyra L_DefaultEditorOverview. Both unique-named (ButtonBorder + user_widget_name disambiguation) and ambiguous (InternalRootButtonBase, 8 instances) widget queries failed. Treat as broken/unreliable until investigated. SKILL.md should NOT chain this op in workflow Step 3 layout branch.",
+      "verdict": "BROKEN — do not use in skill workflow until root-caused"
+    },
+    "pie_list_active_widgets_BROKEN": {
+      "query_attempts": [
+        {
+          "max_widgets": 20,
+          "result": "timeout 10s, total 33s"
+        },
+        {
+          "max_widgets": 5,
+          "visibility_filter": "visible",
+          "result": "timeout 10s, total 33s"
+        }
+      ],
+      "_observation": "Op consistently times out on Lyra. Even with max_widgets=5 and visibility_filter=visible, the response budget exceeds 10s. Likely op blocks until full enumeration regardless of max_widgets.",
+      "verdict": "BROKEN — do not use in skill workflow"
+    },
+    "pie_state_post_stop": {
+      "result": {
+        "is_pie_running": false,
+        "is_simulating": false,
+        "success": true
+      },
+      "_observation": "Acceptance Contract: PIE cleanup confirmed."
+    }
+  },
+  "broken_ops": [
+    "capture_widget_screenshot (15s/48s timeout x2)",
+    "pie_list_active_widgets (10s/33s timeout x2)"
+  ]
+}

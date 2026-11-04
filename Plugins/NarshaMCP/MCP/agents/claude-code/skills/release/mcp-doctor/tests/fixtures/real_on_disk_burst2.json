@@ -1,0 +1,12 @@
+{
+    "ts": "2026-05-05T04:14:36.502Z",
+    "reason": "external_kill",
+    "thread": "unknown",
+    "location": "external_kill",
+    "message": "External kill: daemon process disappeared (exit code unavailable)",
+    "backtrace": "",
+    "tool_call_history": [],
+    "version": "0.9.13",
+    "project_hash": "",
+    "pid": 13640
+}

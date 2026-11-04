@@ -1,0 +1,126 @@
+{
+  "skill": "caller-graph-visualizer",
+  "description": "Trigger precision eval: verify caller-graph-visualizer activates on refactoring safety/impact analysis queries and NOT on general call graph, GAS flow, or BP flow queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "AMyCharacter::GetMovementSpeed 함수 이름을 GetCurrentSpeed로 바꾸려고 하는데, 이거 바꿔도 괜찮을까? BP에서 호출하는 곳이 있으면 안 될 텐데",
+      "should_trigger": true,
+      "reason": "Korean rename safety check with BP caller concern for specific function"
+    },
+    {
+      "id": "tp-02",
+      "query": "refactoring impact analysis for UInventoryComponent::AddItem - I'm changing the signature to accept FItemHandle instead of int32 ItemID, need to know every call site that will break",
+      "should_trigger": true,
+      "reason": "English signature change impact with specific old→new parameter types"
+    },
+    {
+      "id": "tp-03",
+      "query": "UWeaponComponent::Fire() 시그니처 변경하려고 해. void Fire()를 bool Fire(FHitResult& OutHit)으로 바꾸면 영향 범위가 어디까지야? 자식 클래스 오버라이드도 있을 수 있어서",
+      "should_trigger": true,
+      "reason": "Korean signature change impact with override concern and specific signatures"
+    },
+    {
+      "id": "tp-04",
+      "query": "Can I safely rename AEnemyBase::OnDeath to AEnemyBase::HandleDeath? there might be Blueprint overrides and delegate bindings referencing the old name in BP_EnemyMelee and BP_EnemyRanged",
+      "should_trigger": true,
+      "reason": "English safe rename check with BP override and delegate binding risks"
+    },
+    {
+      "id": "tp-05",
+      "query": "OnHealthChanged 델리게이트를 삭제하고 OnAttributeChanged로 통합하려는데, 기존 바인딩 전부 확인해줘. BP_HUD_HealthBar랑 BP_DamageNumber에서 바인딩하고 있을 거야",
+      "should_trigger": true,
+      "reason": "Korean delegate deletion/consolidation with specific BP binding locations"
+    },
+    {
+      "id": "tp-06",
+      "query": "리팩토링 영향 분석 필요해. UAbilitySystemComponent에서 InitializeAbilitySystem 함수를 deprecated 마킹하고 새로 SetupAbilities로 대체하려는데, 기존 호출부가 얼마나 되는지",
+      "should_trigger": true,
+      "reason": "Korean deprecation impact for specific function replacement"
+    },
+    {
+      "id": "tp-07",
+      "query": "signature change impact: UDamageCalculator::CalculateDamage에서 float 리턴을 FDamageResult 구조체로 바꾸면 뭐가 깨져? 이 함수 GAS의 UGameplayEffectExecutionCalculation에서도 호출하는 것 같아",
+      "should_trigger": true,
+      "reason": "Korean return type change impact with GAS execution calculator context"
+    },
+    {
+      "id": "tp-08",
+      "query": "is it safe to change UMyGameInstance::GetSaveManager from returning raw pointer to TWeakObjectPtr? worried about existing code that assumes non-null returns",
+      "should_trigger": true,
+      "reason": "English return type safety change with null assumption concern"
+    },
+    {
+      "id": "tp-09",
+      "query": "AMyPlayerController::ServerRPC_RequestAction 시그니처 변경하면 safely rename 가능한지 확인해줘",
+      "should_trigger": true,
+      "reason": "Korean RPC signature change impact across client/server boundary"
+    },
+    {
+      "id": "tp-10",
+      "query": "IInteractable 인터페이스에서 Execute_Interact 함수 삭제하고 새 인터페이스 IInteractableV2로 대체하려는데, 기존 구현체들이 몇 개나 되고 어디서 Cast<IInteractable> 하고 있는지 확인해줘",
+      "should_trigger": true,
+      "reason": "Korean interface replacement impact with implementor and cast site analysis"
+    },
+    {
+      "id": "tn-01",
+      "query": "이 함수 호출 관계 보여줘",
+      "should_trigger": false,
+      "reason": "General call graph -> execution-flow-explorer"
+    },
+    {
+      "id": "tn-02",
+      "query": "GAS ability flow 전체 추적해줘",
+      "should_trigger": false,
+      "reason": "GAS cross-domain flow -> cross-domain-flow"
+    },
+    {
+      "id": "tn-03",
+      "query": "BP_Player 실행 흐름 분석해줘",
+      "should_trigger": false,
+      "reason": "BP execution flow -> blueprint-flow"
+    },
+    {
+      "id": "tn-04",
+      "query": "show call graph for TakeDamage",
+      "should_trigger": false,
+      "reason": "General call graph display -> execution-flow-explorer"
+    },
+    {
+      "id": "tn-05",
+      "query": "C++ 클래스 생성해줘",
+      "should_trigger": false,
+      "reason": "C++ class generation -> code-generation"
+    },
+    {
+      "id": "tn-06",
+      "query": "무기 시스템 전체 만들어줘",
+      "should_trigger": false,
+      "reason": "Multi-class system -> code-generation-power"
+    },
+    {
+      "id": "tn-07",
+      "query": "머테리얼 분석해줘",
+      "should_trigger": false,
+      "reason": "Material analysis -> material-analysis"
+    },
+    {
+      "id": "tn-08",
+      "query": "BP를 C++로 변환해줘",
+      "should_trigger": false,
+      "reason": "BP to C++ conversion -> bp-cpp-project-init"
+    },
+    {
+      "id": "tn-09",
+      "query": "BeginPlay 내부에서 뭐 호출하는지 보여줘",
+      "should_trigger": false,
+      "reason": "Internal callees exploration -> execution-flow-explorer"
+    },
+    {
+      "id": "tn-10",
+      "query": "양방향 추적해줘 OnHit",
+      "should_trigger": false,
+      "reason": "Bidirectional trace -> execution-flow-explorer"
+    }
+  ]
+}

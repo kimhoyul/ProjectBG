@@ -1,0 +1,126 @@
+{
+  "skill": "game-design-intelligence",
+  "description": "Trigger precision eval: verify game-design-intelligence activates on balance/GAS/AI-doc queries and NOT on explain/audit/gameplay-search queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "밸런스 분석해줘",
+      "should_trigger": true,
+      "reason": "Korean '밸런스 분석' — core trigger for balance analysis"
+    },
+    {
+      "id": "tp-02",
+      "query": "balance analysis for this project",
+      "should_trigger": true,
+      "reason": "English 'balance analysis' — direct trigger pattern"
+    },
+    {
+      "id": "tp-03",
+      "query": "GAS 밸런스 분석 결과 보여줘",
+      "should_trigger": true,
+      "reason": "Korean 'GAS 밸런스' — GAS balance trigger (avoids '만들어줘' → ue-scaffold)"
+    },
+    {
+      "id": "tp-04",
+      "query": "AI 행동 문서 확인해줘",
+      "should_trigger": true,
+      "reason": "Korean 'AI 행동 문서' — AI behavior doc trigger (avoids '생성' → ue-scaffold)"
+    },
+    {
+      "id": "tp-05",
+      "query": "게임 디자인 문서 출력해줘",
+      "should_trigger": true,
+      "reason": "Korean '게임 디자인 문서' — game design report trigger (avoids '만들어줘' → ue-scaffold)"
+    },
+    {
+      "id": "tp-06",
+      "query": "Generate game design report",
+      "should_trigger": true,
+      "reason": "English 'game design report' — direct trigger"
+    },
+    {
+      "id": "tp-07",
+      "query": "이펙트 밸런스 분석",
+      "should_trigger": true,
+      "reason": "Korean '이펙트 밸런스' — effect balance trigger"
+    },
+    {
+      "id": "tp-08",
+      "query": "ST_EnemyAI AI 행동 문서 분석",
+      "should_trigger": true,
+      "reason": "Korean 'AI 행동 문서' — AI behavior doc for specific StateTree (avoids '생성' → ue-scaffold)"
+    },
+    {
+      "id": "tp-09",
+      "query": "game design report for BT_Combat",
+      "should_trigger": true,
+      "reason": "English 'game design report' — BehaviorTree design report (avoids '만들어줘' → ue-scaffold)"
+    },
+    {
+      "id": "tp-10",
+      "query": "balance analysis for GA_Melee abilities",
+      "should_trigger": true,
+      "reason": "English 'balance analysis' with specific GAS context"
+    },
+    {
+      "id": "tn-01",
+      "query": "GameplayAbility 어떻게 동작해?",
+      "should_trigger": false,
+      "reason": "TN: '어떻게 동작' is ue-explain trigger. Understanding mechanics, not generating design docs."
+    },
+    {
+      "id": "tn-02",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "TN: '진단' is ue-audit trigger. Project health check, not design intelligence."
+    },
+    {
+      "id": "tn-03",
+      "query": "search for all tags with Ability prefix",
+      "should_trigger": false,
+      "reason": "TN: Tag search is ue_manage_gameplay direct MCP call, not design report."
+    },
+    {
+      "id": "tn-04",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "TN: '에러 해결' is ue-debug trigger. Error fixing, not design analysis."
+    },
+    {
+      "id": "tn-05",
+      "query": "캐릭터 만들어줘",
+      "should_trigger": false,
+      "reason": "TN: '만들어줘' (creation) is ue-scaffold trigger. Building features, not design docs."
+    },
+    {
+      "id": "tn-06",
+      "query": "Explain how GAS attribute sets work",
+      "should_trigger": false,
+      "reason": "TN: 'Explain how' is ue-explain trigger. Mentions GAS but intent is explanation."
+    },
+    {
+      "id": "tn-07",
+      "query": "trace_input_flow for IA_Attack",
+      "should_trigger": false,
+      "reason": "TN: Direct MCP operation name — ue_manage_gameplay tool, not design intelligence."
+    },
+    {
+      "id": "tn-08",
+      "query": "에셋 유효성 검사해줘",
+      "should_trigger": false,
+      "reason": "TN: '유효성 검사' is ue-validate trigger. Validation, not design analysis."
+    },
+    {
+      "id": "tn-09",
+      "query": "성능 분석해줘",
+      "should_trigger": false,
+      "reason": "TN: '성능 분석' is ue-insights-profiler trigger. Performance profiling, not game design."
+    },
+    {
+      "id": "tn-10",
+      "query": "StateTree 구조 분석해줘",
+      "should_trigger": false,
+      "reason": "TN: StateTree structure analysis is ue_manage_ai direct MCP call, not design document generation."
+    }
+  ]
+}

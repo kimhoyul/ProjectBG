@@ -1,0 +1,126 @@
+{
+  "skill": "execution-flow-explorer",
+  "description": "Trigger precision eval: verify execution-flow-explorer activates on C++ call graph/dependency trace queries and NOT on refactoring safety, GAS chain, or BP-only flow queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "AMyCharacter::TakeDamage 함수가 내부에서 뭘 호출하는지 전체 콜 체인 보여줘. ApplyDamage 쪽 분기가 복잡해서 어디까지 퍼지는지 파악이 안 돼",
+      "should_trigger": true,
+      "reason": "Korean call chain trace for specific function with complexity context"
+    },
+    {
+      "id": "tp-02",
+      "query": "show call graph for UAbilitySystemComponent::TryActivateAbility - I need to understand what internal functions get called before the ability actually activates, especially the CanActivate checks",
+      "should_trigger": true,
+      "reason": "English call graph with specific interest in internal validation path"
+    },
+    {
+      "id": "tp-03",
+      "query": "호출 관계 보여줘 — AMyCharacter::BeginPlay 양방향 추적 dependency trace",
+      "should_trigger": true,
+      "reason": "English/Korean mixed dependency trace with initialization order debugging"
+    },
+    {
+      "id": "tp-04",
+      "query": "양방향 추적해줘 UHealthComponent::ApplyDamage. 누가 이 함수를 호출하는지랑 이 함수가 내부에서 OnHealthChanged 델리게이트 브로드캐스트까지 어떻게 가는지 둘 다 보고 싶어",
+      "should_trigger": true,
+      "reason": "Korean bidirectional trace with specific caller/callee interest"
+    },
+    {
+      "id": "tp-05",
+      "query": "AEnemyBase::OnPerceptionUpdated가 어디서 호출되는지 알려줘. UAIPerceptionComponent에서 delegate로 바인딩된 건지 직접 호출인지 모르겠어",
+      "should_trigger": true,
+      "reason": "Korean caller trace with delegate vs direct call ambiguity"
+    },
+    {
+      "id": "tp-06",
+      "query": "우리 프로젝트 UWeaponComponent::Fire() 함수 내부에서 LineTrace → SpawnProjectile → ApplyDamage까지 호출 흐름 추적해줘. 중간에 Async 호출이 있는지도 확인",
+      "should_trigger": true,
+      "reason": "Korean internal call chain trace with async check for weapon fire path"
+    },
+    {
+      "id": "tp-07",
+      "query": "bidirectional trace for AMyGameMode::HandleMatchStart - want to see who triggers this function and what chain of events it kicks off (player spawning, UI updates, score reset)",
+      "should_trigger": true,
+      "reason": "English bidirectional trace for game mode match start"
+    },
+    {
+      "id": "tp-08",
+      "query": "AMyPlayerController::ServerRequestRespawn_Implementation 호출 체인 분석해줘. 클라이언트 RPC에서 시작해서 서버에서 실제 리스폰까지 어떤 함수들 거치는지",
+      "should_trigger": true,
+      "reason": "Korean RPC call chain analysis from client to server respawn"
+    },
+    {
+      "id": "tp-09",
+      "query": "who calls UMySubsystem::Initialize and what does it call internally? trying to figure out if it's safe to add a dependency on UInventorySubsystem there without circular init issues",
+      "should_trigger": true,
+      "reason": "English bidirectional caller/callee query with circular dependency concern"
+    },
+    {
+      "id": "tp-10",
+      "query": "SetupPlayerInputComponent 안에서 Enhanced Input 바인딩이 어떤 순서로 등록되는지 콜 그래프로 보여줘. BindAction 여러 개 있는데 우선순위가 어떻게 되는지 파악하려고",
+      "should_trigger": true,
+      "reason": "Korean call graph for input setup with binding order concern"
+    },
+    {
+      "id": "tn-01",
+      "query": "이 함수 이름 바꿔도 안전할까?",
+      "should_trigger": false,
+      "reason": "Refactoring safety check -> caller-graph-visualizer"
+    },
+    {
+      "id": "tn-02",
+      "query": "GAS ability flow 전체 추적해줘",
+      "should_trigger": false,
+      "reason": "GAS cross-domain flow -> cross-domain-flow"
+    },
+    {
+      "id": "tn-03",
+      "query": "BP_Player 실행 흐름 분석해줘",
+      "should_trigger": false,
+      "reason": "BP execution flow -> blueprint-flow"
+    },
+    {
+      "id": "tn-04",
+      "query": "refactoring impact 분석해줘",
+      "should_trigger": false,
+      "reason": "Refactoring impact analysis -> caller-graph-visualizer"
+    },
+    {
+      "id": "tn-05",
+      "query": "C++ 클래스 생성해줘",
+      "should_trigger": false,
+      "reason": "C++ class generation -> code-generation"
+    },
+    {
+      "id": "tn-06",
+      "query": "머테리얼 M_Rock 노드 흐름 보여줘",
+      "should_trigger": false,
+      "reason": "Material node flow -> material-analysis"
+    },
+    {
+      "id": "tn-07",
+      "query": "이 함수 deprecated 하면 영향 범위는?",
+      "should_trigger": false,
+      "reason": "Deprecation impact -> caller-graph-visualizer"
+    },
+    {
+      "id": "tn-08",
+      "query": "InputTag→Ability 매핑 추적해줘",
+      "should_trigger": false,
+      "reason": "Input-to-ability chain -> cross-domain-flow"
+    },
+    {
+      "id": "tn-09",
+      "query": "BP를 C++로 변환해줘",
+      "should_trigger": false,
+      "reason": "BP to C++ conversion -> bp-cpp-project-init"
+    },
+    {
+      "id": "tn-10",
+      "query": "delegate binding 영향 분석해줘",
+      "should_trigger": false,
+      "reason": "Delegate binding impact -> caller-graph-visualizer"
+    }
+  ]
+}

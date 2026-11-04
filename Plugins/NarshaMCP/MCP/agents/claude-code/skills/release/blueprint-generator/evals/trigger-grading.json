@@ -1,0 +1,138 @@
+{
+  "skill": "blueprint-generator",
+  "description": "Trigger precision eval: verify blueprint-generator activates on BP creation queries and NOT on BP analysis/C++ generation/conversion queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "BP_HealthBar라는 이름으로 플레이어 HP 위젯 BP를 만들어야 하는데, BeginPlay에서 PlayerState에서 현재 HP를 가져와서 ProgressBar에 바인딩하는 로직 필요해",
+      "should_trigger": true,
+      "reason": "Korean detailed BP creation with specific asset name, lifecycle event, and binding logic"
+    },
+    {
+      "id": "tp-02",
+      "query": "블루프린트 그래프 만들어 - 인벤토리 슬롯 드래그앤드롭 처리하는 BP 그래프 만들어줘. WBP_InventorySlot에서 OnDragDetected랑 OnDrop 이벤트 구현해야 하는데 아이템 데이터 교환 로직도 포함해줘",
+      "should_trigger": true,
+      "reason": "Korean widget BP creation with drag-and-drop events and data exchange"
+    },
+    {
+      "id": "tp-03",
+      "query": "need a BP graph for our door i... [generate Blueprint graph] nteraction system - BP_InteractableDoor that listens for overlap on a box collision, checks if player has the right key item in inventory, then plays an open timeline animation on the static mesh",
+      "should_trigger": true,
+      "reason": "English BP creation with concrete game logic: overlap, inventory check, timeline"
+    },
+    {
+      "id": "tp-04",
+      "query": "블루프린트 그래프 만들어 - BP_EnemySpawner 만들어야 하는데, 타이머로 3초마다 스폰하고 동시에 최대 5마리까지만 유지하도록 SpawnActor 노드에 조건 걸어줘",
+      "should_trigger": true,
+      "reason": "BP creation query — non-deterministic routing"
+    },
+    {
+      "id": "tp-05",
+      "query": "generate a Blueprint graph for BP_DamageZone - on ActorBeginOverlap apply 20 damage per second using a looping timer, and stop on EndOverlap. needs to work with our existing UHealthComponent",
+      "should_trigger": true,
+      "reason": "English BP creation with overlap events, timer damage, and existing component reference"
+    },
+    {
+      "id": "tp-06",
+      "query": "블루프린트 그래프 만들어 - BP_PickupItem에 BeginPlay에서 RotatingMovement 컴포넌트 속도 설정하고, OnOverlap에서 아이템 ID를 PlayerController한테 넘기는 노드 추가해줘",
+      "should_trigger": true,
+      "reason": "Korean node addition to existing BP with component setup and overlap callback"
+    },
+    {
+      "id": "tp-07",
+      "query": "generate Blueprint graph: 우리 프로젝트 미니맵 시스템에 쓸 BP가 필요한데, WBP_Minimap이라는 이름으로 만들어줘. Tick에서 플레이어 위치 받아서 Image 위젯의 RenderTransform을 업데이트하는 구조",
+      "should_trigger": true,
+      "reason": "Korean widget BP creation for minimap with Tick-based transform update"
+    },
+    {
+      "id": "tp-08",
+      "query": "make a Blueprint graph for our checkpoint system - BP_Checkpoint with a box trigger that on overlap saves the player's transform to a SaveGame object, and on respawn teleports back to last saved location",
+      "should_trigger": true,
+      "reason": "English BP creation with SaveGame integration and teleport logic"
+    },
+    {
+      "id": "tp-09",
+      "query": "플랫포머 프로토타입에 쓸 이동 발판 BP 로직 만들어줘. Timeline으로 A지점에서 B지점 왕복하면서 위에 올라탄 캐릭터도 같이 이동되게 InterpToMovement 써야할듯",
+      "should_trigger": true,
+      "reason": "Korean moving platform BP with Timeline, interpolation, and character attachment"
+    },
+    {
+      "id": "tp-10",
+      "query": "build a BP graph for BP_TurretAI - on EventTick do a sphere trace forward, if hit result is enemy tag then spawn projectile at muzzle socket location with a 0.5s fire rate cooldown using a boolean gate",
+      "should_trigger": true,
+      "reason": "English BP turret AI with sphere trace, tag check, socket spawn, and cooldown gate"
+    },
+    {
+      "id": "tn-01",
+      "query": "BP_Player 실행 흐름 분석해줘",
+      "should_trigger": false,
+      "reason": "BP flow analysis -> blueprint-flow ('실행 흐름')"
+    },
+    {
+      "id": "tn-02",
+      "query": "C++ 클래스 생성해줘",
+      "should_trigger": false,
+      "reason": "C++ class generation -> code-generation"
+    },
+    {
+      "id": "tn-03",
+      "query": "BP를 C++로 변환해줘",
+      "should_trigger": false,
+      "reason": "BP-to-C++ conversion -> bp-cpp-project-init"
+    },
+    {
+      "id": "tn-04",
+      "query": "Blueprint 구조 분석해줘",
+      "should_trigger": false,
+      "reason": "Blueprint analysis -> blueprint-flow ('구조 분석')"
+    },
+    {
+      "id": "tn-05",
+      "query": "무기 시스템 만들어줘",
+      "should_trigger": false,
+      "reason": "Multi-class system generation -> code-generation-power"
+    },
+    {
+      "id": "tn-06",
+      "query": "머테리얼 분석해줘",
+      "should_trigger": false,
+      "reason": "Material analysis -> material-analysis"
+    },
+    {
+      "id": "tn-07",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "Build error -> ue-debug"
+    },
+    {
+      "id": "tn-08",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "Project diagnostic -> ue-audit"
+    },
+    {
+      "id": "tn-09",
+      "query": "ACharacter 어떻게 동작해?",
+      "should_trigger": false,
+      "reason": "Explanation -> ue-explain"
+    },
+    {
+      "id": "tn-10",
+      "query": "BP 변환 검증해줘",
+      "should_trigger": false,
+      "reason": "Migration validation -> bp-to-cpp-validator"
+    },
+    {
+      "id": "tp-11",
+      "query": "BP 그래프 만들어 - ECA로 문 상호작용 BP 생성해줘. BoxCollision OnOverlap에서 문 열림 Timeline 재생하는 로직",
+      "should_trigger": true,
+      "reason": "Korean BP graph creation using new trigger pattern 'BP 그래프 만들어' with ECA reference"
+    },
+    {
+      "id": "tn-11",
+      "query": "복잡한 BP 로직이 있는데 이걸 C++로 직접 구현하고 싶어",
+      "should_trigger": false,
+      "reason": "C++ code generation from BP description — belongs to bp-to-cpp or code-generation, not Blueprint graph creation"
+    }
+  ]
+}

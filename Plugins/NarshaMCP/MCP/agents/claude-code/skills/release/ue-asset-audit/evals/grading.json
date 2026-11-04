@@ -1,0 +1,62 @@
+{
+  "skill": "ue-asset-audit",
+  "issue": 20648,
+  "version": "1.0.0",
+  "description": "Output-quality smoke for /ue-asset-audit: must drive offline validate_assets, avoid empty params wrapping, and produce a health-style report (or honest degrade).",
+  "criteria": [
+    {
+      "id": "uses_validate_assets",
+      "description": "Must call ue_search_assets(operation=validate_assets) not only search",
+      "weight": 0.35
+    },
+    {
+      "id": "no_params_wrapper",
+      "description": "Must not wrap tool args as empty params={} / params=None",
+      "weight": 0.25
+    },
+    {
+      "id": "report_sections",
+      "description": "Report includes health summary, worst offenders, and rule histogram",
+      "weight": 0.25
+    },
+    {
+      "id": "honest_degrade",
+      "description": "cache_cold / unknown op reported as N/A not fake 100% healthy",
+      "weight": 0.15
+    }
+  ],
+  "cases": [
+    {
+      "id": "QUAL-01",
+      "prompt": "텍스처 예산 점검해줘",
+      "assertions": [
+        {
+          "type": "tool_usage",
+          "value": "ue_search_assets",
+          "description": "Mesh/texture audit must use ue_search_assets"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(validate_assets|health|Texture|StaticMesh|메시|텍스처|감사|budget|rule)",
+          "description": "Should report audit/validate/health signals for mesh or texture"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-02",
+      "prompt": "audit textures and meshes in /Game",
+      "assertions": [
+        {
+          "type": "tool_usage",
+          "value": "ue_search_assets",
+          "description": "English trigger must still route to ue_search_assets"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(validate_assets|error|warning|health|Texture|StaticMesh|SkeletalMesh|N/A|cache)",
+          "description": "Should surface validation summary or honest degrade path"
+        }
+      ]
+    }
+  ]
+}

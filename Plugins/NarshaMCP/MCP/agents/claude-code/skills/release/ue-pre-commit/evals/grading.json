@@ -1,0 +1,73 @@
+{
+  "skill": "ue-pre-commit",
+  "version": "1.0.0",
+  "description": "Output quality eval: verify ue-pre-commit produces staged-change analysis with BP impact assessment and risk level verdict",
+  "cases": [
+    {
+      "id": "QUAL-01",
+      "prompt": "커밋 전 분석해줘",
+      "assertions": [
+        {
+          "type": "content_contains_any",
+          "values": ["staged", "스테이지", "git diff", "changed", "변경", "no C++", "nothing to commit", "no staged", "safe to commit", "no changes", "변경 없", "커밋할"],
+          "description": "Should reference staged/changed files when present, OR correctly report no staged C++ changes on a clean tree (Issue #16685: clean-tree robust — clean-tree phrasing varies run-to-run, so accept both vocab sets; an off-topic answer still matches none)"
+        },
+        {
+          "type": "tool_usage_any",
+          "value": ["git", "ue_analyze_symbols"],
+          "description": "Should detect staged changes via git, and/or analyze them via ue_analyze_symbols. On a clean tree the skill short-circuits at git change-detection and never reaches the impact phase (Issue #16493: clean-tree robust; ue_analyze_symbols requires a real tool call — git may also be credited from the report text, so on-topic signal is enforced by the sibling content_contains_any/llm_judge assertions and the harness MCP-reachability gate)"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response analyze the staged changes and assess commit safety — identifying what was changed and whether it is safe to commit — OR, when no C++ files are staged, correctly report that there is nothing to commit / safe to commit? Either a concrete staged-change safety assessment OR an explicit 'nothing staged / safe to commit' verdict passes. A vague, off-topic, or non-commit-safety answer fails.",
+          "threshold": 0.6,
+          "description": "Should provide commit safety assessment OR correctly report no staged changes (LLM judge; clean-tree robust, Issue #16493)"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-02",
+      "prompt": "Is it safe to commit?",
+      "assertions": [
+        {
+          "type": "content_contains_any",
+          "values": ["safe", "risk", "commit", "impact", "affected", "안전", "위험", "no C++", "nothing to commit", "no staged", "변경 없"],
+          "description": "Should address commit safety — risk/safety vocab when changes are staged, OR clean-tree 'nothing to commit' phrasing (Issue #16685: clean-tree robust)"
+        },
+        {
+          "type": "tool_usage_any",
+          "value": ["git", "ue_analyze_symbols"],
+          "description": "Should detect staged changes via git, and/or analyze them via ue_analyze_symbols. On a clean tree the skill short-circuits at git change-detection (Issue #16493: clean-tree robust; ue_analyze_symbols requires a real tool call — git may also be credited from the report text, so on-topic signal is enforced by the sibling content_contains_any/llm_judge assertions and the harness MCP-reachability gate)"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response provide a clear yes/no verdict on commit safety with supporting evidence from code analysis — OR, when no C++ files are staged, correctly state there is nothing to commit and that it is safe to commit? Either a verdict backed by change analysis OR an explicit clean-tree 'nothing staged / safe' verdict passes. A vague or off-topic answer fails.",
+          "threshold": 0.6,
+          "description": "Should provide clear safety verdict OR correctly report no staged changes (LLM judge; clean-tree robust, Issue #16493)"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-03",
+      "prompt": "커밋 영향 분석 — 어떤 BP가 깨질 수 있어?",
+      "assertions": [
+        {
+          "type": "content_contains_any",
+          "values": ["Blueprint", "BP_", "블루프린트", "affected", "영향", "no C++", "nothing to commit", "no staged", "safe to commit", "변경 없", "커밋할"],
+          "description": "Should reference affected Blueprints when changes are staged, OR correctly report no staged C++ changes on a clean tree (Issue #16493: clean-tree robust; an off-topic answer still matches none)"
+        },
+        {
+          "type": "tool_usage_any",
+          "value": ["git", "ue_analyze_symbols"],
+          "description": "Should detect staged changes via git, and/or use ue_analyze_symbols for cross-BP dependency analysis. On a clean tree the skill short-circuits at git change-detection (Issue #16493: clean-tree robust; ue_analyze_symbols requires a real tool call — git may also be credited from the report text, so on-topic signal is enforced by the sibling content_contains_any/llm_judge assertions and the harness MCP-reachability gate)"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response either (a) identify which Blueprints/assets are affected by the staged C++ changes — naming BPs, cross-references, or C++→BP dependencies — OR (b), when no C++ files are staged, correctly report that there is nothing to analyze / no affected Blueprints? Either a concrete affected-BP impact analysis OR an explicit 'no staged changes / no impact' verdict passes. A vague, off-topic, or non-impact answer fails.",
+          "threshold": 0.6,
+          "description": "Should identify affected BPs when changes staged, OR correctly report no staged C++ changes (LLM judge; clean-tree robust, Issue #16493)"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "{SERVER_NAME}": {
+      "command": "{PLUGIN_MCP_DIR}/bin/narshamcp.exe",
+      "args": ["--project-path", "{PROJECT_DIR}", "--engine-path", "{ENGINE_DIR}"],
+      "env": {
+        "RUST_LOG": "error"
+      }
+    }
+  }
+}

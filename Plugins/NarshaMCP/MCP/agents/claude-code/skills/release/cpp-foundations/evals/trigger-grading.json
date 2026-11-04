@@ -1,0 +1,97 @@
+{
+  "skill": "cpp-foundations",
+  "version": "1.1.0",
+  "description": "Trigger precision eval. TP cases use literal macro/specifier names (avoids ue-explain hijack via '방법/차이' wording). NOTE: skill backfires on medium/hard probes per #13003 A/B — PR has HOLD recommendation. Triggers are wired correctly so if (when) merged, routing works.",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "UPROPERTY EditDefaultsOnly EditAnywhere 정의",
+      "should_trigger": true,
+      "reason": "UPROPERTY specifier — direct"
+    },
+    {
+      "id": "TP-02",
+      "query": "BlueprintAssignable UPROPERTY delegate property 패턴",
+      "should_trigger": true,
+      "reason": "BlueprintAssignable + delegate"
+    },
+    {
+      "id": "TP-03",
+      "query": "DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams 매크로 사용",
+      "should_trigger": true,
+      "reason": "Delegate macro arity — skill section 7"
+    },
+    {
+      "id": "TP-04",
+      "query": "GENERATED_BODY UCLASS 위치 첫 줄",
+      "should_trigger": true,
+      "reason": "Reflection macro — skill section 6"
+    },
+    {
+      "id": "TP-05",
+      "query": "TArray RemoveAt 인덱스 제거 시그니처",
+      "should_trigger": true,
+      "reason": "TArray container API — skill section 8"
+    },
+    {
+      "id": "TP-06",
+      "query": "DECLARE_LOG_CATEGORY_EXTERN 헤더 DEFINE_LOG_CATEGORY cpp",
+      "should_trigger": true,
+      "reason": "Log category macros — skill section 10"
+    },
+    {
+      "id": "TP-07",
+      "query": "TObjectPtr UE5 raw pointer UPROPERTY 멤버",
+      "should_trigger": true,
+      "reason": "Smart pointer family — skill section 9"
+    },
+    {
+      "id": "TP-08",
+      "query": "FName ToString FString 변환",
+      "should_trigger": true,
+      "reason": "FString/FName/FText — skill section 11"
+    },
+    {
+      "id": "TP-09",
+      "query": "UFUNCTION Server Reliable WithValidation RPC",
+      "should_trigger": true,
+      "reason": "UFUNCTION RPC specifiers — skill section 4"
+    },
+    {
+      "id": "TP-10",
+      "query": "UPROPERTY Transient SaveGame Replicated 직렬화",
+      "should_trigger": true,
+      "reason": "UPROPERTY networking/serialization — skill section 3"
+    },
+    {
+      "id": "TN-01",
+      "query": "UAssetManager로 PrimaryAsset 비동기 로드",
+      "should_trigger": false,
+      "reason": "Asset Manager API — data-assets-tables, not cpp-foundations"
+    },
+    {
+      "id": "TN-02",
+      "query": "GA_Melee GameplayTag ASC 등록",
+      "should_trigger": false,
+      "reason": "GAS Ability — gas-development"
+    },
+    {
+      "id": "TN-03",
+      "query": "M_Stone 머터리얼 노드 그래프 분석",
+      "should_trigger": false,
+      "reason": "Material — material-analysis"
+    },
+    {
+      "id": "TN-04",
+      "query": "BP_MyCharacter Blueprint 컴포넌트 분석",
+      "should_trigger": false,
+      "reason": "Blueprint — blueprint-flow"
+    },
+    {
+      "id": "TN-05",
+      "query": "MyActor.cpp IsPaused 함수 생성",
+      "should_trigger": false,
+      "reason": "Code generation — ue_generate_code"
+    }
+  ]
+}

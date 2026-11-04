@@ -1,0 +1,38 @@
+{
+  "skill_name": "ue-build-automate",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "프로젝트 빌드해줘",
+      "expected_output": "Build pipeline execution with platform/config auto-detection, target discovery from .Target.cs, and build results",
+      "files": [],
+      "assertions": [
+        {"type": "tool_usage", "value": "ue_build_pipeline", "description": "Should use ue_build_pipeline for build execution"},
+        {"type": "content_pattern", "value": "(build_editor|Development|Shipping|Win64|configuration|platform|target)", "description": "Should reference build configuration and platform"},
+        {"type": "llm_judge", "criteria": "Does the response confirm build parameters and execute or prepare to execute the build?", "threshold": 0.6, "description": "Build execution with proper parameters"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Cook for Windows",
+      "expected_output": "Cook pipeline execution with Windows platform specification, content cooking parameters, and results",
+      "files": [],
+      "assertions": [
+        {"type": "tool_usage", "value": "ue_build_pipeline", "description": "Should use ue_build_pipeline for cooking"},
+        {"type": "content_contains_any", "values": ["cook", "Windows", "platform", "content", "쿡"], "description": "Should reference cooking for Windows platform"},
+        {"type": "content_pattern", "value": "(cook|platform.*Windows|Win64|Development|Shipping)", "description": "Should specify platform and configuration"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "커맨드릿 CompileAllBlueprints 실행해줘",
+      "expected_output": "Commandlet execution via ue_build_pipeline with CompileAllBlueprints name and execution results",
+      "files": [],
+      "assertions": [
+        {"type": "tool_usage", "value": "ue_build_pipeline", "description": "Should use ue_build_pipeline for commandlet execution"},
+        {"type": "content_contains_any", "values": ["commandlet", "CompileAllBlueprints", "커맨드릿", "run_commandlet"], "description": "Should reference the specific commandlet"},
+        {"type": "content_pattern", "value": "(run_commandlet|commandlet_name|result|success|fail|complete)", "description": "Should show commandlet execution with results"}
+      ]
+    }
+  ]
+}

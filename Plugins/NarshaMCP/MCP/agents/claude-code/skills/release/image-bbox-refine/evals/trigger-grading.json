@@ -1,0 +1,90 @@
+{
+  "skill": "image-bbox-refine",
+  "description": "Trigger precision eval: image-bbox-refine must activate on stage1_analysis.json bbox coordinate refinement queries (closed-loop visual). NOT on fresh image-to-spec / brief iteration / screenshot capture / visual regression.",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "stage1_analysis.json bbox 보정해줘",
+      "should_trigger": true,
+      "reason": "Korean: literal 'bbox 보정' core trigger",
+      "language": "ko"
+    },
+    {
+      "id": "tp-02",
+      "query": "bbox refine closed-loop 실행",
+      "should_trigger": true,
+      "reason": "English: literal 'bbox refine' + 'closed-loop' trigger",
+      "language": "en"
+    },
+    {
+      "id": "tp-03",
+      "query": "closed-loop bbox iterate until convergence",
+      "should_trigger": true,
+      "reason": "English: 'closed-loop bbox' + 'bbox iterate' compound trigger",
+      "language": "en"
+    },
+    {
+      "id": "tp-04",
+      "query": "stage1 bbox 보정 진행해줘",
+      "should_trigger": true,
+      "reason": "Korean: 'stage1 bbox 보정' explicit trigger",
+      "language": "ko"
+    },
+    {
+      "id": "tp-05",
+      "query": "wf_20260501_a1b2c3 워크플로우의 bbox iterate",
+      "should_trigger": true,
+      "reason": "English: 'bbox iterate' trigger with workflow id",
+      "language": "en"
+    },
+    {
+      "id": "tn-01",
+      "query": "이미지로 기획서 만들어줘",
+      "should_trigger": false,
+      "reason": "Negative: '이미지로 기획서' belongs to image-to-design-spec (Stage 1+2 fresh entry, not Stage 1.5 refinement)",
+      "language": "ko"
+    },
+    {
+      "id": "tn-02",
+      "query": "디자인 문서 개선 루프 돌려",
+      "should_trigger": false,
+      "reason": "Negative: '디자인 문서 개선' belongs to design-doc-iterate (Stage 2 content loop)",
+      "language": "ko"
+    },
+    {
+      "id": "tn-03",
+      "query": "PIE 화면 스크린샷 캡처",
+      "should_trigger": false,
+      "reason": "Negative: 'PIE 스크린샷' belongs to screenshot-vision-analyzer",
+      "language": "ko"
+    },
+    {
+      "id": "tn-04",
+      "query": "골든 이미지 비교 visual regression",
+      "should_trigger": false,
+      "reason": "Negative: 'visual regression' / 'golden image' belongs to visual-regression-test",
+      "language": "en"
+    },
+    {
+      "id": "tn-05",
+      "query": "GDD 완성해서 GitHub sync",
+      "should_trigger": false,
+      "reason": "Negative: 'GDD 완성' belongs to design-doc-finalize (Stage 3+4)",
+      "language": "ko"
+    },
+    {
+      "id": "tn-06",
+      "query": "design from image stage 1+2 자동화",
+      "should_trigger": false,
+      "reason": "Negative: 'design from image' belongs to image-to-design-spec, not refinement",
+      "language": "en"
+    },
+    {
+      "id": "tn-07",
+      "query": "기획서 A/B 테스트 실행",
+      "should_trigger": false,
+      "reason": "Negative: '기획서 A/B 테스트' belongs to design-doc-ab-test",
+      "language": "ko"
+    }
+  ]
+}

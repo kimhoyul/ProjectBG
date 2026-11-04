@@ -1,0 +1,127 @@
+{
+  "skill": "lighting-workflow",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for lighting-workflow skill. Tests correct activation on light placement/search/build queries, and correct rejection of audio, animation, and PCG queries.",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "조명 추가해줘 — L_Dungeon 레벨 복도에 포인트 라이트 3개 배치. 강도 5000lm, 색온도 3200K",
+      "should_trigger": true,
+      "reason": "Point light placement with specific level, quantity, intensity, color temperature, and radius"
+    },
+    {
+      "id": "TP-02",
+      "query": "i need to spawn a spotlight above the boss arena in L_BossRoom. position roughly (2400, -1800, 600), pointing downward with a 45 degree cone angle. intensity around 15000 cd, warm white",
+      "should_trigger": true,
+      "reason": "Spotlight spawn with specific coordinates, cone angle, and intensity"
+    },
+    {
+      "id": "TP-03",
+      "query": "L_Village 레벨에 라이트가 몇 개나 있는지 검색해줘. 타입별로 PointLight, SpotLight, RectLight 각각 몇 개인지 알고 싶고, 혹시 Stationary로 안 바뀐 Movable 라이트가 있으면 찾아줘",
+      "should_trigger": true,
+      "reason": "Light audit in specific level — count by type and find mobility issues"
+    },
+    {
+      "id": "TP-04",
+      "query": "실내 주방 씬인데 천장에 RectLight 하나 달고 싶어. 형광등 느낌으로 5600K, 강도 2000lm, 소스 사이즈 120x30cm 정도. 그리고 싱크대 위에 보조 SpotLight도 하나 추가해줘",
+      "should_trigger": true,
+      "reason": "Indoor lighting setup with RectLight specs and secondary SpotLight placement"
+    },
+    {
+      "id": "TP-05",
+      "query": "조명 추가 — 캐릭터 촬영인데 3점 조명 세팅. Key Light는 SpotLight로 spawn light",
+      "should_trigger": true,
+      "reason": "Three-point lighting with specific angle, type, and relative intensity ratios"
+    },
+    {
+      "id": "TP-06",
+      "query": "라이팅 빌드 돌려야 하는데 L_OpenWorld가 너무 커서 시간이 오래 걸려. Production 퀄리티로 빌드하면 좋겠고, Lightmap Resolution이 너무 높은 액터들 먼저 확인할 수 있어?",
+      "should_trigger": true,
+      "reason": "Lighting build with quality setting and lightmap resolution pre-check for large level"
+    },
+    {
+      "id": "TP-07",
+      "query": "setting up studio lighting for a product showcase cinematic. need a large key softbox (rect light, 200x200cm) at 45 degrees, a fill bounce, and a backlight rim. the product is centered at origin on a turntable",
+      "should_trigger": true,
+      "reason": "Studio lighting setup with softbox dimensions and product photography positioning"
+    },
+    {
+      "id": "TP-08",
+      "query": "L_Corridor에 있는 SpotLight_Hallway01~05 강도가 너무 세서 바닥에 핫스팟이 생겨. 전부 8000cd에서 3000cd로 줄이고 Inner Cone 15도, Outer Cone 35도로 바꿔줘",
+      "should_trigger": true,
+      "reason": "Batch spotlight intensity and cone angle adjustment with specific named actors"
+    },
+    {
+      "id": "TP-09",
+      "query": "미술관 씬에서 벽에 걸린 그림마다 RectLight를 위에서 비추고 싶어. 색상은 약간 따뜻한 화이트 (4500K), 크기는 80x15cm, 강도 1500lm. 총 6개 그림이 있는데 위치는 내가 알려줄게",
+      "should_trigger": true,
+      "reason": "Multiple RectLight placements for art gallery with specific color temp and dimensions"
+    },
+    {
+      "id": "TP-10",
+      "query": "디렉셔널 라이트 방향이 좀 이상한데, 해가 동쪽에서 뜨는 느낌으로 Rotation (0, -30, 150) 정도로 잡아주고. AtmosphericFog이랑 SkyLight도 같이 조정해야 자연스러울 거 같아",
+      "should_trigger": true,
+      "reason": "Directional light rotation with specific angles and atmospheric/sky light coordination"
+    },
+    {
+      "id": "TN-01",
+      "query": "사운드 재생해줘 배경음악",
+      "should_trigger": false,
+      "reason": "Background music playback — belongs to audio-workflow skill"
+    },
+    {
+      "id": "TN-02",
+      "query": "AnimBP 분석해줘",
+      "should_trigger": false,
+      "reason": "AnimBP analysis — belongs to animation-workflow skill"
+    },
+    {
+      "id": "TN-03",
+      "query": "PCG 그래프 성능 감사",
+      "should_trigger": false,
+      "reason": "PCG performance audit — belongs to pcg-workflow skill"
+    },
+    {
+      "id": "TN-04",
+      "query": "M_Rock 머티리얼 파라미터 분석",
+      "should_trigger": false,
+      "reason": "Material parameter analysis — belongs to material-analysis skill"
+    },
+    {
+      "id": "TN-05",
+      "query": "캐릭터 만들어줘",
+      "should_trigger": false,
+      "reason": "Character creation — belongs to ue-scaffold skill"
+    },
+    {
+      "id": "TN-06",
+      "query": "Niagara 이미시터 파라미터 설정",
+      "should_trigger": false,
+      "reason": "Niagara emitter parameters — belongs to ue_manage_niagara direct MCP call"
+    },
+    {
+      "id": "TN-07",
+      "query": "블루프린트 노드 추가해줘",
+      "should_trigger": false,
+      "reason": "Blueprint node addition — belongs to blueprint-flow or ue_manage_blueprint"
+    },
+    {
+      "id": "TN-08",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "Project diagnostic — belongs to ue-audit skill"
+    },
+    {
+      "id": "TN-09",
+      "query": "3D 사운드 감쇠 설정",
+      "should_trigger": false,
+      "reason": "3D sound attenuation — belongs to audio-workflow skill"
+    },
+    {
+      "id": "TN-10",
+      "query": "GAS ability 개발해줘",
+      "should_trigger": false,
+      "reason": "GAS ability development — belongs to gas-development skill"
+    }
+  ]
+}

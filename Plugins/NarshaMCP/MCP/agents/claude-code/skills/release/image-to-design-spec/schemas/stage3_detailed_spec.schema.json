@@ -1,0 +1,122 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://narshamcp.dev/schemas/design-from-image/stage3_detailed_spec.schema.json",
+  "title": "Design-from-Image Stage 3 Detailed Specification",
+  "description": "Domain-branched detailed spec output of /design-doc-finalize --stage 3. Branches: umg (UI), gas (system_diagram), art (concept_art), mixed. Per-spec arrays may be empty arrays OR (3rd-pilot variant) dict objects keyed by id — schema accepts both shapes via array-or-object.",
+  "type": "object",
+  "required": [
+    "$schema_version",
+    "workflow_id",
+    "stage",
+    "generated_at"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "$schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "workflow_id": {
+      "type": "string",
+      "pattern": "^wf_[0-9]{8}_[0-9a-f]{6}$"
+    },
+    "stage": {
+      "type": ["integer", "string"],
+      "description": "Stage number 3 (integer) or 'stage3' (string in some pilots)."
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "evaluator": {
+      "type": ["string", "null"]
+    },
+    "domain_branch": {
+      "type": "string",
+      "description": "1st pilot uses domain_branch (e.g., 'ui_mockup_primary'); 2nd pilot uses branch_used; 3rd pilot uses dominant_domain. Optional — at least ONE of (domain_branch, branch_used, dominant_domain) recommended. Schema is permissive (no enum) since pilot-specific naming conventions are still settling — observed values include `umg`, `gas`, `art`, `mixed`, `ui_mockup`, `ui_mockup_primary`, `system_diagram`, `concept_art`."
+    },
+    "branch_used": {
+      "type": "string",
+      "description": "2nd-pilot field, equivalent role to domain_branch."
+    },
+    "dominant_domain": {
+      "type": "string",
+      "description": "3rd-pilot field, equivalent role to domain_branch."
+    },
+    "primary_domain": {
+      "type": "string",
+      "description": "2nd-pilot alternate field for primary domain identifier."
+    },
+    "branch_rationale": {
+      "type": "string"
+    },
+    "domain_distribution": {
+      "type": "object",
+      "additionalProperties": {"type": "number"}
+    },
+    "umg_specs": {
+      "$ref": "#/$defs/specsArrayOrObject"
+    },
+    "gas_specs": {
+      "$ref": "#/$defs/specsArrayOrObject"
+    },
+    "art_specs": {
+      "$ref": "#/$defs/specsArrayOrObject"
+    },
+    "art_specs_lite": {
+      "$ref": "#/$defs/specsArrayOrObject",
+      "description": "1st-pilot variant for art_specs (minimal cross-references)."
+    },
+    "gas_specs_lite": {
+      "$ref": "#/$defs/specsArrayOrObject",
+      "description": "1st-pilot variant for gas_specs (minimal cross-references)."
+    },
+    "economy_specs": {
+      "$ref": "#/$defs/specsArrayOrObject"
+    },
+    "statetree_specs": {
+      "$ref": "#/$defs/specsArrayOrObject"
+    },
+    "replication_specs": {
+      "$ref": "#/$defs/specsArrayOrObject"
+    },
+    "tracks": {
+      "type": ["object", "array", "null"],
+      "description": "3rd-pilot field: workflow track metadata."
+    },
+    "multi_domain": {
+      "type": ["object", "array", "boolean", "null"]
+    },
+    "stage3_summary": {
+      "type": ["string", "object", "null"]
+    },
+    "stage4_handoff_summary": {
+      "type": ["string", "object", "null"]
+    },
+    "ip_safety_check": {
+      "type": ["object", "boolean", "string", "null"]
+    },
+    "mcp_calls_planned": {
+      "type": ["array", "object", "integer", "null"]
+    }
+  },
+  "$defs": {
+    "specsArrayOrObject": {
+      "description": "1st/2nd pilot use array of {id, ...} objects. 3rd pilot uses dict keyed by id. Both shapes accepted; null permitted when domain branch not selected.",
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": true
+        },
+        {"type": "null"}
+      ]
+    }
+  }
+}

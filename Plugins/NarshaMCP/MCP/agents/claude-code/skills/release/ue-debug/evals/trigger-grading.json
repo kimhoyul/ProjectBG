@@ -1,0 +1,126 @@
+{
+  "skill": "ue-debug",
+  "description": "Trigger precision eval: verify ue-debug activates on error/crash/fix queries and NOT on explain/scaffold/impact/audit/validate queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "빌드 왜 실패했는지 디버그 분석해줘",
+      "should_trigger": true,
+      "reason": "Korean error fix pattern - core trigger ('에러', '해결해줘')"
+    },
+    {
+      "id": "tp-02",
+      "query": "런타임 크래시 원인 찾아줘",
+      "should_trigger": true,
+      "reason": "Korean crash analysis ('크래시', '원인')"
+    },
+    {
+      "id": "tp-03",
+      "query": "디버그 — Fix this linker error, 왜 이런지 분석",
+      "should_trigger": true,
+      "reason": "English 'fix' + 'error' - core trigger"
+    },
+    {
+      "id": "tp-04",
+      "query": "Why is BP_Player not working?",
+      "should_trigger": true,
+      "reason": "English 'not working' pattern"
+    },
+    {
+      "id": "tp-05",
+      "query": "디버그 — 컴파일 에러 왜 이런지 상세 분석",
+      "should_trigger": true,
+      "reason": "Korean compile error analysis ('에러')"
+    },
+    {
+      "id": "tp-06",
+      "query": "NullPtr crash in TakeDamage",
+      "should_trigger": true,
+      "reason": "English 'crash' keyword with specific crash type"
+    },
+    {
+      "id": "tp-07",
+      "query": "LNK2019 unresolved external symbol error",
+      "should_trigger": true,
+      "reason": "Specific linker error code - clearly a debug scenario"
+    },
+    {
+      "id": "tp-08",
+      "query": "Blueprint 컴파일이 안돼",
+      "should_trigger": true,
+      "reason": "Korean '안돼' (not working) pattern"
+    },
+    {
+      "id": "tp-09",
+      "query": "Hot reload failed with error C2011",
+      "should_trigger": true,
+      "reason": "English 'failed' + 'error' with specific error code"
+    },
+    {
+      "id": "tp-10",
+      "query": "Assertion failed: IsValid() in UObject::ProcessEvent",
+      "should_trigger": true,
+      "reason": "Runtime assertion failure - clearly a debug/crash scenario"
+    },
+    {
+      "id": "tn-01",
+      "query": "ACharacter 어떻게 동작해?",
+      "should_trigger": false,
+      "reason": "Explanation request -> ue-explain (contains '어떻게 동작')"
+    },
+    {
+      "id": "tn-02",
+      "query": "캐릭터 만들어줘",
+      "should_trigger": false,
+      "reason": "Creation request -> ue-scaffold (contains '만들어줘')"
+    },
+    {
+      "id": "tn-03",
+      "query": "APawn 변경하면 영향 범위 분석해줘",
+      "should_trigger": false,
+      "reason": "Impact analysis -> ue-impact (contains '변경하면', '영향')"
+    },
+    {
+      "id": "tn-04",
+      "query": "프로젝트 건강 상태 확인해줘",
+      "should_trigger": false,
+      "reason": "Health check -> ue-audit (contains '건강', '상태 확인')"
+    },
+    {
+      "id": "tn-05",
+      "query": "에셋 유효성 검사해줘",
+      "should_trigger": false,
+      "reason": "Validation -> ue-validate (contains '유효성', '검사'). Note: '검사' is similar to debugging but context is validation"
+    },
+    {
+      "id": "tn-06",
+      "query": "Explain why TakeDamage works this way",
+      "should_trigger": false,
+      "reason": "Explanation -> ue-explain (contains 'explain', 'why...works'). Mentions TakeDamage but intent is understanding, not fixing"
+    },
+    {
+      "id": "tn-07",
+      "query": "Create a damage system with error handling",
+      "should_trigger": false,
+      "reason": "Creation -> ue-scaffold (contains 'create'). Mentions 'error' but in the context of building error handling, not fixing errors"
+    },
+    {
+      "id": "tn-08",
+      "query": "Set up a crash reporter widget",
+      "should_trigger": false,
+      "reason": "Creation -> ue-scaffold (contains 'set up'). Mentions 'crash' but intent is to build a crash reporter, not debug a crash"
+    },
+    {
+      "id": "tn-09",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "Audit/diagnostic -> ue-audit (contains '진단'). Similar to debugging but project-wide health, not specific error"
+    },
+    {
+      "id": "tn-10",
+      "query": "Build an inventory system",
+      "should_trigger": false,
+      "reason": "Creation -> ue-scaffold (contains 'build'). 'Build' here means create/construct, not build-compile"
+    }
+  ]
+}

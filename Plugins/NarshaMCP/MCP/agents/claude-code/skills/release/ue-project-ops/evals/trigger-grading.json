@@ -1,0 +1,126 @@
+{
+  "skill": "ue-project-ops",
+  "description": "Trigger precision eval: verify ue-project-ops activates on WP/DDC/source-control infrastructure queries and NOT on audit/cvar/validate queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "DDC 상태 확인해줘",
+      "should_trigger": true,
+      "reason": "Korean 'DDC 상태' — DDC health trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "World Partition status",
+      "should_trigger": true,
+      "reason": "English 'World Partition' — WP status trigger"
+    },
+    {
+      "id": "tp-03",
+      "query": "소스 컨트롤 상태 확인",
+      "should_trigger": true,
+      "reason": "Korean '소스 컨트롤' — source control trigger"
+    },
+    {
+      "id": "tp-04",
+      "query": "DDC health overview",
+      "should_trigger": true,
+      "reason": "English 'DDC health' — direct trigger (avoids 'health check' → ue-audit)"
+    },
+    {
+      "id": "tp-05",
+      "query": "프로젝트 인프라 상태",
+      "should_trigger": true,
+      "reason": "Korean '프로젝트 인프라' — project infrastructure trigger"
+    },
+    {
+      "id": "tp-06",
+      "query": "월드 파티션 상태 확인해줘",
+      "should_trigger": true,
+      "reason": "Korean '월드 파티션' — exact WP trigger from routing.json"
+    },
+    {
+      "id": "tp-07",
+      "query": "소스 컨트롤 확인해줘",
+      "should_trigger": true,
+      "reason": "Korean '소스 컨트롤' — source control trigger (avoids en 'control' → ue-cvar-explorer)"
+    },
+    {
+      "id": "tp-08",
+      "query": "월드 파티션 상태",
+      "should_trigger": true,
+      "reason": "Korean '월드 파티션' — World Partition Korean trigger"
+    },
+    {
+      "id": "tp-09",
+      "query": "project ops 대시보드 보여줘",
+      "should_trigger": true,
+      "reason": "English 'project ops' — exact trigger pattern from routing.json"
+    },
+    {
+      "id": "tp-10",
+      "query": "DDC 상태 분석해줘",
+      "should_trigger": true,
+      "reason": "Korean 'DDC 상태' — exact trigger pattern from routing.json"
+    },
+    {
+      "id": "tn-01",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "TN: '진단' is ue-audit trigger. Broad project health, not specific infrastructure."
+    },
+    {
+      "id": "tn-02",
+      "query": "Is this project healthy?",
+      "should_trigger": false,
+      "reason": "TN: 'healthy' is ue-audit trigger. General health check, not WP/DDC/SC."
+    },
+    {
+      "id": "tn-03",
+      "query": "r.Shadow.MaxResolution 뭐야?",
+      "should_trigger": false,
+      "reason": "TN: CVar query is ue-cvar-explorer trigger. Config search, not infrastructure."
+    },
+    {
+      "id": "tn-04",
+      "query": "에셋 유효성 검사해줘",
+      "should_trigger": false,
+      "reason": "TN: '유효성 검사' is ue-validate trigger. Asset validation, not infrastructure."
+    },
+    {
+      "id": "tn-05",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "TN: '에러 해결' is ue-debug trigger. Error fixing, not project ops."
+    },
+    {
+      "id": "tn-06",
+      "query": "경고 요약해줘",
+      "should_trigger": false,
+      "reason": "TN: '경고 요약' is ue-audit trigger. Warning summary, not infrastructure status."
+    },
+    {
+      "id": "tn-07",
+      "query": "성능 분석해줘",
+      "should_trigger": false,
+      "reason": "TN: '성능 분석' is ue-insights-profiler trigger. Performance, not infrastructure."
+    },
+    {
+      "id": "tn-08",
+      "query": "프로젝트 빌드해줘",
+      "should_trigger": false,
+      "reason": "TN: '빌드' is ue-build-automate trigger. Build pipeline, not project ops."
+    },
+    {
+      "id": "tn-09",
+      "query": "메시지 로그 확인해줘",
+      "should_trigger": false,
+      "reason": "TN: '메시지 로그' is ue-audit trigger. Editor message log, not infrastructure."
+    },
+    {
+      "id": "tn-10",
+      "query": "auto fix warnings",
+      "should_trigger": false,
+      "reason": "TN: 'auto fix warnings' is ue-audit trigger. Warning remediation, not project ops."
+    }
+  ]
+}

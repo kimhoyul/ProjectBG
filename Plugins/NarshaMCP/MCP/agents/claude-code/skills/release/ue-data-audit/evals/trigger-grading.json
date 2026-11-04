@@ -1,0 +1,85 @@
+{
+  "skill": "ue-data-audit",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for ue-data-audit (Issue #20623). TP cases exercise the audit/health-rollup trigger surface (KO+EN). TN cases test rejection of the C++ API reference twin (data-assets-tables), other audit domains, and single-op MCP queries that should route to direct tool calls.",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "데이터 테이블 감사해줘",
+      "should_trigger": true,
+      "reason": "Canonical KO trigger — data table audit"
+    },
+    {
+      "id": "TP-02",
+      "query": "테이블 건강도 리포트 뽑아줘",
+      "should_trigger": true,
+      "reason": "Table health report — direct trigger phrase"
+    },
+    {
+      "id": "TP-03",
+      "query": "프로젝트의 데이터 에셋 전부 훑고 문제 요약해줘",
+      "should_trigger": true,
+      "reason": "Issue #20623 motivating query — enumerate + validate + summarize"
+    },
+    {
+      "id": "TP-04",
+      "query": "audit data tables in this project",
+      "should_trigger": true,
+      "reason": "Canonical EN trigger"
+    },
+    {
+      "id": "TP-05",
+      "query": "are my data tables healthy",
+      "should_trigger": true,
+      "reason": "Health question form — audit intent"
+    },
+    {
+      "id": "TP-06",
+      "query": "데이터 테이블 일괄 검증해줘",
+      "should_trigger": true,
+      "reason": "Batch table validation — Phase 2 fan-out surface"
+    },
+    {
+      "id": "TP-07",
+      "query": "validate all data tables",
+      "should_trigger": true,
+      "reason": "Advertised EN trigger — must beat ue-validate's broad 'validate' (carve-out, ns-review WARNING)"
+    },
+    {
+      "id": "TP-08",
+      "query": "data health check",
+      "should_trigger": true,
+      "reason": "Advertised EN trigger — must beat ue-audit's broad 'health check' (carve-out, ns-review WARNING)"
+    },
+    {
+      "id": "TN-01",
+      "query": "UAssetManager ChangeBundleStateForPrimaryAssets 시그니처 알려줘",
+      "should_trigger": false,
+      "reason": "C++ API reference — data-assets-tables territory"
+    },
+    {
+      "id": "TN-02",
+      "query": "UDataTable FindRow 사용법",
+      "should_trigger": false,
+      "reason": "C++ row lookup pattern — data-assets-tables territory"
+    },
+    {
+      "id": "TN-03",
+      "query": "물리 에셋 전체 감사해줘",
+      "should_trigger": false,
+      "reason": "Physics domain — ue-physics-audit"
+    },
+    {
+      "id": "TN-04",
+      "query": "프로젝트 감사해줘",
+      "should_trigger": false,
+      "reason": "Whole-project system health — ue-audit"
+    },
+    {
+      "id": "TN-05",
+      "query": "DT_Weapons 를 참조하는 에셋 찾아줘",
+      "should_trigger": false,
+      "reason": "Single reference query — direct ue_search_assets(find_references) / ue-impact"
+    }
+  ]
+}

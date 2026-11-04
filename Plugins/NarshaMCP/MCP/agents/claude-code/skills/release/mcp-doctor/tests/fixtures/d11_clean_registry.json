@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "entries": {
+    "single_hash": {
+      "project_path": "C:/Projects/MyProj",
+      "port": 19674,
+      "dashboard_port": 19774,
+      "pid": 12345,
+      "started_at": "2026-05-13T01:00:00+00:00",
+      "status": "Running",
+      "crash_info": null,
+      "degraded": false
+    }
+  }
+}

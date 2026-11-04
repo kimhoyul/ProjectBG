@@ -1,0 +1,109 @@
+{
+  "skill": "ue-diff",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for ue-diff skill — entity/config/asset cross-check & mismatch detection (replication audit, hierarchy delta, config cascade, binary .uasset compare). Added in Issue #20718.",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "ALyraPlayerState 리플리케이션 감사",
+      "should_trigger": true,
+      "reason": "Replication audit of a class → ue-diff"
+    },
+    {
+      "id": "TP-02",
+      "query": "DefaultEngine vs WindowsEngine 설정 비교",
+      "should_trigger": true,
+      "reason": "Config comparison → compare_configs"
+    },
+    {
+      "id": "TP-03",
+      "query": "ALyraCharacter vs ACharacter 계층 비교",
+      "should_trigger": true,
+      "reason": "Hierarchy delta vs base class → diff_hierarchy"
+    },
+    {
+      "id": "TP-04",
+      "query": "클래스 차이 분석",
+      "should_trigger": true,
+      "reason": "Class delta keyword → ue-diff"
+    },
+    {
+      "id": "TP-05",
+      "query": "compare configs DefaultEngine WindowsEngine",
+      "should_trigger": true,
+      "reason": "Compare configs (EN) → ue-diff"
+    },
+    {
+      "id": "TP-06",
+      "query": "diff hierarchy ALyraCharacter",
+      "should_trigger": true,
+      "reason": "Diff hierarchy (EN) → ue-diff"
+    },
+    {
+      "id": "TP-07",
+      "query": "override cascade",
+      "should_trigger": true,
+      "reason": "Config override cascade → compare_config_chain"
+    },
+    {
+      "id": "TP-08",
+      "query": "compare assets",
+      "should_trigger": true,
+      "reason": "Binary asset compare (NEW #20718 trigger) → compare_assets"
+    },
+    {
+      "id": "TP-09",
+      "query": "NS_Confetti vs NS_Explosion 에셋 비교",
+      "should_trigger": true,
+      "reason": "Asset compare KO (NEW #20718 trigger) → compare_assets"
+    },
+    {
+      "id": "TP-10",
+      "query": "uasset diff",
+      "should_trigger": true,
+      "reason": "uasset diff (NEW #20718 trigger) → compare_assets"
+    },
+    {
+      "id": "TP-11",
+      "query": "BP_v1 vs BP_v2 에셋 차이",
+      "should_trigger": true,
+      "reason": "Asset diff KO (NEW #20718 trigger) → compare_assets"
+    },
+    {
+      "id": "TN-01",
+      "query": "what changed between HEAD~3 and HEAD",
+      "should_trigger": false,
+      "reason": "Revision-range diff — belongs to ue-vcs-diff"
+    },
+    {
+      "id": "TN-02",
+      "query": "svn diff 분석",
+      "should_trigger": false,
+      "reason": "VCS revision diff — belongs to ue-vcs-diff"
+    },
+    {
+      "id": "TN-03",
+      "query": "커밋 전 안전한지 검사",
+      "should_trigger": false,
+      "reason": "Pre-commit safety — belongs to ue-pre-commit"
+    },
+    {
+      "id": "TN-04",
+      "query": "APawn 변경하면 뭐가 깨져",
+      "should_trigger": false,
+      "reason": "Hypothetical change impact — belongs to ue-impact"
+    },
+    {
+      "id": "TN-05",
+      "query": "changelist diff @12345",
+      "should_trigger": false,
+      "reason": "P4 changelist revision diff — belongs to ue-vcs-diff"
+    },
+    {
+      "id": "TN-06",
+      "query": "업데이트해줘",
+      "should_trigger": false,
+      "reason": "VCS sync/update — belongs to vcs-update"
+    }
+  ]
+}

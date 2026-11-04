@@ -1,0 +1,109 @@
+{
+  "skill": "ue-vcs-diff",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for ue-vcs-diff skill — VCS revision-range change detection + per-file structured diff (SVN/Git/P4). Added in Issue #20718.",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "What changed between HEAD~3 and HEAD?",
+      "should_trigger": true,
+      "reason": "Git revision-range change detection → compare_revision"
+    },
+    {
+      "id": "TP-02",
+      "query": "svn diff 분석해줘",
+      "should_trigger": true,
+      "reason": "SVN revision diff → compare_revision"
+    },
+    {
+      "id": "TP-03",
+      "query": "리비전 비교 해줘",
+      "should_trigger": true,
+      "reason": "Revision comparison KO → compare_revision"
+    },
+    {
+      "id": "TP-04",
+      "query": "compare revisions",
+      "should_trigger": true,
+      "reason": "Compare revisions EN → compare_revision"
+    },
+    {
+      "id": "TP-05",
+      "query": "changelist diff @12345",
+      "should_trigger": true,
+      "reason": "P4 changelist diff → compare_revision"
+    },
+    {
+      "id": "TP-06",
+      "query": "변경된 에셋 분석",
+      "should_trigger": true,
+      "reason": "Changed-asset analysis across a revision → ue-vcs-diff"
+    },
+    {
+      "id": "TP-07",
+      "query": "커밋 변경사항 뭐가 바뀌었어",
+      "should_trigger": true,
+      "reason": "Commit change set KO → compare_revision"
+    },
+    {
+      "id": "TP-08",
+      "query": "changed files analysis",
+      "should_trigger": true,
+      "reason": "Changed files analysis EN → compare_revision"
+    },
+    {
+      "id": "TP-09",
+      "query": "리비전 diff",
+      "should_trigger": true,
+      "reason": "Revision diff KO → compare_revision"
+    },
+    {
+      "id": "TN-01",
+      "query": "ALyraPlayerState 리플리케이션 감사",
+      "should_trigger": false,
+      "reason": "Entity replication audit — belongs to ue-diff"
+    },
+    {
+      "id": "TN-02",
+      "query": "DefaultEngine vs WindowsEngine 설정 비교",
+      "should_trigger": false,
+      "reason": "Config comparison — belongs to ue-diff"
+    },
+    {
+      "id": "TN-03",
+      "query": "계층 비교",
+      "should_trigger": false,
+      "reason": "Hierarchy delta — belongs to ue-diff"
+    },
+    {
+      "id": "TN-04",
+      "query": "compare configs",
+      "should_trigger": false,
+      "reason": "Compare configs — belongs to ue-diff"
+    },
+    {
+      "id": "TN-05",
+      "query": "커밋 전 검사",
+      "should_trigger": false,
+      "reason": "Pre-commit safety — belongs to ue-pre-commit"
+    },
+    {
+      "id": "TN-06",
+      "query": "APawn 변경하면 영향",
+      "should_trigger": false,
+      "reason": "Hypothetical impact — belongs to ue-impact"
+    },
+    {
+      "id": "TN-07",
+      "query": "소스 동기화해줘",
+      "should_trigger": false,
+      "reason": "VCS sync/update — belongs to vcs-update"
+    },
+    {
+      "id": "TN-08",
+      "query": "에셋 비교",
+      "should_trigger": false,
+      "reason": "Static asset compare (not revision-range) — belongs to ue-diff"
+    }
+  ]
+}

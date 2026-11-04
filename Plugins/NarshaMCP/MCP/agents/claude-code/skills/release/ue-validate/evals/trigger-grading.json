@@ -1,0 +1,126 @@
+{
+  "skill": "ue-validate",
+  "description": "Trigger precision eval for ue-validate skill — asset quality validation, data validation",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "이 에셋 유효해?",
+      "should_trigger": true,
+      "reason": "Korean '유효' trigger — asset validity check"
+    },
+    {
+      "id": "tp-02",
+      "query": "Validate assets",
+      "should_trigger": true,
+      "reason": "English 'validate' keyword trigger"
+    },
+    {
+      "id": "tp-03",
+      "query": "에셋 검증해줘",
+      "should_trigger": true,
+      "reason": "Korean '에셋 검증' trigger — asset validation request"
+    },
+    {
+      "id": "tp-04",
+      "query": "Pre-submit validation",
+      "should_trigger": true,
+      "reason": "English 'validation' in pre-submit context"
+    },
+    {
+      "id": "tp-05",
+      "query": "Data validation 실행해줘",
+      "should_trigger": true,
+      "reason": "Korean+English 'data validation' trigger"
+    },
+    {
+      "id": "tp-06",
+      "query": "에셋 품질 확인",
+      "should_trigger": true,
+      "reason": "Korean '에셋 품질' trigger — asset quality check"
+    },
+    {
+      "id": "tp-07",
+      "query": "Validate BP_Player and BP_Enemy",
+      "should_trigger": true,
+      "reason": "English 'validate' with specific asset names"
+    },
+    {
+      "id": "tp-08",
+      "query": "Run data validation on all materials",
+      "should_trigger": true,
+      "reason": "English 'data validation' with asset type scope"
+    },
+    {
+      "id": "tp-09",
+      "query": "에셋 유효성 검사 실행",
+      "should_trigger": true,
+      "reason": "Korean '유효성 검사' trigger — validity check"
+    },
+    {
+      "id": "tp-10",
+      "query": "Check if SM_Rock passes validation",
+      "should_trigger": true,
+      "reason": "English 'passes validation' — asset-specific validation query"
+    },
+    {
+      "id": "tn-01",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "TN: '진단' is ue-audit trigger. Project-wide diagnostic, not asset-specific validation."
+    },
+    {
+      "id": "tn-02",
+      "query": "프로젝트 건강 상태",
+      "should_trigger": false,
+      "reason": "TN: '건강 상태' is ue-audit trigger. Health check, not asset validation."
+    },
+    {
+      "id": "tn-03",
+      "query": "빌드 에러 수정",
+      "should_trigger": false,
+      "reason": "TN: '에러 수정' is ue-debug trigger. Error fixing, not validation."
+    },
+    {
+      "id": "tn-04",
+      "query": "ACharacter 설명",
+      "should_trigger": false,
+      "reason": "TN: '설명' is ue-explain trigger. Explanation request, not validation."
+    },
+    {
+      "id": "tn-05",
+      "query": "M_Rock 만들어줘",
+      "should_trigger": false,
+      "reason": "TN: '만들어줘' is ue-scaffold trigger. Creation, not validation."
+    },
+    {
+      "id": "tn-06",
+      "query": "Is this project healthy?",
+      "should_trigger": false,
+      "reason": "TN: 'healthy' is ue-audit trigger. Project health audit, not asset validation."
+    },
+    {
+      "id": "tn-07",
+      "query": "Run a full audit",
+      "should_trigger": false,
+      "reason": "TN: 'audit' is ue-audit trigger. Project-wide audit overlaps but is distinct from asset validation."
+    },
+    {
+      "id": "tn-08",
+      "query": "에셋 참조 찾아줘",
+      "should_trigger": false,
+      "reason": "TN: '에셋 참조' is ue-asset-discovery trigger. Reference search, not quality validation."
+    },
+    {
+      "id": "tn-09",
+      "query": "커밋 전 검증해줘",
+      "should_trigger": false,
+      "reason": "TN: '커밋 전' is ue-pre-commit trigger. Pre-commit safety check, not asset quality validation."
+    },
+    {
+      "id": "tn-10",
+      "query": "빌드 후 결과 확인해줘",
+      "should_trigger": false,
+      "reason": "TN: '빌드 후' is ue-build-automate domain. Post-build verification, not asset data validation."
+    }
+  ]
+}

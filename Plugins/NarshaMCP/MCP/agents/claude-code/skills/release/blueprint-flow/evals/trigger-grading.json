@@ -1,0 +1,126 @@
+{
+  "skill": "blueprint-flow",
+  "description": "Trigger precision eval: verify blueprint-flow activates on BP structure/execution flow queries and NOT on BP creation/GAS chain/code gen queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "BP_Player 실행 흐름 분석해줘",
+      "should_trigger": true,
+      "reason": "Korean BP execution flow analysis ('실행 흐름')"
+    },
+    {
+      "id": "tp-02",
+      "query": "Blueprint 구조 분석",
+      "should_trigger": true,
+      "reason": "Korean Blueprint structure analysis ('구조 분석')"
+    },
+    {
+      "id": "tp-03",
+      "query": "E키 누르면 어떤 로직 트리거돼?",
+      "should_trigger": true,
+      "reason": "Korean input-to-logic flow query ('누르면', '트리거')"
+    },
+    {
+      "id": "tp-04",
+      "query": "Show me the BP execution flow for BP_Enemy",
+      "should_trigger": true,
+      "reason": "English BP execution flow request"
+    },
+    {
+      "id": "tp-05",
+      "query": "BP 그래프에서 뭐가 실행돼?",
+      "should_trigger": true,
+      "reason": "Korean BP graph execution query"
+    },
+    {
+      "id": "tp-06",
+      "query": "Blueprint 노드 실행 순서 보여줘",
+      "should_trigger": true,
+      "reason": "Korean node execution order ('노드 실행')"
+    },
+    {
+      "id": "tp-07",
+      "query": "BP 내부 흐름 추적해줘",
+      "should_trigger": true,
+      "reason": "Korean internal flow tracing ('내부 흐름')"
+    },
+    {
+      "id": "tp-08",
+      "query": "BP 실행 흐름 보여줘 — Trace the execution flow of this Blueprint 노드 실행 순서",
+      "should_trigger": true,
+      "reason": "English execution flow trace request"
+    },
+    {
+      "id": "tp-09",
+      "query": "어빌리티 흐름 분석해줘",
+      "should_trigger": true,
+      "reason": "Korean ability flow analysis ('어빌리티 흐름')"
+    },
+    {
+      "id": "tp-10",
+      "query": "Blueprint 구조 - BP_Player 전체 분석해줘",
+      "should_trigger": true,
+      "reason": "Korean full Blueprint analysis ('전체 분석')"
+    },
+    {
+      "id": "tn-01",
+      "query": "BP 생성해줘",
+      "should_trigger": false,
+      "reason": "Blueprint creation -> blueprint-generator ('생성')"
+    },
+    {
+      "id": "tn-02",
+      "query": "GAS ability 전체 흐름 Input에서 Animation까지",
+      "should_trigger": false,
+      "reason": "GAS deep chain Input→Animation -> cross-domain-flow (5-stage)"
+    },
+    {
+      "id": "tn-03",
+      "query": "C++ 클래스 생성해줘",
+      "should_trigger": false,
+      "reason": "C++ class generation -> code-generation"
+    },
+    {
+      "id": "tn-04",
+      "query": "머테리얼 분석해줘",
+      "should_trigger": false,
+      "reason": "Material analysis -> material-analysis"
+    },
+    {
+      "id": "tn-05",
+      "query": "BP를 C++로 변환해줘",
+      "should_trigger": false,
+      "reason": "BP to C++ conversion -> bp-cpp-project-init"
+    },
+    {
+      "id": "tn-06",
+      "query": "trace를 HTML로 보여줘",
+      "should_trigger": false,
+      "reason": "HTML visualization -> trace-html-visualizer"
+    },
+    {
+      "id": "tn-07",
+      "query": "프로젝트 건강도 분석해줘",
+      "should_trigger": false,
+      "reason": "Project health -> performance-health-check"
+    },
+    {
+      "id": "tn-08",
+      "query": "TakeDamage 함수 이름 바꿔도 돼?",
+      "should_trigger": false,
+      "reason": "Refactoring safety -> caller-graph-visualizer"
+    },
+    {
+      "id": "tn-09",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "Build error resolution -> ue-debug or unreal-error-doctor"
+    },
+    {
+      "id": "tn-10",
+      "query": "모든 블루프린트에서 MaxHealth 기본값 바꿔줘",
+      "should_trigger": false,
+      "reason": "Bulk modification -> asset-modification-wizard"
+    }
+  ]
+}

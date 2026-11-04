@@ -1,0 +1,127 @@
+{
+  "skill": "asset-modification-wizard",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for asset-modification-wizard skill. Tests correct activation on bulk/batch asset modification queries, and correct rejection of single asset analysis, material analysis, and project audit queries.",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "모든 블루프린트에서 변경 - BP_Enemy_Goblin, BP_Enemy_Skeleton, BP_Enemy_Orc 같은 적 BP가 15개쯤 있는데, 전부 MaxHealth 변수를 현재값의 1.5배로 올려야 해. 하나씩 하면 너무 오래 걸리니까 일괄로 해줘",
+      "should_trigger": true,
+      "reason": "Bulk BP variable modification across 15 enemy assets with multiplier"
+    },
+    {
+      "id": "TP-02",
+      "query": "change MaxHealth in every - change MaxHealth from 100 to 200 in every Blueprint that inherits from BP_CharacterBase. there are about 20 of them across Content/Characters/ and Content/Enemies/. dry run first please",
+      "should_trigger": true,
+      "reason": "Batch Blueprint property change with inheritance filter, count, paths, and dry-run request"
+    },
+    {
+      "id": "TP-03",
+      "query": "PCG 그래프 8개에서 bulk change — PointsPerSquareMeter 파라미터를 일괄 수정해줘",
+      "should_trigger": true,
+      "reason": "Batch PCG parameter tuning across 8 graphs with specific node type and values"
+    },
+    {
+      "id": "TP-04",
+      "query": "change MaxHealth in every - add a TeamID int property (default value 0) to all Blueprints that inherit from ACharacter in the project. should be EditAnywhere and BlueprintReadWrite. probably about 12 BPs",
+      "should_trigger": true,
+      "reason": "Batch property addition to character-inheriting BPs with specifiers and count estimate"
+    },
+    {
+      "id": "TP-05",
+      "query": "일괄 수정 필요해. BP_Enemy_* 패턴 BP들의 MovementSpeed 변수를 전부 500으로 바꾸고, bCanFly 변수는 false로 통일. 근데 BP_Enemy_Dragon만 bCanFly=true로 예외 처리해야 해",
+      "should_trigger": true,
+      "reason": "Bulk modification with wildcard pattern, multiple variables, and specific exception"
+    },
+    {
+      "id": "TP-06",
+      "query": "밸런스 패치로 BP 대량 변경해야 하는데, BP_Weapon_Sword, BP_Weapon_Axe, BP_Weapon_Spear 등 근접 무기 BP 8개의 BaseDamage를 현재값에서 20% 감소시키고 AttackSpeed는 10% 증가시켜야 해",
+      "should_trigger": true,
+      "reason": "Balance patch bulk change with percentage-based adjustments on multiple variables"
+    },
+    {
+      "id": "TP-07",
+      "query": "모든 블루프린트에서 MaxHealth 디폴트값을 100에서 150으로 바꿔야 하는데, ACharacter 상속 BP만 대상이야. AItem이나 AWeapon 상속 BP는 건드리면 안 됨",
+      "should_trigger": true,
+      "reason": "Filtered batch modification — only ACharacter children, exclude other inheritance chains"
+    },
+    {
+      "id": "TP-08",
+      "query": "batch update collision settings on all StaticMeshActors in L_Village level. change collision preset from NoCollision to BlockAll, and enable GenerateOverlapEvents. there are around 200 props",
+      "should_trigger": true,
+      "reason": "Batch collision config change on 200 actors with specific preset and overlap setting"
+    },
+    {
+      "id": "TP-09",
+      "query": "모든 적 BP에 FactionTag라는 GameplayTag 프로퍼티 추가해줘. 기본값은 Faction.Enemy로. BP_Enemy_로 시작하는 것만 대상이고, BP_EnemySpawner 같은 건 제외해야 해",
+      "should_trigger": true,
+      "reason": "Batch GameplayTag property addition with prefix filter and exclusion pattern"
+    },
+    {
+      "id": "TP-10",
+      "query": "일괄로 모든 무기 BP의 BaseDamage를 2배로 올려줘. BP_Weapon_Rifle, BP_Weapon_Shotgun, BP_Weapon_SMG 등 총 10개. 변경 전에 현재값 리스트 먼저 보여주고 확인 받고 적용해줘",
+      "should_trigger": true,
+      "reason": "Bulk damage doubling with preview-before-apply safety workflow"
+    },
+    {
+      "id": "TN-01",
+      "query": "BP_Player 블루프린트 구조 분석해줘",
+      "should_trigger": false,
+      "reason": "Single Blueprint analysis — belongs to blueprint-flow skill"
+    },
+    {
+      "id": "TN-02",
+      "query": "M_Rock 머티리얼 파라미터 변경",
+      "should_trigger": false,
+      "reason": "Single material parameter change — belongs to material-analysis skill"
+    },
+    {
+      "id": "TN-03",
+      "query": "프로젝트 건강도 진단해줘",
+      "should_trigger": false,
+      "reason": "Project health audit — belongs to performance-health-check skill"
+    },
+    {
+      "id": "TN-04",
+      "query": "BP_Enemy 하나만 MaxHealth 바꿔줘",
+      "should_trigger": false,
+      "reason": "Single asset modification — belongs to ue_manage_blueprint direct MCP call"
+    },
+    {
+      "id": "TN-05",
+      "query": "PCG 그래프 구조 보여줘",
+      "should_trigger": false,
+      "reason": "Single PCG structure query — belongs to ue_manage_pcg direct MCP call"
+    },
+    {
+      "id": "TN-06",
+      "query": "에셋 검증해줘",
+      "should_trigger": false,
+      "reason": "Asset validation — belongs to ue-validate skill"
+    },
+    {
+      "id": "TN-07",
+      "query": "클래스 이름 변경해줘",
+      "should_trigger": false,
+      "reason": "Class rename — belongs to safe-class-rename skill"
+    },
+    {
+      "id": "TN-08",
+      "query": "GAS 어빌리티 분석해줘",
+      "should_trigger": false,
+      "reason": "GAS analysis — belongs to gas-development skill"
+    },
+    {
+      "id": "TN-09",
+      "query": "조명 생성해줘 레벨에",
+      "should_trigger": false,
+      "reason": "Light creation — belongs to lighting-workflow skill"
+    },
+    {
+      "id": "TN-10",
+      "query": "AnimBP 분석해줘",
+      "should_trigger": false,
+      "reason": "AnimBP analysis — belongs to animation-workflow skill"
+    }
+  ]
+}

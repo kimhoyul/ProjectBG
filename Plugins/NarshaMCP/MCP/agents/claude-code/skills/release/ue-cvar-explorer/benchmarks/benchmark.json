@@ -1,0 +1,20 @@
+{
+  "skill": "ue-cvar-explorer",
+  "version": "1.1.0",
+  "date": "2026-07-18",
+  "trigger_eval": {
+    "total": 22,
+    "passed": 22,
+    "pass_rate": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "tp": 11,
+    "fp": 0,
+    "tn": 11,
+    "fn": 0
+  },
+  "method": "deterministic_pattern_match",
+  "routing_json_version": "2.3.1",
+  "failures": []
+}

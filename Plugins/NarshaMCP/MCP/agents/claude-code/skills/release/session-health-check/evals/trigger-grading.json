@@ -1,0 +1,127 @@
+{
+  "skill": "session-health-check",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for session-health-check skill — MCP session readiness deep check",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "세션 체크해줘",
+      "should_trigger": true,
+      "reason": "Session check"
+    },
+    {
+      "id": "TP-02",
+      "query": "MCP ready?",
+      "should_trigger": true,
+      "reason": "MCP ready check"
+    },
+    {
+      "id": "TP-03",
+      "query": "서버 상태 확인",
+      "should_trigger": true,
+      "reason": "Server status check"
+    },
+    {
+      "id": "TP-04",
+      "query": "session-health-check 실행",
+      "should_trigger": true,
+      "reason": "Direct skill invocation"
+    },
+    {
+      "id": "TP-05",
+      "query": "세션 체크 — session health check 실행",
+      "should_trigger": true,
+      "reason": "Run health check"
+    },
+    {
+      "id": "TP-06",
+      "query": "MCP 서버 상태",
+      "should_trigger": true,
+      "reason": "MCP server status"
+    },
+    {
+      "id": "TP-07",
+      "query": "세션 준비 확인",
+      "should_trigger": true,
+      "reason": "Session readiness check"
+    },
+    {
+      "id": "TP-08",
+      "query": "server status deep check",
+      "should_trigger": true,
+      "reason": "Server status deep check"
+    },
+    {
+      "id": "TP-09",
+      "query": "MCP 연결 상태",
+      "should_trigger": true,
+      "reason": "MCP connection status"
+    },
+    {
+      "id": "TP-10",
+      "query": "세션 헬스 상태",
+      "should_trigger": true,
+      "reason": "Session health status"
+    },
+    {
+      "id": "TN-01",
+      "query": "프로젝트 진단",
+      "should_trigger": false,
+      "reason": "Project audit — belongs to ue-audit"
+    },
+    {
+      "id": "TN-02",
+      "query": "MCP 분석",
+      "should_trigger": false,
+      "reason": "MCP analysis — belongs to mcp-analyze"
+    },
+    {
+      "id": "TN-03",
+      "query": "CI 확인",
+      "should_trigger": false,
+      "reason": "CI check — belongs to ci-verify"
+    },
+    {
+      "id": "TN-04",
+      "query": "터미널 어드바이저",
+      "should_trigger": false,
+      "reason": "Terminal advisor — belongs to terminal-advisor"
+    },
+    {
+      "id": "TN-05",
+      "query": "MCP 라이브 테스트",
+      "should_trigger": false,
+      "reason": "MCP live test — belongs to mcp-live-test"
+    },
+    {
+      "id": "TN-06",
+      "query": "배포 테스트",
+      "should_trigger": false,
+      "reason": "Deploy test — belongs to deploy-test"
+    },
+    {
+      "id": "TN-07",
+      "query": "프로젝트 온보딩",
+      "should_trigger": false,
+      "reason": "Onboarding — belongs to project-onboarding"
+    },
+    {
+      "id": "TN-08",
+      "query": "코드 리뷰",
+      "should_trigger": false,
+      "reason": "Code review — belongs to ns-review"
+    },
+    {
+      "id": "TN-09",
+      "query": "MCP 배포",
+      "should_trigger": false,
+      "reason": "MCP deploy — belongs to mcp-deploy"
+    },
+    {
+      "id": "TN-10",
+      "query": "릴리즈 자동화",
+      "should_trigger": false,
+      "reason": "Release — belongs to release-automation"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+[mcp_servers.narshamcp]
+command = "C:/Program Files/Epic Games/UE_5.7/Engine/Plugins/Marketplace/NarshaADb0a51a29e8f5V1/Source/ThirdParty/bin/narshamcp.exe"
+args = ["connect", "--project-path", "C:/Work/Unreal/ProjectBG/", "--engine-path", "C:/Program Files/Epic Games/UE_5.7/Engine/"]
+startup_timeout_sec = 30
+tool_timeout_sec = 120
+
+[mcp_servers.narshamcp.env]
+RUST_LOG = "error"

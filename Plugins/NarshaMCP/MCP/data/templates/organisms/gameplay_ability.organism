@@ -1,0 +1,31 @@
+{
+  "name": "gameplay_ability",
+  "description": "Basic Gameplay Ability System ability with Abstract specifier",
+  "version": "2.0.0",
+  "base_class": "UGameplayAbility",
+  "default_specifiers": "Abstract",
+  "includes": [
+    "CoreMinimal.h",
+    "Abilities/GameplayAbility.h"
+  ],
+  "interfaces": [],
+  "default_overrides": [
+    {
+      "function_name": "ActivateAbility",
+      "return_type": "virtual void",
+      "parameters": "const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData",
+      "override_qualifier": "override",
+      "body": "\tSuper::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);\n"
+    },
+    {
+      "function_name": "EndAbility",
+      "return_type": "virtual void",
+      "parameters": "const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled",
+      "override_qualifier": "override",
+      "body": "\tSuper::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);\n"
+    }
+  ],
+  "module_dependencies": {
+    "public": ["GameplayAbilities"]
+  }
+}

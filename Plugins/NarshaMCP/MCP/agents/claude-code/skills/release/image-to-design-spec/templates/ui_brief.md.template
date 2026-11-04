@@ -1,0 +1,114 @@
+{# UI/UX brief template for /image-to-design-spec Stage 2 #}
+{# Used when domain_distribution.ui_mockup ≥ 0.6 (UI-dominant) #}
+{# Compared to hybrid: drops §7 art-direction deep dive + §8 system implications. #}
+{# Keeps §3 RLD / §4 loop / §5 IA / §6 DataBinding / §8.A audio / §8.B a11y / §8.E onboarding. #}
+
+# {{title_from_vision}}
+
+<!-- workflow-id: {{workflow_id}} -->
+<!-- ssot-version: 1.0 -->
+<!-- generated-at: {{generated_at}} -->
+<!-- stage: 2 -->
+<!-- domain: ui_mockup (≥60% UI dominance) -->
+<!-- ip-safety: all proper nouns are placeholders; color hex withheld -->
+
+## 1. 개요 <!-- section-id: SEC-OVR-001 -->
+
+**의도된 플레이어 경험 앵커** — {{intended_experience_summary_one_sentence}}.
+
+이 기획서는 UI 정보 아키텍처에 집중합니다. {{components_count}} widget + {{diegetic_field_count}} 다이어제틱 필드 + 입력 grammar 가 의도된 경험을 *읽기 가능* 하게 만드는 정보 계층입니다.
+
+## 2. 의도된 플레이어 경험 <!-- section-id: SEC-EXP-001 -->
+
+> {{intended_experience}}
+
+**감정 스펙트럼**: {{emotion_spectrum_inline}}
+
+**Schell Lens**: {{schell_lenses_list_inline}}
+
+**Norman 우세**: {{norman_dominant}}. **MDA 우세**: {{mda_dominant}}.
+
+**레이어 omission boundary**: behavioral Norman 은 §5 의 interactive widget 에서 부분적으로 다루지만, full UX 결과는 Stage 3 UX spec 에 위임. mechanics/dynamics MDA 는 별도 system_brief 호출로 위임 (이 brief 는 ui_mockup primary).
+
+## 3. 자원 / 손실 회피 / 지연 보상 <!-- section-id: SEC-RLD-001 -->
+
+{{rld_indicators_table}}
+
+**가시성 분류**:
+
+| 분류 | widget 매핑 |
+|---|---|
+| always-visible | {{always_visible_widgets}} |
+| context-fade | {{context_fade_widgets}} |
+| state-driven pulse | {{state_driven_pulse_widgets}} |
+| future-Slot | {{future_slot_widgets}} |
+
+## 4. 루프 신호 <!-- section-id: SEC-LOOP-001 -->
+
+{{loop_signals_table}}
+
+## 5. UI 정보 아키텍처 ({{components_count}} widget) <!-- section-id: SEC-UI-IA -->
+
+{{components_table_with_bbox_zone_interactive_intent_contribution}}
+
+**Slot 매핑 권장 (Stage 3 입력)**:
+- 모두 `Anchors` + `Padding` 기반; 절대 픽셀 금지
+{{slot_mapping_recommendations_per_component}}
+
+**visceral → behavioral 전환**: {{interactive_count}} widget interactive — {{interactive_widget_names}}. visceral (icon 즉각 인식) → behavioral (위치-바인딩 muscle-memory). Stage 3 양 layer 동시 처리.
+
+## 6. 다이어제틱 데이터 바인딩 <!-- section-id: SEC-DATABIND-001 -->
+
+> Stage 2 에서 placeholder 유지 — Stage 3 에서 GameplayAttribute / Subsystem 매핑.
+
+{{diegetic_fields_table_placeholder_owner_attribute}}
+
+`INotifyFieldValueChanged` 바인딩 권장 (push, not poll).
+
+## 7. 컬러 / 타이포 가이드 (lite) <!-- section-id: SEC-VISUAL-LITE -->
+
+> art-direction deep dive 는 별도 concept_brief 호출로 위임. 이 brief 는 UI-relevant Material 만 lite 수준.
+
+**의도된 경험 → 시각 anchor 도출 규칙**:
+{{visual_lite_derivation_list}}
+
+**Material Parameter Collection**: `MPC_HUD_Theme` — 글로벌 tint/saturation/glow.
+
+## 8.A 음향 디렉션 (lite) <!-- section-id: SEC-AUDIO-001 -->
+
+UI feedback 음향 ({{audio_count}} cue): {{ui_audio_cues_list}}.
+
+전반 음향 (전투/앰비언트) 은 별도 디자인 트랙. 여기서는 UI 인터랙션 cue 만 spec.
+
+## 8.B 접근성 <!-- section-id: SEC-A11Y-001 -->
+
+{{a11y_axes_table_colorblind_motion_controller_scaling}}
+
+UI-specific: {{ui_a11y_specifics_one_paragraph}}.
+
+## 8.E 온보딩 패턴 <!-- section-id: SEC-ONBOARDING-001 -->
+
+{{onboarding_progressive_disclosure_table_time_widgets_learning}}
+
+## 9. Stage 3 핸드오프 가이드 <!-- section-id: SEC-HANDOFF-001 -->
+
+**ui_mockup 트랙 입력** (이 brief 의 primary 산출):
+- {{components_count}} widget bbox + grid_zone (이미 `/image-bbox-refine` 으로 정밀화)
+- {{diegetic_field_count}} DataBinding contracts
+- {{interactive_count}} interactive widget visceral+behavioral
+- Anchor + Padding 룰
+- 특수 케이스: {{ui_special_cases_list}}
+
+**system / concept 보강 권장**: 별도 `system_brief` / `concept_brief` 호출로 cross-domain 깊이 보강.
+
+## 10. 사용자 검토 요청 <!-- section-id: SEC-REVIEW -->
+
+{{review_checklist_ui_focused_questions}}
+
+## 11. 위험 + 경고 <!-- section-id: SEC-RISK-001 -->
+
+{{warnings_list_numbered}}
+
+---
+
+**다음 단계**: game-design-philosopher SubAgent → `stage2_design_review.json` → Gate 2 체크리스트.

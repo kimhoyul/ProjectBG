@@ -1,0 +1,126 @@
+{
+  "skill": "ue-engine-content",
+  "description": "Trigger precision eval: verify ue-engine-content activates on engine PDB/metadata loading queries and NOT on cache-control/explain/build queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "엔진 포함해줘",
+      "should_trigger": true,
+      "reason": "Korean '엔진 포함' — include engine trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "Load engine content",
+      "should_trigger": true,
+      "reason": "English 'load engine content' — direct trigger"
+    },
+    {
+      "id": "tp-03",
+      "query": "엔진 메타데이터 포함해줘",
+      "should_trigger": true,
+      "reason": "Korean '엔진 메타데이터' — engine metadata trigger"
+    },
+    {
+      "id": "tp-04",
+      "query": "include engine PDB",
+      "should_trigger": true,
+      "reason": "English 'include engine' + 'PDB' — engine PDB trigger"
+    },
+    {
+      "id": "tp-05",
+      "query": "엔진 PDB 로드해줘",
+      "should_trigger": true,
+      "reason": "Korean '엔진 PDB 로드' — engine PDB loading trigger"
+    },
+    {
+      "id": "tp-06",
+      "query": "engine content 로드",
+      "should_trigger": true,
+      "reason": "Mixed '엔진 content 로드' — engine content loading"
+    },
+    {
+      "id": "tp-07",
+      "query": "엔진 로드해줘",
+      "should_trigger": true,
+      "reason": "Korean '엔진 로드' — load engine trigger"
+    },
+    {
+      "id": "tp-08",
+      "query": "Load engine PDB symbols",
+      "should_trigger": true,
+      "reason": "English 'load engine PDB' — engine symbol loading"
+    },
+    {
+      "id": "tp-09",
+      "query": "엔진 심볼 포함시켜줘",
+      "should_trigger": true,
+      "reason": "Korean engine symbol inclusion request"
+    },
+    {
+      "id": "tp-10",
+      "query": "include engine metadata for analysis",
+      "should_trigger": true,
+      "reason": "English 'include engine metadata' — engine metadata trigger"
+    },
+    {
+      "id": "tn-01",
+      "query": "캐시 클리어해줘",
+      "should_trigger": false,
+      "reason": "TN: Cache clear is ue_cache_control MCP tool. Cache management, not engine loading."
+    },
+    {
+      "id": "tn-02",
+      "query": "ACharacter 어떻게 동작해?",
+      "should_trigger": false,
+      "reason": "TN: '어떻게 동작' is ue-explain trigger. Explanation, not engine loading."
+    },
+    {
+      "id": "tn-03",
+      "query": "프로젝트 빌드해줘",
+      "should_trigger": false,
+      "reason": "TN: '빌드' is ue-build-automate trigger. Build pipeline, not engine content."
+    },
+    {
+      "id": "tn-04",
+      "query": "Search for ACharacter symbol",
+      "should_trigger": false,
+      "reason": "TN: Symbol search is ue_analyze_symbols MCP tool. Searching, not loading engine content."
+    },
+    {
+      "id": "tn-05",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "TN: '에러 해결' is ue-debug trigger. Error fixing, not engine loading."
+    },
+    {
+      "id": "tn-06",
+      "query": "성능 분석해줘",
+      "should_trigger": false,
+      "reason": "TN: '성능 분석' is ue-insights-profiler trigger. Profiling, not engine loading."
+    },
+    {
+      "id": "tn-07",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "TN: '진단' is ue-audit trigger. Project health, not engine content."
+    },
+    {
+      "id": "tn-08",
+      "query": "regenerate PDB cache",
+      "should_trigger": false,
+      "reason": "TN: Cache regeneration is ue_cache_control MCP tool. Cache ops, not engine loading."
+    },
+    {
+      "id": "tn-09",
+      "query": "DDC 상태 확인",
+      "should_trigger": false,
+      "reason": "TN: 'DDC 상태' is ue-project-ops trigger. Infrastructure, not engine content."
+    },
+    {
+      "id": "tn-10",
+      "query": "What is the UObject hierarchy?",
+      "should_trigger": false,
+      "reason": "TN: 'What is' is ue-explain trigger. Understanding hierarchy, not loading engine."
+    }
+  ]
+}

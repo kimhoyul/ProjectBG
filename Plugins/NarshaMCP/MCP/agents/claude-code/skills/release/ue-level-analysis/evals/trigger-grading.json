@@ -1,0 +1,103 @@
+{
+  "skill": "ue-level-analysis",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for ue-level-analysis skill. Tests correct activation on World Partition level-content queries (OFPA scan, level actors/composition, spatial density, DataLayer audit) and correct rejection of project-level WP status, Blueprint flow, material, execution-trace, and other sibling-skill queries. Negative cases mirror routing.json negative_patterns (Issue #20028).",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "이 World Partition 프로젝트 레벨 분석해줘. OFPA 액터 몇 개고 어떤 레벨에 뭐가 배치돼있는지 구성 보고 싶어",
+      "should_trigger": true,
+      "reason": "Full level-content scan + composition on a WP project — core skill intent"
+    },
+    {
+      "id": "TP-02",
+      "query": "LV_Main 레벨에 어떤 액터들이 들어있는지 자세히 보여줘",
+      "should_trigger": true,
+      "reason": "Per-level actor breakdown — routes to level_get_summary"
+    },
+    {
+      "id": "TP-03",
+      "query": "BP_Enemy가 레벨 어디어디에 배치됐는지 찾아줘",
+      "should_trigger": true,
+      "reason": "Blueprint placement lookup across levels — level_bp_usage"
+    },
+    {
+      "id": "TP-04",
+      "query": "레벨 건강 상태 진단하고 스트리밍/DataLayer 문제 있는지 감사해줘",
+      "should_trigger": true,
+      "reason": "Level health diagnose + DataLayer audit — level_diagnose"
+    },
+    {
+      "id": "TP-05",
+      "query": "액터 밀도가 높은 셀이 어디인지 spatial analysis 돌려줘",
+      "should_trigger": true,
+      "reason": "Cell density / clustering — level_spatial_analysis"
+    },
+    {
+      "id": "TP-06",
+      "query": "scan the OFPA actors in this level and show me the level composition graph",
+      "should_trigger": true,
+      "reason": "English OFPA scan + composition graph — level_get_graph"
+    },
+    {
+      "id": "TP-07",
+      "query": "what actors are placed in the streaming level and which blueprint classes do they use",
+      "should_trigger": true,
+      "reason": "English 'what actors' level content query — level_find_actors"
+    },
+    {
+      "id": "TP-08",
+      "query": "Gameplay.Objective 태그 붙은 액터들이 레벨 어디에 있는지 찾아줘",
+      "should_trigger": true,
+      "reason": "Find actors by GameplayTag within levels — level_find_by_tag"
+    },
+    {
+      "id": "TN-01",
+      "query": "월드 파티션 상태 확인해줘",
+      "should_trigger": false,
+      "reason": "Project-level WP status — routing.json negative_pattern; belongs to ue-project-ops (wp_get_status), NOT level-content analysis"
+    },
+    {
+      "id": "TN-02",
+      "query": "check the WP status of this project",
+      "should_trigger": false,
+      "reason": "English WP status — routing.json negative_pattern; ue-project-ops, not level analysis"
+    },
+    {
+      "id": "TN-03",
+      "query": "BP_Player 블루프린트 실행 흐름 추적해줘",
+      "should_trigger": false,
+      "reason": "Blueprint execution trace — belongs to ue-execution-trace skill"
+    },
+    {
+      "id": "TN-04",
+      "query": "M_Rock 머티리얼 파라미터 분석",
+      "should_trigger": false,
+      "reason": "Material parameter analysis — belongs to material-analysis skill"
+    },
+    {
+      "id": "TN-05",
+      "query": "ACharacter 클래스 어떻게 동작해?",
+      "should_trigger": false,
+      "reason": "Class explanation — belongs to ue-explain skill"
+    },
+    {
+      "id": "TN-06",
+      "query": "DDC 캐시 상태 확인해줘",
+      "should_trigger": false,
+      "reason": "DDC cache health — belongs to ue-project-ops (ddc_*), not level analysis"
+    },
+    {
+      "id": "TN-07",
+      "query": "GAS ability 태그 분석해줘",
+      "should_trigger": false,
+      "reason": "GAS ability/tag analysis — belongs to gas-development skill"
+    },
+    {
+      "id": "TN-08",
+      "query": "이 레벨 시퀀서 컷신 편집해줘",
+      "should_trigger": false,
+      "reason": "Sequencer cinematics editing — belongs to ue-sequencer-cinematics skill"
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+{
+  "skill": "ue-audit",
+  "description": "Trigger precision eval for ue-audit skill — project health audit, diagnostics, warning summary",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": true,
+      "reason": "Korean '진단' trigger — project diagnostic request"
+    },
+    {
+      "id": "tp-02",
+      "query": "Is this project healthy?",
+      "should_trigger": true,
+      "reason": "English 'healthy' trigger — health check query"
+    },
+    {
+      "id": "tp-03",
+      "query": "Run a full audit",
+      "should_trigger": true,
+      "reason": "English 'audit' keyword trigger"
+    },
+    {
+      "id": "tp-04",
+      "query": "메시지 로그 확인",
+      "should_trigger": true,
+      "reason": "Korean '메시지 로그' trigger"
+    },
+    {
+      "id": "tp-05",
+      "query": "경고 요약해줘",
+      "should_trigger": true,
+      "reason": "Korean '경고 요약' trigger — warning summary"
+    },
+    {
+      "id": "tp-06",
+      "query": "프로젝트 상태 점검",
+      "should_trigger": true,
+      "reason": "Korean '점검' trigger — status check"
+    },
+    {
+      "id": "tp-07",
+      "query": "Auto fix warnings",
+      "should_trigger": true,
+      "reason": "English 'fix warnings' in audit context"
+    },
+    {
+      "id": "tp-08",
+      "query": "Run a diagnostic on my project",
+      "should_trigger": true,
+      "reason": "English 'diagnostic' trigger"
+    },
+    {
+      "id": "tp-09",
+      "query": "프로젝트 건강 상태 알려줘",
+      "should_trigger": true,
+      "reason": "Korean '건강' trigger — health status"
+    },
+    {
+      "id": "tp-10",
+      "query": "Give me a health check summary",
+      "should_trigger": true,
+      "reason": "English 'health check' trigger"
+    },
+    {
+      "id": "tn-01",
+      "query": "이 에셋 유효해?",
+      "should_trigger": false,
+      "reason": "TN: '유효' is ue-validate trigger. Asks about specific asset validity, not project-wide health."
+    },
+    {
+      "id": "tn-02",
+      "query": "에셋 검증해줘",
+      "should_trigger": false,
+      "reason": "TN: '검증' is ue-validate trigger. Asset validation, not project audit."
+    },
+    {
+      "id": "tn-03",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "TN: '에러 해결' is ue-debug trigger. Specific error fixing, not project-wide diagnostic."
+    },
+    {
+      "id": "tn-04",
+      "query": "ACharacter 설명해줘",
+      "should_trigger": false,
+      "reason": "TN: '설명해줘' is ue-explain trigger. Explanation request, not audit."
+    },
+    {
+      "id": "tn-05",
+      "query": "r.Shadow 설정 뭐야?",
+      "should_trigger": false,
+      "reason": "TN: CVar query is ue-cvar-explorer trigger. Config search, not project health."
+    },
+    {
+      "id": "tn-06",
+      "query": "APawn 변경 영향?",
+      "should_trigger": false,
+      "reason": "TN: '변경 영향' is ue-impact trigger. Change impact analysis, not audit."
+    },
+    {
+      "id": "tn-07",
+      "query": "컴파일 에러 경고 보여줘",
+      "should_trigger": false,
+      "reason": "TN: Compiler error/warning is ue-debug territory. '경고' here means compiler warnings, not project audit warnings."
+    },
+    {
+      "id": "tn-08",
+      "query": "Data validation 실행해줘",
+      "should_trigger": false,
+      "reason": "TN: 'validation' is ue-validate trigger. Data validation, not project audit."
+    },
+    {
+      "id": "tn-09",
+      "query": "성능 병목 프로파일링 분석해줘",
+      "should_trigger": false,
+      "reason": "TN: '성능 분석'/'프로파일링' is ue-insights-profiler trigger. Runtime profiling, not static audit."
+    },
+    {
+      "id": "tn-10",
+      "query": "프로젝트 온보딩해줘",
+      "should_trigger": false,
+      "reason": "TN: '온보딩' is project-onboarding trigger. First-session orientation, not health audit."
+    }
+  ]
+}

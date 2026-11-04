@@ -1,0 +1,112 @@
+{# Game system brief template for /image-to-design-spec Stage 2 #}
+{# Used when domain_distribution.system_diagram ≥ 0.6 #}
+{# Focus: GAS / StateTree / BehaviorTree / GameplayTags / Subsystems #}
+
+# {{title_from_vision}}
+
+<!-- workflow-id: {{workflow_id}} -->
+<!-- ssot-version: 1.0 -->
+<!-- generated-at: {{generated_at}} -->
+<!-- stage: 2 -->
+<!-- domain: system_diagram (≥60% system dominance) -->
+<!-- ip-safety: all proper nouns are placeholders; color hex withheld; diagram nodes from stage1.diagram_nodes[] -->
+
+## 1. 개요 <!-- section-id: SEC-OVR-001 -->
+
+**의도된 플레이어 경험 앵커** — {{intended_experience_summary_one_sentence}}.
+
+이 기획서는 게임 시스템 메커니즘에 집중합니다. {{diagram_nodes_count}} 노드 + {{diagram_edges_count}} edge 가 의도된 경험을 메커니즘으로 *작동* 시키는 시스템 계층입니다.
+
+## 2. 의도된 플레이어 경험 <!-- section-id: SEC-EXP-001 -->
+
+> {{intended_experience}}
+
+**감정 스펙트럼**: {{emotion_spectrum_inline}}
+
+**MDA 우세**: {{mda_dominant}} (system 도메인은 mechanics + dynamics 우세 가능). aesthetics 는 §6 UI 핸드오프로 위임.
+
+**challenge_kind**: {{challenge_kind}}. **flow_zone**: {{flow_zone_target}}.
+
+## 3. 시스템 노드 다이어그램 ({{diagram_nodes_count}} 노드) <!-- section-id: SEC-SYS-NODES -->
+
+> stage1.diagram_nodes[] 에서 surface 된 시스템 entity. 각 노드는 의도된 경험에 어떻게 기여하는지 anchor 인용.
+
+{{diagram_nodes_table_type_label_intent_contribution}}
+
+## 4. 시스템 흐름 ({{diagram_edges_count}} edge) <!-- section-id: SEC-SYS-FLOW -->
+
+{{diagram_edges_table_from_to_trigger_condition}}
+
+**Mermaid (자동 생성)**:
+
+```mermaid
+{{mermaid_state_diagram_or_flowchart}}
+```
+
+## 5. UE 자산 매핑 권장 <!-- section-id: SEC-UE-MAPPING -->
+
+| diagram node type | UE 자산 후보 | 권장 위치 |
+|---|---|---|
+| state (둥근) | `StateTree state node` | `/Game/AI/StateTree/ST_*` |
+| decision (다이아몬드) | `StateTree condition` 또는 `BT decorator` | StateTree state 내부 |
+| action (사각) | `UGameplayAbility` 또는 `StateTree task` | `/Game/Abilities/GA_*` |
+| event | `GameplayCue` 또는 `GameplayEvent` | `/Game/Tags/GameplayTagsList.ini` |
+
+## 6. GAS spec <!-- section-id: SEC-GAS-001 -->
+
+**GameplayTags** ({{gameplay_tag_count}} 추정):
+{{gameplay_tags_list_with_intent_attribution}}
+
+**Abilities** ({{ability_count}} 추정):
+{{abilities_list_with_input_binding_cooldown_cost}}
+
+**Effects** (recurring patterns):
+{{gameplay_effects_list_buff_debuff_modifier}}
+
+**Attributes** ({{attribute_count}} 추정):
+{{attributes_list_with_replication_strategy}}
+
+## 7. AI / StateTree spec <!-- section-id: SEC-AI-001 -->
+
+{{state_tree_spec_per_diagram_state_phase_transitions}}
+
+**BehaviorTree (잡몹)**:
+{{behavior_tree_spec_if_applicable}}
+
+## 8. UI 핸드오프 (lite) <!-- section-id: SEC-UI-HANDOFF -->
+
+> art-direction + UI deep dive 는 별도 ui_brief / concept_brief 호출로 위임. 이 brief 는 system 우선이므로 UI 는 system 의 visualization 만.
+
+**시스템 → UI 가시화 권장**:
+{{system_to_ui_recommendations_list}}
+
+## 9. 데이터 / Replication <!-- section-id: SEC-DATA-001 -->
+
+**Network scope** (FIX-008 패턴):
+{{network_scope_recommendation_per_system_component}}
+
+**Replication 전략**:
+{{replication_strategy_per_attribute_or_subsystem}}
+
+## 10. Stage 3 핸드오프 가이드 <!-- section-id: SEC-HANDOFF-001 -->
+
+**system_diagram 트랙 입력** (이 brief 의 primary 산출):
+- {{diagram_nodes_count}} system 노드 (state / decision / action / event)
+- {{diagram_edges_count}} 흐름 edge
+- {{gameplay_tag_count}} GameplayTag 후보
+- {{ability_count}} Ability 후보
+- {{attribute_count}} Attribute 후보
+
+**ui_mockup / concept_art 보강 권장**: 별도 `ui_brief` / `concept_brief` 호출로 cross-domain 깊이.
+
+## 11. 사용자 검토 요청 <!-- section-id: SEC-REVIEW -->
+
+{{review_checklist_system_focused_questions}}
+
+## 12. 위험 + 경고 <!-- section-id: SEC-RISK-001 -->
+
+{{warnings_list_numbered}}
+
+---
+
+**다음 단계**: game-design-philosopher SubAgent → `stage2_design_review.json` → Gate 2 체크리스트.

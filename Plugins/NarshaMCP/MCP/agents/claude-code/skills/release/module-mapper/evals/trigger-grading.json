@@ -1,0 +1,127 @@
+{
+  "skill": "module-mapper",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for module-mapper skill — .Build.cs dependency resolution for linker errors",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "FAssetData unresolved external symbol 어떤 모듈",
+      "should_trigger": true,
+      "reason": "'unresolved external symbol' + '어떤 모듈' triggers; unreal-error-doctor excludes 'which module'"
+    },
+    {
+      "id": "TP-02",
+      "query": "unresolved external symbol",
+      "should_trigger": true,
+      "reason": "Unresolved external symbol"
+    },
+    {
+      "id": "TP-03",
+      "query": "Which module is FAssetData in?",
+      "should_trigger": true,
+      "reason": "Module lookup query"
+    },
+    {
+      "id": "TP-04",
+      "query": ".Build.cs 수정해줘",
+      "should_trigger": true,
+      "reason": "Modify .Build.cs"
+    },
+    {
+      "id": "TP-05",
+      "query": "module-mapper 실행",
+      "should_trigger": true,
+      "reason": "Direct skill invocation"
+    },
+    {
+      "id": "TP-06",
+      "query": "모듈 의존성 해결",
+      "should_trigger": true,
+      "reason": "Module dependency resolution"
+    },
+    {
+      "id": "TP-07",
+      "query": "UBT Manifest lookup",
+      "should_trigger": true,
+      "reason": "UBT Manifest lookup"
+    },
+    {
+      "id": "TP-08",
+      "query": "어떤 모듈에 있는 클래스야?",
+      "should_trigger": true,
+      "reason": "Which module has this class?"
+    },
+    {
+      "id": "TP-09",
+      "query": "Build.cs module dependency",
+      "should_trigger": true,
+      "reason": "Build.cs module dependency"
+    },
+    {
+      "id": "TP-10",
+      "query": "링커 에러 모듈 찾기",
+      "should_trigger": true,
+      "reason": "Find module for linker error"
+    },
+    {
+      "id": "TN-01",
+      "query": "모듈 분석",
+      "should_trigger": false,
+      "reason": "Module analysis — belongs to module-analyzer"
+    },
+    {
+      "id": "TN-02",
+      "query": "빌드 에러 수정",
+      "should_trigger": false,
+      "reason": "Build error — belongs to ue-debug"
+    },
+    {
+      "id": "TN-03",
+      "query": "컴파일 에러 해결",
+      "should_trigger": false,
+      "reason": "Compile error — belongs to unreal-error-doctor"
+    },
+    {
+      "id": "TN-04",
+      "query": "코드 생성",
+      "should_trigger": false,
+      "reason": "Code gen — belongs to code-generation"
+    },
+    {
+      "id": "TN-05",
+      "query": "클래스 계층 분석",
+      "should_trigger": false,
+      "reason": "Class hierarchy — belongs to ue_analyze_symbols"
+    },
+    {
+      "id": "TN-06",
+      "query": "프로젝트 빌드",
+      "should_trigger": false,
+      "reason": "Build project — belongs to ue-build-automate"
+    },
+    {
+      "id": "TN-07",
+      "query": "리팩터링",
+      "should_trigger": false,
+      "reason": "Refactoring — belongs to ue-cpp-refactor"
+    },
+    {
+      "id": "TN-08",
+      "query": "코드 리뷰",
+      "should_trigger": false,
+      "reason": "Code review — belongs to ns-review"
+    },
+    {
+      "id": "TN-09",
+      "query": "에셋 참조 찾기",
+      "should_trigger": false,
+      "reason": "Asset references — belongs to ue-asset-discovery"
+    },
+    {
+      "id": "TN-10",
+      "query": "영향 분석",
+      "should_trigger": false,
+      "reason": "Impact analysis — belongs to ue-impact"
+    }
+  ]
+}

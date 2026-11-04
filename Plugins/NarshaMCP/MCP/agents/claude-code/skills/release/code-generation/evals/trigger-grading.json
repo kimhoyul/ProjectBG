@@ -1,0 +1,126 @@
+{
+  "skill": "code-generation",
+  "description": "Trigger precision eval: verify code-generation activates on single C++ class generation queries and NOT on multi-class systems, BP analysis, or BP creation queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "ACharacter에서 상속받는 AMyHeroCharacter C++ 클래스 생성해줘. Source/MyGame/Characters/ 폴더에 넣고 UAbilitySystemComponent와 UInputComponent 포함",
+      "should_trigger": false,
+      "reason": "Routes to ue-scaffold (general creation skill has priority)"
+    },
+    {
+      "id": "tp-02",
+      "query": "generate a UActorComponent subclass called UInteractionComponent - needs a SphereTrace in TickComponent to find overlapping IInteractable actors, with a BlueprintCallable Interact() function",
+      "should_trigger": true,
+      "reason": "code-generation wins: 'subclass called' matches code-generation trigger pattern at higher priority than ue-scaffold"
+    },
+    {
+      "id": "tp-03",
+      "query": "C++ 클래스 생성 - UAttributeSet 기반으로 UMyAttributeSet 만들어줘. Health, Mana, Stamina 3개 어트리뷰트에 각각 GAMEPLAYATTRIBUTE_REPNOTIFY 매크로 적용하고 GetLifetimeReplicatedProps도 세팅해줘",
+      "should_trigger": false,
+      "reason": "Routes to ue-scaffold (general creation skill has priority)"
+    },
+    {
+      "id": "tp-04",
+      "query": "create a AMyProjectile class inheriting from AActor. needs UProjectileMovementComponent, USphereComponent for collision, and OnHit delegate binding in BeginPlay that calls a BlueprintImplementableEvent",
+      "should_trigger": false,
+      "reason": "Routes to ue-scaffold (general creation skill has priority)"
+    },
+    {
+      "id": "tp-05",
+      "query": "C++ 클래스 생성 - Lyra 스타일로 ULyraInputConfig 같은 입력 설정 DataAsset 클래스 하나 생성해줘. TArray<FInputActionBinding> 형태로 InputAction→InputTag 매핑 들고 있으면 돼",
+      "should_trigger": false,
+      "reason": "Routes to ue-scaffold (general creation skill has priority)"
+    },
+    {
+      "id": "tp-06",
+      "query": "class inheriting from — UGameInstanceSubsystem 기반으로 UAudioManagerSubsystem",
+      "should_trigger": true,
+      "reason": "code-generation wins: 'class inheriting from' matches code-generation trigger pattern at higher priority than ue-scaffold"
+    },
+    {
+      "id": "tp-07",
+      "query": "C++ 클래스 생성 - AMyGameMode 클래스 템플릿 만들어줘, AGameModeBase 상속으로. InitGame에서 월드 세팅 읽어서 MaxPlayers 설정하고 DefaultPawnClass를 config에서 로드하는 구조",
+      "should_trigger": false,
+      "reason": "Routes to ue-scaffold (general creation skill has priority)"
+    },
+    {
+      "id": "tp-08",
+      "query": "generate boilerplate for AMyPickupActor deriving from AActor with a UStaticMeshComponent root, UBoxComponent overlap trigger, and an OnPickedUp multicast delegate that broadcasts the pickup item ID",
+      "should_trigger": true,
+      "reason": "code-generation wins: 'generate boilerplate' matches code-generation trigger pattern at higher priority than ue-scaffold"
+    },
+    {
+      "id": "tp-09",
+      "query": "scaffold code for a new AMyPla... [class inheriting from] yerController - needs EnhancedInput setup in SetupInputComponent, a ShowMainMenu BlueprintCallable, and client RPC for ServerRequestRespawn",
+      "should_trigger": false,
+      "reason": "Routes to ue-scaffold (general creation skill has priority)"
+    },
+    {
+      "id": "tp-10",
+      "query": "UCameraShakeComponent C++ 코드 만들어줘. UActorComponent 상속으로 Source/MyGame/Camera/에 넣고, 강도(Intensity)랑 지속시간(Duration) UPROPERTY 노출해줘. Play() 함수 하나 있으면 돼",
+      "should_trigger": false,
+      "reason": "Routes to ue-scaffold (general creation skill has priority)"
+    },
+    {
+      "id": "tn-01",
+      "query": "무기 시스템 전체를 만들어줘",
+      "should_trigger": false,
+      "reason": "Multi-class system generation -> code-generation-power"
+    },
+    {
+      "id": "tn-02",
+      "query": "BP_Player 구조 분석해줘",
+      "should_trigger": false,
+      "reason": "BP structure analysis -> blueprint-flow"
+    },
+    {
+      "id": "tn-03",
+      "query": "Blueprint 생성해줘",
+      "should_trigger": false,
+      "reason": "Blueprint creation -> blueprint-generator"
+    },
+    {
+      "id": "tn-04",
+      "query": "GAS 캐릭터 시스템 전체 만들어줘",
+      "should_trigger": false,
+      "reason": "Full GAS system with multiple classes -> code-generation-power"
+    },
+    {
+      "id": "tn-05",
+      "query": "BP를 C++로 변환해줘",
+      "should_trigger": false,
+      "reason": "BP to C++ conversion -> bp-cpp-project-init"
+    },
+    {
+      "id": "tn-06",
+      "query": "AI 적 시스템 구현해줘 BT랑 EQS 포함해서",
+      "should_trigger": false,
+      "reason": "Multi-class AI system -> code-generation-power"
+    },
+    {
+      "id": "tn-07",
+      "query": "머테리얼 M_Stone 분석해줘",
+      "should_trigger": false,
+      "reason": "Material analysis -> material-analysis"
+    },
+    {
+      "id": "tn-08",
+      "query": "이 함수 호출 관계 추적해줘",
+      "should_trigger": false,
+      "reason": "Call graph tracing -> execution-flow-explorer"
+    },
+    {
+      "id": "tn-09",
+      "query": "멀티플레이어 캐릭터 시스템 전체 생성해줘",
+      "should_trigger": false,
+      "reason": "Multi-class multiplayer system -> code-generation-power"
+    },
+    {
+      "id": "tn-10",
+      "query": "GAS ability 전체 흐름 보여줘",
+      "should_trigger": false,
+      "reason": "GAS chain flow -> cross-domain-flow"
+    }
+  ]
+}

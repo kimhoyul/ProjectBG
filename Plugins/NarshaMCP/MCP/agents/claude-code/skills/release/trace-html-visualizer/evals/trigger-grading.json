@@ -1,0 +1,126 @@
+{
+  "skill": "trace-html-visualizer",
+  "description": "Trigger precision eval: verify trace-html-visualizer activates on HTML/interactive trace visualization queries and NOT on JSON trace/execution flow/material queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "BP_EnemyAI에서 BeginPlay부터 BT 실행까지 실행 흐름을 HTML 파일로 만들어서 팀원들한테 공유하고 싶어. 인터랙티브하게 노드 클릭하면 상세 보이는 형태면 좋겠어",
+      "should_trigger": true,
+      "reason": "Korean HTML trace with specific BP, start/end nodes, interactive requirement, team sharing context"
+    },
+    {
+      "id": "tp-02",
+      "query": "interactive trace HTML: GA_Weapon_Fire trace 결과를 HTML로 export해서 브라우저에서 확인하고 싶은데, Tab View랑 Unified View 둘 다 지원되게 해줘",
+      "should_trigger": true,
+      "reason": "Korean specific ability BP, HTML export, browser viewing, Tab/Unified View feature mention"
+    },
+    {
+      "id": "tp-03",
+      "query": "I need to generate an interactive trace HTML for BP_PlayerController so I can walk the design team through the input handling flow in a browser. include the C++ boundary markers if possible",
+      "should_trigger": true,
+      "reason": "English interactive trace HTML with specific BP, team walkthrough context, C++ boundary feature"
+    },
+    {
+      "id": "tp-04",
+      "query": "지난번에 trace한 BP_InventorySystem 결과 있잖아, 그거 HTML 시각화 파일로 저장해줘. 600KB짜리 self-contained HTML이면 좋겠어 오프라인에서도 볼 수 있게",
+      "should_trigger": true,
+      "reason": "Korean prior trace result, HTML visualization file save, self-contained offline requirement"
+    },
+    {
+      "id": "tp-05",
+      "query": "interactive trace HTML - can you take the BP_HeroAbility trace and open it in a browser? I want to see the node detail panel when I click each step in the execution path",
+      "should_trigger": true,
+      "reason": "English open trace in browser with specific BP, node detail panel interaction"
+    },
+    {
+      "id": "tp-06",
+      "query": "interactive trace HTML — BP_DialogSystem의 BeginDialog에서 EndDialog까지 trace를 ",
+      "should_trigger": true,
+      "reason": "Korean specific BP with start/end functions, HTML generation, data flow badge feature"
+    },
+    {
+      "id": "tp-07",
+      "query": "PR 리뷰용으로 BP_QuestManager trace 결과를 HTML 파일로 내보내줘. Source/MyGame/Docs/ 폴더에 저장하면 돼",
+      "should_trigger": true,
+      "reason": "Korean PR review context, HTML file export, specific output path"
+    },
+    {
+      "id": "tp-08",
+      "query": "generate a trace HTML visualization for BP_EnemySpawner showing the full spawn→initialize→activate flow, save it to D:/Project/Docs/spawner-trace.html",
+      "should_trigger": true,
+      "reason": "English HTML visualization with specific BP, flow description, explicit file path"
+    },
+    {
+      "id": "tp-09",
+      "query": "BP_WeaponSystem에서 Fire 이벤트 trace HTML 파일로 만들어서 브라우저에서 인터랙티브하게 볼 수 있게",
+      "should_trigger": true,
+      "reason": "Korean specific BP event, browser interactive HTML, animation controls feature"
+    },
+    {
+      "id": "tp-10",
+      "query": "interactive trace HTML: 팀 위키에 올릴 용도로 GA_Melee trace를 인터랙티브 HTML로 export하고 싶어. 노드별 exec_pin이랑 data_pin 연결이 잘 보이게 해줘",
+      "should_trigger": true,
+      "reason": "Korean team wiki sharing context, interactive HTML export, pin connection visualization detail"
+    },
+    {
+      "id": "tn-01",
+      "query": "BP_Player 실행 흐름 분석해줘",
+      "should_trigger": false,
+      "reason": "BP execution flow analysis -> blueprint-flow"
+    },
+    {
+      "id": "tn-02",
+      "query": "trace JSON 결과 보여줘",
+      "should_trigger": false,
+      "reason": "JSON trace output -> blueprint-flow (JSON, not HTML)"
+    },
+    {
+      "id": "tn-03",
+      "query": "머테리얼 노드 그래프 분석해줘",
+      "should_trigger": false,
+      "reason": "Material node graph analysis -> material-analysis"
+    },
+    {
+      "id": "tn-04",
+      "query": "BP_Enemy 실행 추적해줘",
+      "should_trigger": false,
+      "reason": "Execution flow tracing -> execution-flow-explorer"
+    },
+    {
+      "id": "tn-05",
+      "query": "TakeDamage 누가 호출하는지 추적해줘",
+      "should_trigger": false,
+      "reason": "Caller graph tracing -> caller-graph-visualizer"
+    },
+    {
+      "id": "tn-06",
+      "query": "BP_Player 구조 분석해줘",
+      "should_trigger": false,
+      "reason": "Blueprint structure analysis -> blueprint-flow"
+    },
+    {
+      "id": "tn-07",
+      "query": "어빌리티 흐름 분석",
+      "should_trigger": false,
+      "reason": "Ability flow analysis -> cross-domain-flow"
+    },
+    {
+      "id": "tn-08",
+      "query": "Mermaid 다이어그램으로 그래프 그려줘",
+      "should_trigger": false,
+      "reason": "Mermaid diagram generation -> blueprint-flow"
+    },
+    {
+      "id": "tn-09",
+      "query": "BP 이해도 평가 해줘",
+      "should_trigger": false,
+      "reason": "BP comprehension evaluation -> bp-flow-comprehension-eval"
+    },
+    {
+      "id": "tn-10",
+      "query": "GA_Weapon_Fire execution flow trace",
+      "should_trigger": false,
+      "reason": "Execution flow trace (no HTML keyword) -> execution-flow-explorer"
+    }
+  ]
+}

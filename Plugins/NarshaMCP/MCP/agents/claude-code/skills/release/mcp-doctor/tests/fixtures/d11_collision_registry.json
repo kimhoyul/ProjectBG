@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "entries": {
+    "alpha_hash": {
+      "project_path": "c:/lcp_a",
+      "port": 19679,
+      "dashboard_port": 19779,
+      "pid": 22060,
+      "started_at": "2026-05-12T11:00:00+00:00",
+      "status": "Running",
+      "crash_info": null,
+      "degraded": false
+    },
+    "beta_hash": {
+      "project_path": "c:/lcp_a",
+      "port": 19680,
+      "dashboard_port": 19780,
+      "pid": 22061,
+      "started_at": "2026-05-12T11:00:05+00:00",
+      "status": "Running",
+      "crash_info": null,
+      "degraded": false
+    }
+  }
+}

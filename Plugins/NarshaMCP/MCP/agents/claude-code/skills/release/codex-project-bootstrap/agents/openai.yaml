@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codex Project Bootstrap"
+  short_description: "Diagnose and repair per-PC Codex setup"
+  default_prompt: "Use /codex-project-bootstrap to check this machine's Codex project setup and safely repair only explicitly approved gaps."

@@ -1,0 +1,132 @@
+{
+  "skill": "image-to-design-spec",
+  "description": "Trigger precision eval: image-to-design-spec must activate on AI-generated image → game design doc (Stage 1+2) queries. NOT on PIE captures / visual regression / Confluence screenshot / bbox refinement / brief iteration queries.",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "이 시안 이미지로 기획서 만들어줘",
+      "should_trigger": true,
+      "reason": "Korean core trigger: '이미지로 기획서' literal match (Stage 1+2 entry)",
+      "language": "ko"
+    },
+    {
+      "id": "tp-02",
+      "query": "Nano Banana 시안으로 기획서 만들어",
+      "should_trigger": true,
+      "reason": "Korean: literal 'Nano Banana 시안' phrase + 기획서",
+      "language": "ko"
+    },
+    {
+      "id": "tp-03",
+      "query": "GPT Image 시안 분석해서 디자인 문서로",
+      "should_trigger": true,
+      "reason": "Korean: literal 'GPT Image 시안' phrase",
+      "language": "ko"
+    },
+    {
+      "id": "tp-04",
+      "query": "AI 이미지 기반 설계 진행해줘 — Stage 1 Vision 분석부터",
+      "should_trigger": true,
+      "reason": "Korean: 'AI 이미지 기반 설계' + Stage 1 reference",
+      "language": "ko"
+    },
+    {
+      "id": "tp-05",
+      "query": "Midjourney 시안 4장 합쳐서 게임 시스템 다이어그램 GDD 만들어",
+      "should_trigger": true,
+      "reason": "Korean: 'Midjourney 시안' + 다이어그램 GDD (mixed_routing path)",
+      "language": "ko"
+    },
+    {
+      "id": "tp-06",
+      "query": "Run concept art to GDD conversion",
+      "should_trigger": true,
+      "reason": "English: literal 'concept art to GDD' phrase",
+      "language": "en"
+    },
+    {
+      "id": "tp-07",
+      "query": "design from image — stage1 analysis + stage2 brief draft",
+      "should_trigger": true,
+      "reason": "English: 'design from image' literal trigger",
+      "language": "en"
+    },
+    {
+      "id": "tp-08",
+      "query": "image to spec for shop_concept.png",
+      "should_trigger": true,
+      "reason": "English: 'image to spec' core trigger",
+      "language": "en"
+    },
+    {
+      "id": "tp-09",
+      "query": "mockup to design pipeline 돌려줘",
+      "should_trigger": true,
+      "reason": "English: literal 'mockup to design' trigger phrase",
+      "language": "en"
+    },
+    {
+      "id": "tp-10",
+      "query": "이미지로 디자인 문서 만들어",
+      "should_trigger": true,
+      "reason": "Korean: literal '이미지로 디자인 문서' trigger phrase",
+      "language": "ko"
+    },
+    {
+      "id": "tn-01",
+      "query": "PIE 화면 캡처해서 분석해줘",
+      "should_trigger": false,
+      "reason": "Negative: 'PIE 캡처' belongs to screenshot-vision-analyzer (live editor capture)",
+      "language": "ko"
+    },
+    {
+      "id": "tn-02",
+      "query": "Confluence 매뉴얼 페이지에 스크린샷 추가해줘",
+      "should_trigger": false,
+      "reason": "Negative: 'Confluence 스크린샷' belongs to confluence-manual-update",
+      "language": "ko"
+    },
+    {
+      "id": "tn-03",
+      "query": "비주얼 회귀 테스트 골든 이미지 비교",
+      "should_trigger": false,
+      "reason": "Negative: 'visual regression' / 'golden image' belongs to visual-regression-test",
+      "language": "ko"
+    },
+    {
+      "id": "tn-04",
+      "query": "stage1_analysis.json의 bbox 좌표 픽셀 정밀도로 보정",
+      "should_trigger": false,
+      "reason": "Negative: 'bbox 보정' belongs to image-bbox-refine (Stage 1.5, not Stage 1 entry)",
+      "language": "ko"
+    },
+    {
+      "id": "tn-05",
+      "query": "기획서 자동 개선 루프 실행",
+      "should_trigger": false,
+      "reason": "Negative: '기획서 개선' belongs to design-doc-iterate (Stage 2 loop, not Stage 1+2 fresh)",
+      "language": "ko"
+    },
+    {
+      "id": "tn-06",
+      "query": "디자인 문서 마무리해서 GitHub sync",
+      "should_trigger": false,
+      "reason": "Negative: '디자인 문서 마무리' belongs to design-doc-finalize (Stage 3+4)",
+      "language": "ko"
+    },
+    {
+      "id": "tn-07",
+      "query": "텍스트 LLM baseline과 A/B 비교",
+      "should_trigger": false,
+      "reason": "Negative: 'A/B 비교' belongs to design-doc-ab-test (Stage 2 gate)",
+      "language": "ko"
+    },
+    {
+      "id": "tn-08",
+      "query": "Capture editor viewport screenshot for the documentation",
+      "should_trigger": false,
+      "reason": "Negative English: 'editor screenshot' belongs to screenshot-vision-analyzer",
+      "language": "en"
+    }
+  ]
+}

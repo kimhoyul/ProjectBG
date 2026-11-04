@@ -1,0 +1,169 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Config Relationships Schema",
+  "description": "Schema for Unreal Engine config relationship data (Issue #238)",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Schema version (e.g., '1.0.0')",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "ue_version": {
+      "type": "string",
+      "description": "Unreal Engine version (e.g., '5.6')",
+      "pattern": "^\\d+\\.\\d+$"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date",
+      "description": "Last update date (YYYY-MM-DD)"
+    },
+    "relationships": {
+      "type": "object",
+      "description": "Config relationship data",
+      "patternProperties": {
+        "^[a-zA-Z0-9\\.]+$": {
+          "oneOf": [
+            { "$ref": "#/definitions/prerequisite_relationship" },
+            { "$ref": "#/definitions/override_relationship" }
+          ]
+        }
+      }
+    }
+  },
+  "required": ["version", "ue_version", "last_updated", "relationships"],
+  "definitions": {
+    "prerequisite_relationship": {
+      "type": "object",
+      "description": "Prerequisite dependency relationship",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["prerequisite"],
+          "description": "Relationship type"
+        },
+        "prerequisites": {
+          "type": "array",
+          "description": "List of prerequisite settings",
+          "items": {
+            "$ref": "#/definitions/prerequisite_item"
+          },
+          "minItems": 1
+        },
+        "sources": {
+          "type": "array",
+          "description": "Documentation sources",
+          "items": { "type": "string" }
+        },
+        "impact_score": {
+          "type": "integer",
+          "description": "User impact score (0-100)",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "confusion_score": {
+          "type": "integer",
+          "description": "User confusion score (0-100)",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      "required": ["type", "prerequisites"]
+    },
+    "prerequisite_item": {
+      "type": "object",
+      "description": "Single prerequisite requirement",
+      "properties": {
+        "setting": {
+          "type": "string",
+          "description": "Required config setting name"
+        },
+        "required_value": {
+          "description": "Required value (any type)",
+          "oneOf": [
+            { "type": "boolean" },
+            { "type": "string" },
+            { "type": "integer" },
+            { "type": "number" }
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "description": "Why this prerequisite is needed"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["error", "warning"],
+          "description": "Severity level"
+        }
+      },
+      "required": ["setting", "required_value", "reason", "severity"]
+    },
+    "override_relationship": {
+      "type": "object",
+      "description": "Override/ignore relationship",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["override"],
+          "description": "Relationship type"
+        },
+        "overrides": {
+          "type": "array",
+          "description": "List of overridden settings",
+          "items": {
+            "$ref": "#/definitions/override_item"
+          },
+          "minItems": 1
+        },
+        "sources": {
+          "type": "array",
+          "description": "Documentation sources",
+          "items": { "type": "string" }
+        },
+        "impact_score": {
+          "type": "integer",
+          "description": "User impact score (0-100)",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "confusion_score": {
+          "type": "integer",
+          "description": "User confusion score (0-100)",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      "required": ["type", "overrides"]
+    },
+    "override_item": {
+      "type": "object",
+      "description": "Single override relationship",
+      "properties": {
+        "setting": {
+          "type": "string",
+          "description": "Overridden config setting name"
+        },
+        "condition": {
+          "type": "string",
+          "description": "Condition when override happens (e.g., 'when enabled')"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["error", "warning", "info"],
+          "description": "Severity level"
+        },
+        "message": {
+          "type": "string",
+          "description": "User-facing warning message"
+        },
+        "solution": {
+          "type": "string",
+          "description": "Suggested solution"
+        }
+      },
+      "required": ["setting", "condition", "severity", "message"]
+    }
+  }
+}

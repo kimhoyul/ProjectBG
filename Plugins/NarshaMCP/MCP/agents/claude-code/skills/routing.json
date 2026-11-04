@@ -1,0 +1,5231 @@
+{
+  "version": "1.9.0",
+  "description": "Skill routing rules — single source of truth for trigger pattern matching (Issue #5540, #5902, #6352, #7411)",
+  "rules": [
+    {
+      "skill": "ue-explain",
+      "trigger_patterns": {
+        "ko": [
+          "어떻게 동작",
+          "설명해",
+          "뭐야",
+          "방법"
+        ],
+        "en": [
+          "explain",
+          "how does",
+          "how to",
+          "what is",
+          "what causes",
+          "why does",
+          "tell me about"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "설정 뭐야",
+          "r.",
+          "sg.",
+          "GAS 세팅",
+          "GAS 처음"
+        ],
+        "en": [
+          "what does r.",
+          "what does sg.",
+          "issues",
+          "issue list",
+          "open issues",
+          "find issues",
+          "GAS setup",
+          "GAS from scratch"
+        ]
+      },
+      "disambiguation": "Explain UE concepts and assets. CVar queries ('r.X 뭐야') should route to ue-cvar-explorer. Issue queries should route to issue-find or issue-snapshot. Queries with explicit '#N' issue references should route to issue-snapshot (single-issue 3-question snapshot) not ue-explain.",
+      "priority": 1,
+      "mcp_tools_used": [
+        "ue_grep",
+        "ue_read",
+        "ue_analyze_symbols",
+        "ue_manage_blueprint",
+        "ue_manage_material"
+      ],
+      "step0_discovery": true
+    },
+    {
+      "skill": "ue-impact",
+      "trigger_patterns": {
+        "ko": [
+          "변경하면",
+          "영향",
+          "깨져",
+          "수정하면",
+          "크로스 레퍼런스",
+          "어떤 BP가 사용",
+          "xref",
+          "참조하는",
+          "사용해",
+          "의존하는"
+        ],
+        "en": [
+          "impact",
+          "breaks if",
+          "depends on",
+          "who uses",
+          "references to",
+          "xref",
+          "affected",
+          "who is affected"
+        ]
+      },
+      "disambiguation": "Change impact analysis and cross-references",
+      "priority": 2,
+      "mcp_tools_used": [
+        "ue_grep",
+        "ue_read",
+        "ue_analyze_symbols",
+        "ue_manage_blueprint"
+      ],
+      "step0_discovery": true,
+      "negative_patterns": {
+        "ko": [
+          "오토메이션 테스트",
+          "안전하게 삭제",
+          "이름 바꿔도",
+          "시그니처 변경",
+          "함수 삭제",
+          "함수 이름",
+          "커밋 영향",
+          "커밋 임팩트",
+          "실행 플로우",
+          "실행 흐름 추적",
+          "GAS flow",
+          "cross-domain",
+          "PCG 마이그레이션",
+          "리팩토링 영향 분석",
+          "이름 바꿔도 괜찮",
+          "시그니처에 파라미터",
+          "AnimGraph 보고",
+          "LinkedAnimGraph"
+        ],
+        "en": [
+          "automation test",
+          "safely rename",
+          "safely delete",
+          "signature change",
+          "delete function",
+          "commit impact",
+          "staged files",
+          "execution flow",
+          "call chain",
+          "ability flow",
+          "cross-domain",
+          "PCG migration",
+          "refactoring impact analysis",
+          "Can I rename",
+          "AnimGraph",
+          "LinkedAnimGraph"
+        ]
+      }
+    },
+    {
+      "skill": "ue-debug",
+      "trigger_patterns": {
+        "ko": [
+          "에러",
+          "크래시",
+          "안돼",
+          "해결해줘",
+          "원인",
+          "사운드 안 재생",
+          "오디오 버그",
+          "메타사운드 문제",
+          "빌드 왜 실패"
+        ],
+        "en": [
+          "error",
+          "crash",
+          "fix",
+          "not working",
+          "cannot",
+          "incompatible",
+          "assertion failed",
+          "sound not playing",
+          "audio bug",
+          "MetaSound issue",
+          "sound not restarting",
+          "spatialization issue"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "에러 테스트",
+          "에러 진단 정확도",
+          "에러 미스터리",
+          "에러 파서 테스트",
+          "빌드 에러 테스트",
+          "진단이 얼마나 정확",
+          "에러 상세 분석",
+          "review fix",
+          "리뷰 fix",
+          "리뷰 수정",
+          "자동 수정 리뷰",
+          "이슈 상태",
+          "라벨 정리",
+          "stale issue",
+          "링커 에러 모듈",
+          "링커 에러 해결"
+        ],
+        "en": [
+          "error handling",
+          "crash reporter",
+          "error recovery",
+          "auto fix",
+          "fix warnings",
+          "error test",
+          "error diagnosis accuracy",
+          "mystery test",
+          "error parser test",
+          "build error mystery",
+          "error diagnosis benchmark",
+          "compilation error resolution",
+          "review fix",
+          "review then fix",
+          "safe auto-fix",
+          "Fix issue labels",
+          "stale issue",
+          "issue state",
+          "linker module",
+          "linker error resolve"
+        ]
+      },
+      "disambiguation": "Error resolution and debugging (includes audio/MetaSound debugging, not 'auto fix warnings' which is ue-audit, not 'error test/mystery' which is build-error-mystery-test)",
+      "priority": 4,
+      "mcp_tools_used": [
+        "ue_grep",
+        "ue_read",
+        "ue_fix_errors",
+        "ue_editor_debug"
+      ],
+      "step0_discovery": true
+    },
+    {
+      "skill": "unreal-error-doctor",
+      "trigger_patterns": {
+        "ko": [
+          "빌드 에러",
+          "컴파일 에러",
+          "빌드 실패",
+          "링커 에러",
+          "헤더 에러",
+          "UPROPERTY 에러",
+          "UCLASS 에러",
+          "에러 해결해줘",
+          "빌드 고쳐줘"
+        ],
+        "en": [
+          "compile error",
+          "build error",
+          "build failed",
+          "linker error",
+          "header error",
+          "UPROPERTY error",
+          "UCLASS error",
+          "fix build errors",
+          "resolve errors"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "빌드 에러 테스트",
+          "에러 진단 정확도",
+          "진단이 얼마나 정확",
+          "에러 미스터리",
+          "링커 에러 모듈",
+          "모듈 찾기",
+          "Build.cs",
+          "링커 에러 해결",
+          "모듈 의존성",
+          "왜 이런",
+          "디버그",
+          "왜 이런지",
+          "빌드 왜 실패"
+        ],
+        "en": [
+          "build error test",
+          "error diagnosis accuracy",
+          "mystery test",
+          "diagnosis benchmark",
+          "linker module",
+          "module dependency",
+          "Build.cs",
+          "linker error module",
+          "debug",
+          "why is",
+          "diagnose",
+          "which module"
+        ]
+      },
+      "disambiguation": "Compile/build error resolution (specific). For general debugging/crashes, use ue-debug instead.",
+      "priority": 3,
+      "mcp_tools_used": [
+        "ue_fix_errors",
+        "ue_build_pipeline",
+        "ue_editor_automation"
+      ]
+    },
+    {
+      "skill": "ue-create-system",
+      "trigger_patterns": {
+        "ko": [
+          "시스템 만들어",
+          "전체 시스템",
+          "이펙트 포함",
+          "VFX 포함",
+          "UI 포함",
+          "머티리얼 포함",
+          "크로스 도메인 시스템"
+        ],
+        "en": [
+          "create system with",
+          "full system",
+          "complete system",
+          "cross-domain system",
+          "system with VFX",
+          "system with effects",
+          "system with material"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "시스템 설명",
+          "시스템 분석",
+          "시스템 진단",
+          "시스템 어떻게",
+          "파워 코드 생성",
+          "시나리오 생성"
+        ],
+        "en": [
+          "explain",
+          "how does",
+          "analyze system",
+          "multi-class",
+          "power codegen",
+          "scenario"
+        ]
+      },
+      "disambiguation": "Cross-domain system generation (C++ + BP + VFX + Material + UI) via NarshaMCP analysis + Editor RC creation. Requires 'system' qualifier with domain qualifier (VFX/UI/Material). For single-feature creation, use ue-scaffold instead.",
+      "priority": 100,
+      "mcp_tools_used": [
+        "ue_generate_code",
+        "ue_grep",
+        "ue_read",
+        "ue_analyze_symbols",
+        "ue_check_health",
+        "ue_fix_errors"
+      ]
+    },
+    {
+      "skill": "ue-scaffold",
+      "trigger_patterns": {
+        "ko": [
+          "만들어줘",
+          "생성",
+          "구현해줘"
+        ],
+        "en": [
+          "build",
+          "create",
+          "scaffold",
+          "set up"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "테스트 생성",
+          "테스트 만들어",
+          "스킬 빌더",
+          "스킬 만들어",
+          "빌드 에러 테스트",
+          "에러 미스터리",
+          "BP 그래프 만들어",
+          "BP 로직 만들어",
+          "API 변경 문서",
+          "트러블슈팅 문서",
+          "OVERVIEW.md",
+          "CLASSES.md",
+          "리뷰 수정",
+          "PR 만들어",
+          "릴리즈 패키지",
+          "이슈 만들어",
+          "변환 리포트",
+          "C++ 프로젝트로 전환",
+          "모듈 분석",
+          "모듈 클래스 문서",
+          "AnimBP 생성",
+          "이슈 생성",
+          "GitHub 이슈",
+          "PR 생성",
+          "풀리퀘스트",
+          "release package",
+          "리뷰 반복",
+          "API_CHANGES",
+          "EXAMPLES.md",
+          "TROUBLESHOOT.md",
+          "README.md",
+          "changelog",
+          "release notes",
+          "GitHub Release",
+          "PCG 그래프 복제",
+          "PCG_",
+          "자동화 테스트",
+          "유닛 테스트",
+          "기능 테스트",
+          "입력 녹화",
+          "PIE recording",
+          "성능 리포트",
+          "optimization opportunities",
+          "스킬 생성",
+          "스킬 평가",
+          "컨텍스트 생성",
+          "개발 루프",
+          "MCP 라이브",
+          "MCP live",
+          "smoke test",
+          "문서 생성",
+          "시스템 전체",
+          "전체 생성",
+          "전체 구현",
+          "전체 코드",
+          "세트 생성",
+          "Build.cs",
+          ".Build.cs",
+          "미니맵",
+          "WBP_",
+          "진단 실행",
+          "개선 이슈",
+          "improvement issues",
+          "오토메이션 테스트",
+          "검증해줘. Enhanced Input",
+          "C++로 옮긴",
+          "프로젝트 빌드",
+          "Build project",
+          "BuildCookRun",
+          "이펙트 포함",
+          "UI 포함",
+          "VFX 포함",
+          "머티리얼 포함",
+          "BP 생성",
+          "BP 만들어"
+        ],
+        "en": [
+          "generate test",
+          "create test",
+          "build time",
+          "build error mystery",
+          "mystery test",
+          "error parser test",
+          "build skill",
+          "automation test builder",
+          "BP graph for",
+          "Blueprint graph for",
+          "API changes",
+          "API diff",
+          "migration report",
+          "spatial audio",
+          "create skill",
+          "create PR",
+          "module analysis",
+          "module documentation",
+          "troubleshooting guide",
+          "Create issue",
+          "GitHub issue",
+          "Create PR",
+          "Make PR",
+          "Open PR",
+          "pull request",
+          "release package",
+          "release artifact",
+          "review fix",
+          "review iterate",
+          "API_CHANGES",
+          "EXAMPLES.md",
+          "TROUBLESHOOT",
+          "README",
+          "changelog",
+          "release notes",
+          "GitHub Release",
+          "PCG graph",
+          "PCG_",
+          "automation test",
+          "unit test",
+          "functional test",
+          "record input",
+          "PIE recording",
+          "multi-class",
+          "weapon system",
+          "GAS setup",
+          "combat system",
+          "Create a skill",
+          "Build a skill",
+          "skill quality",
+          "project init",
+          "domain context",
+          "dev cycle",
+          "code build test",
+          "MCP live test",
+          "Smoke test",
+          "smoke test",
+          "Narsha IDE",
+          "IDE launch",
+          "build narsha",
+          "entire system",
+          "full system",
+          "complete system",
+          ".Build.cs",
+          "Build.cs",
+          "improvement issues",
+          "validate migration",
+          "verify C++ migration",
+          "Build the project",
+          "build project",
+          "BuildCookRun pipeline",
+          "system with VFX",
+          "system with effects",
+          "system with material",
+          "cross-domain system",
+          "create Blueprint",
+          "generate Blueprint",
+          "Blueprint graph",
+          "create a BP",
+          "generate a BP"
+        ]
+      },
+      "disambiguation": "Feature scaffolding with architecture design + code generation",
+      "priority": 47,
+      "mcp_tools_used": [
+        "ue_generate_code",
+        "ue_fix_errors",
+        "ue_grep",
+        "ue_read",
+        "ue_check_health"
+      ]
+    },
+    {
+      "skill": "ue-audit",
+      "trigger_patterns": {
+        "ko": [
+          "건강",
+          "진단",
+          "점검",
+          "경고 요약",
+          "메시지 로그",
+          "자동 수정"
+        ],
+        "en": [
+          "audit",
+          "health check",
+          "diagnostic",
+          "warning summary",
+          "message log",
+          "healthy",
+          "auto fix warnings"
+        ]
+      },
+      "disambiguation": "Project-wide health diagnostic. Level-scoped health (레벨 건강 / streaming + DataLayer diagnose) routes to ue-level-analysis, not the project-wide audit. Scored trace-quality/runtime performance audit of a .utrace routes to ue-perf-audit.",
+      "priority": 5,
+      "mcp_tools_used": [
+        "ue_check_health",
+        "ue_editor_debug",
+        "ue_search_assets",
+        "ue_analyze_config",
+        "ue_diff"
+      ],
+      "negative_patterns": {
+        "ko": [
+          "에러 진단 정확도",
+          "에러 파서",
+          "AnimBP",
+          "코드베이스 자기 진단",
+          "코드베이스 분석",
+          "정확한지 테스트",
+          "에러 테스트",
+          "건강도",
+          "Epic standards",
+          "Epic 표준",
+          "빌드 시간",
+          "모듈 의존성",
+          "Tech Debt",
+          "코드 품질",
+          "세션 건강",
+          "session health",
+          "MCP 세션",
+          "PCG audit",
+          "batch PCG",
+          "PCG 성능",
+          "Rig performance",
+          "리그 성능",
+          "리뷰 fix",
+          "review fix",
+          "자동 수정 리뷰",
+          "타입 힌트 자동",
+          "auto-fix",
+          "type hint fix",
+          "타입 힌트 auto-fix"
+        ],
+        "en": [
+          "error diagnosis accuracy",
+          "error parser",
+          "codebase self",
+          "codebase analysis",
+          "health score",
+          "performance health",
+          "Epic standards",
+          "build time",
+          "module dependency",
+          "Tech Debt",
+          "code quality",
+          "session health",
+          "MCP session",
+          "PCG audit",
+          "batch PCG",
+          "PCG performance",
+          "Rig performance",
+          "control rig audit",
+          "review fix",
+          "auto-fix",
+          "type hint fix",
+          "타입 힌트 auto-fix"
+        ]
+      }
+    },
+    {
+      "skill": "ue-validate",
+      "trigger_patterns": {
+        "ko": [
+          "검증",
+          "유효성",
+          "에셋 품질",
+          "에셋 검증",
+          "유효해"
+        ],
+        "en": [
+          "validate",
+          "data validation",
+          "asset quality",
+          "pre-submit validation",
+          "passes validation"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "목표 달성",
+          "이슈 목표",
+          "테스트로 검증",
+          "테스트 생성 검증",
+          "이슈 테스트 검증",
+          "완료 검증",
+          "변환 검증",
+          "마이그레이션 검증",
+          "C++로 옮",
+          "동일한지 검증",
+          "C++로",
+          "설치 검증",
+          "패키지 검증",
+          "릴리즈 검증",
+          "이슈 검증",
+          "목표 달성 검증",
+          "변환 리포트",
+          "커밋 전",
+          "커밋 검증",
+          "푸시 전",
+          "MCP 라이브",
+          "MCP 도구",
+          "MCP live",
+          "README",
+          "CLAUDE.md",
+          "교차검증",
+          "목표 검증",
+          "문서 검증",
+          "문서 소스",
+          "소스코드 교차",
+          "source doc",
+          "doc verify"
+        ],
+        "en": [
+          "issue goals",
+          "goal verification",
+          "verify with tests",
+          "test-based verification",
+          "issue test verify",
+          "migration validation",
+          "release artifact",
+          "package installation",
+          "installation test",
+          "issue goal",
+          "verify goals",
+          "migration complete",
+          "conversion report",
+          "pre-commit",
+          "commit check",
+          "MCP live",
+          "MCP tool",
+          "README",
+          "cross-verify",
+          "doc verify",
+          "source verification"
+        ]
+      },
+      "disambiguation": "Asset quality validation (not project audit, not issue goal verification)",
+      "priority": 11,
+      "mcp_tools_used": [
+        "ue_editor_assets"
+      ]
+    },
+    {
+      "skill": "ue-cvar-explorer",
+      "trigger_patterns": {
+        "ko": [
+          "CVar",
+          "설정 검색",
+          "설정 뭐야",
+          "그래픽 설정",
+          "성능 설정",
+          "렌더링 옵션",
+          "값 확인",
+          "r.",
+          "sg."
+        ],
+        "en": [
+          "cvar",
+          "config search",
+          "quality settings",
+          "scalability",
+          "graphics settings",
+          "what does r.",
+          "control",
+          "r.",
+          "sg."
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "모든 설정 찾아",
+          "전체에서",
+          "관련된 모든",
+          "Compare control rig",
+          "컨트롤 리그",
+          "Control Rig",
+          "BeginPlay에서",
+          "RotatingMovement",
+          "호출 체인",
+          "RPC",
+          "trace HTML",
+          "interactive trace",
+          "시각화 파일",
+          "BP 변환",
+          "migration validation",
+          "C++ 마이그레이션 확인"
+        ],
+        "en": [
+          "find all",
+          "search all",
+          "every setting",
+          "class inheriting",
+          "create a A",
+          "Compare control rig",
+          "Control Rig",
+          "control rig",
+          "call chain",
+          "RPC",
+          "trace HTML",
+          "interactive trace",
+          "visualization file",
+          "BP 변환",
+          "migration validation",
+          "C++ 마이그레이션 확인"
+        ]
+      },
+      "disambiguation": "CVar/config exploration with engine metadata. Broad search queries ('모든 설정 찾아') should use ue_grep instead.",
+      "priority": 12,
+      "mcp_tools_used": [
+        "ue_analyze_config"
+      ]
+    },
+    {
+      "skill": "ue-livecoding-fix",
+      "trigger_patterns": {
+        "ko": [
+          "live coding",
+          "핫 리로드",
+          "라이브 코딩",
+          "패치 실패"
+        ],
+        "en": [
+          "live coding",
+          "hot reload failed",
+          "patch failed"
+        ]
+      },
+      "disambiguation": "Live Coding / Hot Reload failure recovery",
+      "priority": 13,
+      "mcp_tools_used": [
+        "ue_editor_automation",
+        "ue_fix_errors"
+      ],
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      }
+    },
+    {
+      "skill": "ue-pre-commit",
+      "trigger_patterns": {
+        "ko": [
+          "커밋 전",
+          "커밋 검사",
+          "커밋 영향",
+          "커밋해도 안전",
+          "커밋해도 될까",
+          "변경사항 커밋"
+        ],
+        "en": [
+          "pre-commit",
+          "commit check",
+          "push check",
+          "safe to commit",
+          "safe to push"
+        ]
+      },
+      "disambiguation": "Pre-commit safety check for staged C++ changes (incl. Phase 6 test-intent suggestion)",
+      "priority": 14,
+      "mcp_tools_used": [
+        "ue_analyze_symbols",
+        "ue_manage_blueprint",
+        "ue_fix_errors",
+        "ue_diff"
+      ],
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      }
+    },
+    {
+      "skill": "ue-diff",
+      "trigger_patterns": {
+        "ko": [
+          "리플리케이션 감사",
+          "설정 비교",
+          "config 비교",
+          "계층 비교",
+          "클래스 차이",
+          "설정 체인",
+          "config chain",
+          "에셋 비교",
+          "에셋 차이",
+          "uasset 비교"
+        ],
+        "en": [
+          "replication cross-check",
+          "config diff",
+          "config chain",
+          "diff hierarchy",
+          "class delta",
+          "compare configs",
+          "override cascade",
+          "compare assets",
+          "asset diff",
+          "uasset diff"
+        ]
+      },
+      "disambiguation": "Cross-check mismatches + entity/asset diff: replication audit, class hierarchy delta, config override cascade, binary .uasset compare",
+      "priority": 70,
+      "mcp_tools_used": [
+        "ue_diff",
+        "ue_grep"
+      ],
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      }
+    },
+    {
+      "skill": "ue-test-framework-advisor",
+      "trigger_patterns": {
+        "ko": [
+          "테스트 프레임워크",
+          "어떤 테스트",
+          "테스트 추천",
+          "테스트 타입 추천",
+          "어떤 테스트가 좋",
+          "테스트 방식 추천",
+          "프레임워크 추천"
+        ],
+        "en": [
+          "test framework",
+          "which test type",
+          "best test for",
+          "recommend test",
+          "test advisor",
+          "what kind of test"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "테스트 생성",
+          "테스트 만들어",
+          "자동화 테스트 만들어",
+          "테스트 시나리오"
+        ],
+        "en": [
+          "generate test",
+          "create test",
+          "automation test builder",
+          "test scenario"
+        ]
+      },
+      "disambiguation": "UE test framework auto-selection advisor (Phase 0). Recommends framework then routes to ue-test-gen, ue-automation-test-builder, or ue-test-scenario. Not direct test generation.",
+      "priority": 108,
+      "mcp_tools_used": [
+        "ue_analyze_symbols",
+        "ue_generate_code"
+      ],
+      "step0_discovery": true
+    },
+    {
+      "skill": "ue-test-gen",
+      "trigger_patterns": {
+        "ko": [
+          "테스트 생성",
+          "테스트 만들어"
+        ],
+        "en": [
+          "generate test",
+          "create test"
+        ]
+      },
+      "disambiguation": "One-shot UE Automation Test generation (also intent-based multi-test mode, Issue #10283)",
+      "priority": 15,
+      "mcp_tools_used": [
+        "ue_generate_code",
+        "ue_analyze_symbols"
+      ],
+      "negative_patterns": {
+        "ko": [
+          "자동화 테스트",
+          "UE 자동화",
+          "기능 테스트",
+          "입력 녹화",
+          "입력 기록",
+          "PIE 녹화",
+          "UE 자동화 테스트 생성",
+          "6-Phase"
+        ],
+        "en": [
+          "automation test",
+          "UE automation",
+          "functional test",
+          "automation framework",
+          "record input",
+          "input recording",
+          "PIE recording"
+        ]
+      }
+    },
+    {
+      "skill": "game-design-intelligence",
+      "trigger_patterns": {
+        "ko": [
+          "밸런스 분석",
+          "GAS 밸런스",
+          "게임 디자인 문서",
+          "AI 행동 문서"
+        ],
+        "en": [
+          "balance analysis",
+          "game design report",
+          "AI behavior doc"
+        ]
+      },
+      "disambiguation": "Game design intelligence documents (GAS balance, AI behavior)",
+      "priority": 16,
+      "mcp_tools_used": [
+        "ue_manage_gameplay",
+        "ue_manage_ai"
+      ],
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      }
+    },
+    {
+      "skill": "ue-engine-content",
+      "trigger_patterns": {
+        "ko": [
+          "엔진 포함",
+          "엔진 메타데이터",
+          "엔진 로드",
+          "엔진 PDB",
+          "엔진 심볼"
+        ],
+        "en": [
+          "include engine",
+          "engine content",
+          "load engine",
+          "engine metadata",
+          "engine pdb"
+        ]
+      },
+      "disambiguation": "On-demand engine PDB/metadata loading workflow",
+      "priority": 17,
+      "mcp_tools_used": [
+        "ue_cache_control"
+      ],
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      }
+    },
+    {
+      "skill": "mcp-skill-builder",
+      "trigger_patterns": {
+        "ko": [
+          "스킬 만들어",
+          "스킬 생성",
+          "스킬 빌더",
+          "스킬 평가",
+          "스킬 개선",
+          "MCP 동기화",
+          "스킬 품질"
+        ],
+        "en": [
+          "create skill",
+          "build skill",
+          "skill builder",
+          "evaluate skill",
+          "improve skill",
+          "mcp sync",
+          "skill quality",
+          "evaluate skill quality"
+        ]
+      },
+      "disambiguation": "Build, evaluate, and maintain MCP-powered skills (not UE feature creation)",
+      "priority": 18,
+      "mcp_tools_used": [
+        "ue_tool_docs"
+      ],
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      }
+    },
+    {
+      "skill": "ue-sequencer-cinematics",
+      "trigger_patterns": {
+        "ko": [
+          "시네마틱",
+          "시퀀서 워크플로우",
+          "레벨 시퀀스",
+          "카메라 컷"
+        ],
+        "en": [
+          "cinematics",
+          "sequencer workflow",
+          "level sequence",
+          "camera cut"
+        ]
+      },
+      "disambiguation": "Level Sequence cinematics workflow (structure, tracks, keyframes, playback)",
+      "priority": 19,
+      "mcp_tools_used": [
+        "ue_sequencer_structure",
+        "ue_sequencer_tracks",
+        "ue_sequencer_keyframes",
+        "ue_sequencer_playback"
+      ],
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      }
+    },
+    {
+      "skill": "ue-ik-rig-analysis",
+      "trigger_patterns": {
+        "ko": [
+          "IK 리그 분석",
+          "IK 솔버",
+          "리타게터 분석",
+          "IK 체인"
+        ],
+        "en": [
+          "IK Rig analysis",
+          "IK solver",
+          "retargeter analysis",
+          "IK chain"
+        ]
+      },
+      "disambiguation": "IK Rig structure analysis (not Control Rig)",
+      "priority": 20,
+      "mcp_tools_used": [
+        "ue_manage_rigging"
+      ],
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      }
+    },
+    {
+      "skill": "ue-perf-lint",
+      "trigger_patterns": {
+        "ko": [
+          "성능 린트",
+          "퍼포먼스 린트",
+          "안티패턴 검사",
+          "Tick 성능 검사",
+          "코드 성능 검사"
+        ],
+        "en": [
+          "perf lint",
+          "performance lint",
+          "anti-pattern check",
+          "tick performance scan",
+          "static perf analysis"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "프로파일링",
+          "utrace",
+          "프레임 드롭",
+          "병목 분석"
+        ],
+        "en": [
+          "profiling",
+          "utrace",
+          "frame drop",
+          "bottleneck",
+          "runtime"
+        ]
+      },
+      "disambiguation": "Static code analysis for PERF rules. For runtime profiling, use ue-insights-profiler.",
+      "priority": 66,
+      "mcp_tools_used": [
+        "ue_grep",
+        "ue_read",
+        "ue_generate_code"
+      ],
+      "step0_discovery": true
+    },
+    {
+      "skill": "ue-architecture-lint",
+      "trigger_patterns": {
+        "ko": [
+          "아키텍처 린트",
+          "구조 검사",
+          "아키텍처 검증",
+          "코드 구조 분석",
+          "설계 검사",
+          "아키텍처 검사"
+        ],
+        "en": [
+          "architecture lint",
+          "arch lint",
+          "architecture check",
+          "structure check",
+          "design check"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "성능 린트",
+          "perf lint",
+          "빌드 에러",
+          "프로파일링",
+          "프로젝트 건강"
+        ],
+        "en": [
+          "perf lint",
+          "performance lint",
+          "build error",
+          "profiling",
+          "project health"
+        ]
+      },
+      "disambiguation": "Static architecture rule checking (ARCH-001~010). For performance: ue-perf-lint. For pre-commit impact: ue-pre-commit. For project health: ue-audit.",
+      "priority": 110,
+      "mcp_tools_used": [
+        "ue_analyze_symbols",
+        "ue_analyze_source",
+        "ue_diff",
+        "ue_grep",
+        "ue_read"
+      ],
+      "step0_discovery": true
+    },
+    {
+      "skill": "ue-insights-profiler",
+      "trigger_patterns": {
+        "ko": [
+          "성능 분석",
+          "프로파일링",
+          "왜 느려",
+          "병목",
+          "utrace"
+        ],
+        "en": [
+          "performance profiling",
+          "bottleneck",
+          "hot function",
+          "utrace",
+          "frame drop"
+        ]
+      },
+      "disambiguation": "Performance profiling with Unreal Insights (not general debugging). Scored trace-quality + runtime audit of a capture routes to ue-perf-audit.",
+      "priority": 21,
+      "mcp_tools_used": [
+        "ue_analyze_insights"
+      ],
+      "negative_patterns": {
+        "ko": [
+          "PCG 성능",
+          "PCG_Forest",
+          "PCG 그래프"
+        ],
+        "en": [
+          "PCG performance",
+          "PCG graph"
+        ]
+      }
+    },
+    {
+      "skill": "ue-project-ops",
+      "trigger_patterns": {
+        "ko": [
+          "프로젝트 인프라",
+          "DDC 상태",
+          "월드 파티션",
+          "소스 컨트롤"
+        ],
+        "en": [
+          "project ops",
+          "DDC health",
+          "World Partition",
+          "source control status"
+        ]
+      },
+      "disambiguation": "Project infrastructure (WP/DDC/SC), not git/commit operations. Level-content analysis (레벨 분석 / OFPA actor placement, per-level composition) belongs to ue-level-analysis, not project-level WP/DDC status.",
+      "priority": 22,
+      "mcp_tools_used": [
+        "ue_manage_project_ops"
+      ],
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      }
+    },
+    {
+      "skill": "ue-asset-discovery",
+      "trigger_patterns": {
+        "ko": [
+          "에셋 참조",
+          "에셋 의존성",
+          "순환 참조",
+          "레퍼런스 찾기",
+          "뭐가 사용"
+        ],
+        "en": [
+          "asset references",
+          "asset dependencies",
+          "circular dependencies",
+          "what uses this asset",
+          "reference graph"
+        ]
+      },
+      "disambiguation": "Asset reference/dependency discovery (not asset validation or search)",
+      "priority": 23,
+      "mcp_tools_used": [
+        "ue_search_assets"
+      ],
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      }
+    },
+    {
+      "skill": "ue-execution-trace",
+      "trigger_patterns": {
+        "ko": [
+          "실행 추적",
+          "실행 플로우",
+          "어빌리티 플로우",
+          "입력 추적",
+          "태그 전파"
+        ],
+        "en": [
+          "trace execution",
+          "execution flow",
+          "ability flow",
+          "trace from input",
+          "what happens when"
+        ]
+      },
+      "disambiguation": "Blueprint/GAS execution flow tracing (not impact analysis or debugging)",
+      "priority": 24,
+      "mcp_tools_used": [
+        "ue_trace_execution"
+      ],
+      "negative_patterns": {
+        "ko": [
+          "BP 실행 흐름",
+          "Blueprint 실행 흐름",
+          "comprehension",
+          "eval"
+        ],
+        "en": [
+          "comprehension test",
+          "comprehension eval"
+        ]
+      }
+    },
+    {
+      "skill": "ue-source-build",
+      "trigger_patterns": {
+        "ko": [
+          "풀소스 빌드",
+          "소스 빌드",
+          "엔진 빌드",
+          "소스 엔진",
+          "풀소스 설정"
+        ],
+        "en": [
+          "source build",
+          "build engine",
+          "full source",
+          "engine build",
+          "build UE from source"
+        ]
+      },
+      "disambiguation": "UE engine source build (not project build → ue-build-automate)",
+      "priority": 69,
+      "mcp_tools_used": [
+        "ue_build_pipeline"
+      ],
+      "negative_patterns": {
+        "ko": [
+          "프로젝트 빌드",
+          "빌드 에러",
+          "에디터 실행"
+        ],
+        "en": [
+          "project build",
+          "build project",
+          "build error",
+          "launch editor"
+        ]
+      }
+    },
+    {
+      "skill": "ue-build-automate",
+      "trigger_patterns": {
+        "ko": [
+          "빌드 자동화",
+          "쿡",
+          "패키징",
+          "커맨드릿 실행",
+          "빌드 파이프라인",
+          "프로젝트 빌드해"
+        ],
+        "en": [
+          "build project",
+          "cook",
+          "package",
+          "run commandlet",
+          "BuildCookRun",
+          "build pipeline",
+          "Build the project"
+        ]
+      },
+      "disambiguation": "Build/cook/package pipeline automation (not build error fixing)",
+      "priority": 25,
+      "mcp_tools_used": [
+        "ue_build_pipeline"
+      ],
+      "negative_patterns": {
+        "ko": [
+          "릴리즈 패키지",
+          "설치 검증",
+          "릴리즈 패키지 테스트",
+          "건틀릿"
+        ],
+        "en": [
+          "release package",
+          "package installation",
+          "installation test",
+          "release-package-tester",
+          "release package test",
+          "packaged build",
+          "Gauntlet"
+        ]
+      }
+    },
+    {
+      "skill": "ue-cpp-refactor",
+      "trigger_patterns": {
+        "ko": [
+          "리팩터링",
+          "리네임",
+          "클래스 이름 변경",
+          "함수 추출",
+          "안전 삭제"
+        ],
+        "en": [
+          "refactor",
+          "rename class",
+          "rename function",
+          "extract method",
+          "change signature",
+          "safe delete"
+        ]
+      },
+      "disambiguation": "C++ refactoring operations (not new class creation or scaffolding)",
+      "priority": 26,
+      "mcp_tools_used": [
+        "ue_generate_code"
+      ],
+      "negative_patterns": {
+        "ko": [
+          "이슈 준비",
+          "리팩토링 이슈",
+          "이슈 검증",
+          "리팩토링 검증",
+          "이름 바꿔도 괜찮",
+          "바꿔도 안전",
+          "BP 리팩터링",
+          "BP 리팩토링",
+          "BP 개선",
+          "블루프린트 정리",
+          "블루프린트 개선"
+        ],
+        "en": [
+          "Prepare issue",
+          "refactoring issue",
+          "Verify goals",
+          "refactoring task verify",
+          "Can I rename safely",
+          "breaking change assessment",
+          "refactoring impact analysis",
+          "refactor Blueprint",
+          "refactor BP",
+          "clean up BP",
+          "optimize BP graph",
+          "Blueprint refactor"
+        ]
+      }
+    },
+    {
+      "skill": "project-onboarding",
+      "trigger_patterns": {
+        "ko": [
+          "온보딩",
+          "프로젝트 분석",
+          "프로젝트 시작",
+          "뭘 할 수 있어",
+          "도구 추천",
+          "첫 세션"
+        ],
+        "en": [
+          "onboarding",
+          "project analysis",
+          "get started",
+          "what can you do",
+          "tool recommendations",
+          "first session",
+          "project setup"
+        ]
+      },
+      "disambiguation": "First-session project analysis and tool/skill recommendation (not project ops/WP/DDC, not audit/health)",
+      "priority": 28,
+      "mcp_tools_used": [
+        "ue_check_health",
+        "ue_cache_control",
+        "ue_search_assets",
+        "ue_analyze_symbols"
+      ],
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      }
+    },
+    {
+      "skill": "ci-verify",
+      "trigger_patterns": {
+        "ko": [
+          "CI 상태",
+          "CI 확인",
+          "CI 통과",
+          "이슈 목표 달성",
+          "PR 체크",
+          "워크플로우 상태",
+          "브랜치 CI",
+          "빌드 상태",
+          "목표 달성"
+        ],
+        "en": [
+          "CI status",
+          "CI verify",
+          "CI passed",
+          "issue goals",
+          "PR check",
+          "workflow status",
+          "check CI",
+          "CI gate",
+          "GitHub Actions",
+          "build status"
+        ]
+      },
+      "disambiguation": "CI status check and issue goal verification (not debugging or auditing)",
+      "priority": 29,
+      "mcp_tools_used": [],
+      "negative_patterns": {
+        "ko": [
+          "빌드 상태 모니터링",
+          "auto-recover",
+          "테스트 생성",
+          "test generation",
+          "이슈 목표 달성 확인",
+          "이슈 검증",
+          "objective evidence"
+        ],
+        "en": [
+          "monitoring",
+          "auto-recover",
+          "test generation",
+          "generate tests",
+          "code review",
+          "objective evidence"
+        ]
+      }
+    },
+    {
+      "skill": "issue-find",
+      "trigger_patterns": {
+        "ko": [
+          "이슈 찾아",
+          "이슈 목록",
+          "이슈 우선순위",
+          "작업 가능한 이슈",
+          "이슈 추천",
+          "이슈 있어",
+          "열린 이슈"
+        ],
+        "en": [
+          "find issues",
+          "open issues",
+          "issue list",
+          "issue priority",
+          "unassigned issues",
+          "work on next",
+          "P0 issues",
+          "P1 bugs"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "목표 달성",
+          "이슈 목표"
+        ],
+        "en": [
+          "issue goals",
+          "goal verification"
+        ]
+      },
+      "disambiguation": "Find actionable GitHub issues by priority/component (not issue creation or CI check)",
+      "priority": 30,
+      "mcp_tools_used": []
+    },
+    {
+      "skill": "build-error-mystery-test",
+      "trigger_patterns": {
+        "ko": [
+          "빌드 에러 테스트",
+          "에러 진단 정확도",
+          "에러 미스터리",
+          "에러 파서 테스트",
+          "진단이 얼마나 정확"
+        ],
+        "en": [
+          "build error test",
+          "error diagnosis accuracy",
+          "mystery test",
+          "error parser test",
+          "build error mystery"
+        ]
+      },
+      "disambiguation": "Cyclic build error diagnosis accuracy testing (not debugging real errors)",
+      "priority": 31,
+      "mcp_tools_used": [
+        "ue_fix_errors"
+      ],
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      }
+    },
+    {
+      "skill": "mcp-live-test",
+      "trigger_patterns": {
+        "ko": [
+          "MCP 라이브 테스트",
+          "MCP 테스트 실행",
+          "라이브 테스트 실행",
+          "MCP 서버 라이브",
+          "MCP 서버 테스트"
+        ],
+        "en": [
+          "MCP live test",
+          "run MCP live test",
+          "live test MCP",
+          "MCP server live",
+          "live test MCP server"
+        ]
+      },
+      "disambiguation": "MCP server live testing (build + mock E2E + editor + live calls), not code review or issue verification",
+      "priority": 32,
+      "mcp_tools_used": [
+        "ue_check_health",
+        "ue_analyze_symbols"
+      ],
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      }
+    },
+    {
+      "skill": "pr-create",
+      "trigger_patterns": {
+        "ko": [
+          "PR 만들어줘",
+          "PR 생성",
+          "PR 올려줘",
+          "풀리퀘스트 만들어",
+          "PR 올려"
+        ],
+        "en": [
+          "create PR",
+          "make PR",
+          "open PR",
+          "submit PR",
+          "Make a PR",
+          "Open a pull request"
+        ]
+      },
+      "disambiguation": "PR creation with quality gate enforcement and CI monitoring (not code review or CI check)",
+      "priority": 33,
+      "mcp_tools_used": [],
+      "negative_patterns": {
+        "ko": [],
+        "en": [
+          "system with",
+          "projectile system"
+        ]
+      }
+    },
+    {
+      "skill": "post-merge-cleanup",
+      "trigger_patterns": {
+        "ko": [
+          "머지 정리",
+          "머지 후 정리",
+          "브런치 정리",
+          "머지 완료 정리",
+          "포스트 머지",
+          "클린업",
+          "머지 클린업"
+        ],
+        "en": [
+          "post-merge cleanup",
+          "merge cleanup",
+          "branch cleanup",
+          "after merge",
+          "clean up merged",
+          "post merge"
+        ]
+      },
+      "disambiguation": "Post-merge cleanup (verify merge, clean issue/branch/untracked, switch to main). Not for pre-merge review or full-cycle.",
+      "priority": 65,
+      "mcp_tools_used": []
+    },
+    {
+      "skill": "ue-project-init",
+      "trigger_patterns": {
+        "ko": [
+          "프로젝트 초기화",
+          "컨텍스트 생성",
+          "프로젝트 도메인",
+          "프로젝트 정보 저장",
+          "세션 컨텍스트 만들어줘",
+          "프로젝트 메타데이터",
+          "컨텍스트 파일"
+        ],
+        "en": [
+          "project init",
+          "generate context",
+          "save project info",
+          "project domain",
+          "init project context",
+          "generate project context",
+          "project metadata",
+          "context files",
+          "initialize project"
+        ]
+      },
+      "disambiguation": "Generate persistent project context files for auto-loading in future sessions (not onboarding/recommendations)",
+      "priority": 34,
+      "mcp_tools_used": [
+        "ue_check_health",
+        "ue_cache_control",
+        "ue_search_assets",
+        "ue_analyze_symbols",
+        "ue_analyze_config",
+        "ue_manage_gameplay",
+        "ue_glob",
+        "ue_grep"
+      ],
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      }
+    },
+    {
+      "skill": "project-map",
+      "trigger_patterns": {
+        "ko": [
+          "프로젝트 구조",
+          "프로젝트 맵",
+          "폴더 트리",
+          "모듈 맵",
+          "클래스 맵",
+          "프로젝트 문서 생성"
+        ],
+        "en": [
+          "project map",
+          "project structure",
+          "folder tree",
+          "module map",
+          "class map",
+          "generate project docs"
+        ]
+      },
+      "disambiguation": "Auto-generate progressive disclosure project structure docs (L0-L3). Not project-init (domain context), not module-analyzer (engine docs), not module-mapper (linker errors).",
+      "priority": 105,
+      "mcp_tools_used": [
+        "ue_check_health",
+        "ue_cache_control",
+        "ue_glob",
+        "ue_grep",
+        "ue_analyze_symbols",
+        "ue_analyze_config"
+      ],
+      "negative_patterns": {
+        "ko": [
+          "프로젝트 초기화",
+          "컨텍스트 생성",
+          "모듈 분석",
+          "프로젝트 진단"
+        ],
+        "en": [
+          "project init",
+          "generate context",
+          "module analysis",
+          "project audit"
+        ]
+      }
+    },
+    {
+      "skill": "full-cycle",
+      "trigger_patterns": {
+        "ko": [
+          "풀사이클",
+          "전체 워크플로우",
+          "이슈 처음부터",
+          "처음부터 끝까지",
+          "전체 사이클"
+        ],
+        "en": [
+          "full cycle",
+          "full workflow",
+          "end to end",
+          "start to finish",
+          "full lifecycle"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "리뷰만",
+          "테스트만",
+          "PR만",
+          "이슈만"
+        ],
+        "en": [
+          "review only",
+          "test only",
+          "PR only",
+          "issue only"
+        ]
+      },
+      "disambiguation": "End-to-end issue lifecycle (plan → implement → test → review → PR → CI → cleanup). Not individual steps.",
+      "priority": 35,
+      "mcp_tools_used": []
+    },
+    {
+      "skill": "ue-dev-cycle",
+      "trigger_patterns": {
+        "ko": [
+          "개발 루프",
+          "개발 사이클",
+          "코드 빌드 테스트",
+          "빌드 루프",
+          "구현하고 빌드",
+          "코드 짜고 테스트"
+        ],
+        "en": [
+          "dev cycle",
+          "dev loop",
+          "code build test",
+          "build loop",
+          "implement and build",
+          "development cycle"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "풀사이클",
+          "전체 워크플로우",
+          "만들어줘"
+        ],
+        "en": [
+          "full cycle",
+          "full workflow",
+          "scaffold",
+          "create"
+        ]
+      },
+      "disambiguation": "UE C++ dev loop (code → build → fix → test). Not internal full-cycle. Not scaffolding only (ue-scaffold).",
+      "priority": 36,
+      "mcp_tools_used": [
+        "ue_generate_code",
+        "ue_fix_errors",
+        "ue_build_pipeline",
+        "ue_editor_automation",
+        "ue_analyze_symbols"
+      ]
+    },
+    {
+      "skill": "issue-test-verify",
+      "trigger_patterns": {
+        "ko": [
+          "이슈 테스트 검증",
+          "테스트로 검증",
+          "테스트 생성 검증",
+          "제대로 완료 검증",
+          "이슈 목표 테스트",
+          "issue-test-verify"
+        ],
+        "en": [
+          "verify with tests",
+          "issue test verify",
+          "test-based verification",
+          "issue-test-verify",
+          "test generation for issue"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "테스트 반복",
+          "자동화 테스트"
+        ],
+        "en": [
+          "test iterate",
+          "automation test",
+          "edge case"
+        ]
+      },
+      "disambiguation": "Goal-based test generation and verification for issues. Not edge case hunting (test-iterate) or UE automation test creation (ue-automation-test-builder).",
+      "priority": 37,
+      "mcp_tools_used": []
+    },
+    {
+      "skill": "ue-automation-test-builder",
+      "trigger_patterns": {
+        "ko": [
+          "자동화 테스트 만들어",
+          "오토메이션 테스트",
+          "유닛 테스트 만들어",
+          "오토메이션 테스트 생성",
+          "6-Phase 테스트",
+          "UE 자동화 테스트 생성",
+          "6-Phase"
+        ],
+        "en": [
+          "automation test",
+          "functional test",
+          "automation test builder"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "PIE input",
+          "PIE 녹화",
+          "Capture PIE"
+        ],
+        "en": [
+          "Capture PIE",
+          "PIE input",
+          "PIE recording"
+        ]
+      },
+      "disambiguation": "UE Automation Test 6-Phase iterative creation for game code. Not one-shot test gen (ue-test-gen). Not issue-based verification (issue-test-verify).",
+      "priority": 38,
+      "mcp_tools_used": [
+        "ue_manage_automation_test",
+        "ue_generate_code",
+        "ue_editor_automation",
+        "ue_analyze_symbols",
+        "ue_search_assets"
+      ]
+    },
+    {
+      "skill": "ue-test-scenario",
+      "trigger_patterns": {
+        "ko": [
+          "테스트 시나리오",
+          "시나리오 테스트",
+          "게임 시나리오 테스트",
+          "시나리오 검증"
+        ],
+        "en": [
+          "test scenario",
+          "scenario test",
+          "game scenario test",
+          "scenario validation"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "테스트 생성",
+          "테스트 만들어"
+        ],
+        "en": [
+          "generate test for",
+          "create test for"
+        ]
+      },
+      "disambiguation": "Natural language scenario to Complex+Latent automation test (Issue #6798)",
+      "priority": 39,
+      "mcp_tools_used": [
+        "ue_generate_code",
+        "ue_editor_automation"
+      ],
+      "step0_discovery": true
+    },
+    {
+      "skill": "release-automation",
+      "trigger_patterns": {
+        "ko": [
+          "릴리즈",
+          "버전 업데이트",
+          "changelog 생성",
+          "릴리즈 준비",
+          "패치 릴리즈",
+          "마이너 릴리즈"
+        ],
+        "en": [
+          "release",
+          "bump version",
+          "create release",
+          "generate changelog",
+          "pre-release check",
+          "patch release"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "릴리즈 패키지 테스트",
+          "릴리즈 설치 검증",
+          "5-phase",
+          "설치 후 MCP"
+        ],
+        "en": [
+          "release package test",
+          "deploy test",
+          "5-phase",
+          "package installation",
+          "post-installation"
+        ]
+      },
+      "disambiguation": "Release workflow (version bump + changelog + git + GitHub Release + Confluence). Not for release testing (use release-package-tester) or deploy (use deploy-test).",
+      "priority": 40,
+      "mcp_tools_used": [
+        "ue_check_health"
+      ]
+    },
+    {
+      "skill": "control-rig-workflow",
+      "trigger_patterns": {
+        "ko": [
+          "리그 성능 감사",
+          "컨트롤 리그 비교",
+          "리그 C++ 연동",
+          "배치 리그 분석",
+          "전체 리그 복잡도",
+          "리그 A/B"
+        ],
+        "en": [
+          "rig performance audit",
+          "compare control rigs",
+          "rig C++ integration",
+          "batch rig analysis",
+          "audit all control rigs",
+          "rig A/B"
+        ]
+      },
+      "disambiguation": "Multi-tool Control Rig orchestration: batch audit, A/B comparison, C++ integration (not IK Rig, not single-tool operations)",
+      "priority": 41,
+      "mcp_tools_used": [
+        "ue_manage_rigging",
+        "ue_search_assets",
+        "ue_analyze_symbols"
+      ],
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      }
+    },
+    {
+      "skill": "ue-test-record",
+      "trigger_patterns": {
+        "ko": [
+          "입력 녹화",
+          "PIE 녹화",
+          "녹화 테스트",
+          "입력 기록",
+          "플레이 녹화",
+          "테스트 녹화"
+        ],
+        "en": [
+          "record input",
+          "PIE recording",
+          "record test",
+          "input recording",
+          "record playtest"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "테스트 시나리오",
+          "테스트 생성"
+        ],
+        "en": [
+          "test scenario",
+          "generate test"
+        ]
+      },
+      "disambiguation": "PIE input recording → C++ automation test (Issue #6799). Not scenario-based (ue-test-scenario) or function-based (ue-test-gen).",
+      "priority": 42,
+      "mcp_tools_used": [
+        "ue_editor_automation",
+        "ue_generate_code"
+      ]
+    },
+    {
+      "skill": "mcp-e2e-nightly",
+      "trigger_patterns": {
+        "ko": [
+          "야간 테스트",
+          "nightly e2e",
+          "e2e 자동 테스트",
+          "MCP 야간 테스트",
+          "야간 E2E",
+          "야간 헤드리스",
+          "헤드리스 E2E"
+        ],
+        "en": [
+          "nightly e2e",
+          "MCP E2E nightly",
+          "run nightly tests",
+          "e2e nightly test",
+          "nightly MCP test",
+          "nightly headless",
+          "headless E2E"
+        ]
+      },
+      "disambiguation": "Run MCP E2E headless tests with auto GitHub issue creation on failure. For MCP live testing use mcp-live-test.",
+      "priority": 140,
+      "mcp_tools_used": [
+        "ue_check_health"
+      ],
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      }
+    },
+    {
+      "skill": "idle-tasks",
+      "trigger_patterns": {
+        "ko": [
+          "유휴 작업",
+          "아이들 러너",
+          "남는 계정",
+          "유휴 계정",
+          "아이들 태스크"
+        ],
+        "en": [
+          "idle task",
+          "idle runner",
+          "idle account",
+          "auto task runner"
+        ]
+      },
+      "disambiguation": "Compatibility alias for idle-scout. For queued issue fixing use idle-resolve; for PR decision queues use idle-review-harvest; for operational improvement analysis use idle-analyst.",
+      "priority": 44,
+      "mcp_tools_used": [],
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      }
+    },
+    {
+      "skill": "idle-harvest",
+      "trigger_patterns": {
+        "ko": [
+          "수확",
+          "유휴 수확",
+          "아이들 수확",
+          "아이들 하베스트",
+          "러너 수확",
+          "결과 수확"
+        ],
+        "en": [
+          "harvest",
+          "idle harvest",
+          "harvest idle",
+          "idle runner harvest",
+          "harvest runner"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "유휴 작업",
+          "아이들 러너 시작"
+        ],
+        "en": [
+          "idle task",
+          "idle runner start"
+        ]
+      },
+      "disambiguation": "Legacy idle branch sweep only. For v2 PR decision queues use idle-review-harvest; for queued issue fixing use idle-resolve.",
+      "priority": 141,
+      "mcp_tools_used": []
+    },
+    {
+      "skill": "idle-review-harvest",
+      "trigger_patterns": {
+        "ko": [
+          "아이들 리뷰 하베스트",
+          "아이들 리뷰 수확",
+          "유휴 리뷰 큐",
+          "아이들 pr 정리",
+          "아이들 결정 큐"
+        ],
+        "en": [
+          "idle review harvest",
+          "idle review queue",
+          "idle decision queue",
+          "harvest idle prs"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "legacy",
+          "브랜치 수확"
+        ],
+        "en": [
+          "legacy",
+          "branch harvest"
+        ]
+      },
+      "disambiguation": "Summarize Resolver-created Draft PRs for human decision. Does not create fixes or merge.",
+      "priority": 193,
+      "mcp_tools_used": []
+    },
+    {
+      "skill": "idle-analyst",
+      "trigger_patterns": {
+        "ko": [
+          "아이들 애널리스트",
+          "아이들 분석",
+          "아이들 개선 분석",
+          "유휴 운영 분석",
+          "아이들 상태 분석"
+        ],
+        "en": [
+          "idle analyst",
+          "idle analysis",
+          "idle automation health",
+          "idle improvement analysis",
+          "analyze idle automation"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "해결",
+          "수정",
+          "머지"
+        ],
+        "en": [
+          "resolve",
+          "fix issue",
+          "merge"
+        ]
+      },
+      "disambiguation": "Analyze Scout/Resolver/Review Harvester runtime evidence and improvement candidates. Does not run stages or mutate GitHub unless --create-issues.",
+      "priority": 194,
+      "mcp_tools_used": []
+    },
+    {
+      "skill": "idle-resolve",
+      "trigger_patterns": {
+        "ko": [
+          "아이들 해결",
+          "유휴 이슈 해결",
+          "아이들 컨슈머",
+          "아이들 리졸버"
+        ],
+        "en": [
+          "idle resolve",
+          "idle resolver",
+          "idle consumer",
+          "resolve idle issue"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "수확",
+          "하베스트"
+        ],
+        "en": [
+          "harvest",
+          "review queue"
+        ]
+      },
+      "disambiguation": "Consume one idle:queued Scout issue and open a Draft PR. Does not merge.",
+      "priority": 197,
+      "mcp_tools_used": []
+    },
+    {
+      "skill": "idle-scout",
+      "trigger_patterns": {
+        "ko": [
+          "아이들 스카우트",
+          "유휴 스카우트",
+          "스카우트 상태"
+        ],
+        "en": [
+          "idle scout",
+          "scout status",
+          "idle discovery"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "해결",
+          "수확"
+        ],
+        "en": [
+          "resolve",
+          "harvest"
+        ]
+      },
+      "disambiguation": "Discovery-only idle Scout. Creates queued issues only; no branches or PRs.",
+      "priority": 190,
+      "mcp_tools_used": []
+    },
+    {
+      "skill": "ue-gauntlet-orchestration",
+      "trigger_patterns": {
+        "ko": [
+          "gauntlet",
+          "건틀릿",
+          "soak test",
+          "smoke test 멀티플랫폼",
+          "쿠킹 빌드 테스트",
+          "패키지 빌드 검증",
+          "스모크 테스트",
+          "소크 테스트",
+          "RunUAT"
+        ],
+        "en": [
+          "gauntlet",
+          "RunUAT test",
+          "soak test",
+          "smoke test multiplatform",
+          "performance benchmark CI",
+          "package build verification",
+          "smoke test",
+          "RunUAT",
+          "packaged build"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "빌드 에러",
+          "빌드 자동화"
+        ],
+        "en": [
+          "build error",
+          "build project",
+          "cook",
+          "package project",
+          "package for"
+        ]
+      },
+      "disambiguation": "Multi-platform Gauntlet smoke/soak/performance test orchestration via RunUAT (not build pipeline or error fixing)",
+      "priority": 45,
+      "mcp_tools_used": [
+        "ue_build_pipeline",
+        "ue_editor_automation"
+      ]
+    },
+    {
+      "skill": "ue-editor-launcher",
+      "trigger_patterns": {
+        "ko": [
+          "에디터 열어줘",
+          "언리얼 실행해줘",
+          "에디터 시작",
+          "UE 열어",
+          "프로젝트 열어줘"
+        ],
+        "en": [
+          "open editor",
+          "launch UE",
+          "start editor",
+          "open Unreal",
+          "launch Unreal Editor"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "진단",
+          "점검",
+          "건강"
+        ],
+        "en": [
+          "health check",
+          "audit",
+          "diagnostic"
+        ]
+      },
+      "disambiguation": "Launch Unreal Editor process (not project health check or audit)",
+      "priority": 46,
+      "mcp_tools_used": []
+    },
+    {
+      "skill": "issue-setup",
+      "trigger_patterns": {
+        "ko": [
+          "이슈 만들어",
+          "이슈 생성",
+          "이슈 준비",
+          "이슈 세팅",
+          "이슈 설정"
+        ],
+        "en": [
+          "create issue",
+          "setup issue",
+          "prepare issue",
+          "new issue"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "이슈 찾아",
+          "이슈 시작",
+          "이슈 목록"
+        ],
+        "en": [
+          "find issues",
+          "start issue",
+          "issue list",
+          "open issues"
+        ]
+      },
+      "disambiguation": "Create/prepare GitHub issue with labels, assignee, branch. Not issue discovery (issue-find) or execution start (issue-start). Title-input case auto-invokes /issue-review (Issue #11418).",
+      "priority": 48,
+      "mcp_tools_used": [
+        "ue_grep",
+        "ue_read"
+      ]
+    },
+    {
+      "skill": "issue-start",
+      "trigger_patterns": {
+        "ko": [
+          "이슈 시작",
+          "이슈 시작해줘",
+          "이슈 작업 시작",
+          "작업 시작",
+          "이슈 착수",
+          "착수해줘"
+        ],
+        "en": [
+          "start issue",
+          "begin issue",
+          "issue start",
+          "kick off issue",
+          "Begin work on",
+          "Start working on"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "이슈 만들어",
+          "이슈 설정",
+          "이슈 찾아"
+        ],
+        "en": [
+          "create issue",
+          "setup issue",
+          "find issues"
+        ]
+      },
+      "disambiguation": "Full issue execution workflow (setup + plan + review loop). Not issue creation (issue-setup) or issue discovery (issue-find).",
+      "priority": 49,
+      "mcp_tools_used": [
+        "ue_fix_errors"
+      ]
+    },
+    {
+      "skill": "issue-verify",
+      "trigger_patterns": {
+        "ko": [
+          "이슈 검증",
+          "완료 확인",
+          "목표 검증",
+          "이슈 완료 검증"
+        ],
+        "en": [
+          "verify issue",
+          "check completion",
+          "verify goals",
+          "issue verification"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "CI 상태",
+          "CI 확인",
+          "이슈 찾아"
+        ],
+        "en": [
+          "CI status",
+          "CI verify",
+          "find issues",
+          "check CI"
+        ]
+      },
+      "disambiguation": "Manual goal-based verification with code review and tests. Not CI status check (ci-verify) or issue discovery (issue-find).",
+      "priority": 50,
+      "mcp_tools_used": [
+        "ue_grep",
+        "ue_read"
+      ]
+    },
+    {
+      "skill": "issue-update",
+      "trigger_patterns": {
+        "ko": [
+          "이슈 정합성",
+          "이슈 상태 수정",
+          "이슈 라벨 정리",
+          "이슈 정리",
+          "이슈 상태 검사",
+          "라벨 불일치",
+          "이슈 업데이트",
+          "라벨 정리"
+        ],
+        "en": [
+          "issue consistency",
+          "fix issue labels",
+          "issue state check",
+          "issue update",
+          "label mismatch",
+          "fix stale issues",
+          "issue cleanup",
+          "Clean up labels",
+          "update issue states"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "이슈 찾아",
+          "이슈 목록",
+          "이슈 만들어"
+        ],
+        "en": [
+          "find issues",
+          "issue list",
+          "create issue",
+          "open issues"
+        ]
+      },
+      "disambiguation": "Issue state consistency check and fix (branch-label, resolved prereqs, stale). Not issue discovery (issue-find) or creation (issue-setup).",
+      "priority": 236,
+      "mcp_tools_used": []
+    },
+    {
+      "skill": "test-iterate",
+      "trigger_patterns": {
+        "ko": [
+          "테스트 반복",
+          "엣지 케이스",
+          "버그 헌팅",
+          "clean pass",
+          "클린 패스",
+          "엣지 케이스 반복"
+        ],
+        "en": [
+          "test iterate",
+          "edge case test",
+          "bug hunting",
+          "clean pass",
+          "iterate tests",
+          "Iterate on edge cases",
+          "edge case iteration"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "테스트 생성",
+          "테스트 실행",
+          "테스트 만들어"
+        ],
+        "en": [
+          "generate test",
+          "create test"
+        ]
+      },
+      "disambiguation": "Iterative edge case hunting until N consecutive clean passes. Not one-shot test gen (ue-test-gen) or simple test run (test-run).",
+      "priority": 51,
+      "mcp_tools_used": [
+        "ue_manage_gameplay",
+        "ue_check_health"
+      ]
+    },
+    {
+      "skill": "test-run",
+      "trigger_patterns": {
+        "ko": [
+          "테스트 실행",
+          "테스트 돌려",
+          "테스트 돌려줘",
+          "빠른 테스트 모드",
+          "cargo tests"
+        ],
+        "en": [
+          "run tests",
+          "test run",
+          "execute tests",
+          "quick test mode",
+          "cargo tests",
+          "unit tests for"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "테스트 반복",
+          "테스트 생성",
+          "엣지 케이스",
+          "이슈 목표",
+          "이슈 테스트",
+          "MCP 라이브",
+          "MCP 서버 테스트",
+          "스모크 테스트",
+          "소크 테스트"
+        ],
+        "en": [
+          "test iterate",
+          "generate test",
+          "edge case",
+          "clean pass",
+          "issue goal",
+          "issue test",
+          "MCP live",
+          "MCP server test",
+          "smoke test",
+          "soak test",
+          "Gauntlet"
+        ]
+      },
+      "disambiguation": "Smart test execution (quick/verify/full modes). Not iterative edge case hunting (test-iterate) or test generation (ue-test-gen).",
+      "priority": 52,
+      "mcp_tools_used": [
+        "ue_editor_automation",
+        "ue_grep"
+      ]
+    },
+    {
+      "skill": "project-orchestrator",
+      "trigger_patterns": {
+        "ko": [
+          "계획 검토",
+          "설계 리뷰",
+          "플랜 보완",
+          "리팩토링 리뷰",
+          "아키텍처 리뷰",
+          "플랜 리뷰"
+        ],
+        "en": [
+          "plan review check",
+          "design review",
+          "plan improvement",
+          "refactoring review",
+          "architecture review",
+          "review plan",
+          "improve plan",
+          "check plan"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "만들어줘",
+          "영향 분석",
+          "변경하면"
+        ],
+        "en": [
+          "create",
+          "scaffold",
+          "impact analysis",
+          "breaks if"
+        ]
+      },
+      "disambiguation": "Plan/design review using past lessons (636 lessons). Not scaffolding (ue-scaffold) or impact analysis (ue-impact).",
+      "priority": 53,
+      "mcp_tools_used": [
+        "ue_grep",
+        "ue_read"
+      ]
+    },
+    {
+      "skill": "ue-perf-replay",
+      "trigger_patterns": {
+        "ko": [
+          "리플레이 성능 테스트",
+          "리플레이 퍼프 테스트",
+          "DemoRec 테스트",
+          ".replay 테스트",
+          "리플레이 벤치마크",
+          "리플레이 테스트",
+          "DemoRec 성능"
+        ],
+        "en": [
+          "replay perf test",
+          "replay performance",
+          "DemoRec perf",
+          ".replay benchmark",
+          "replay benchmark",
+          "replay regression test"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "입력 녹화",
+          "PIE 녹화",
+          "시네마틱",
+          "utrace 분석",
+          "가운틀릿 설정"
+        ],
+        "en": [
+          "record input",
+          "PIE recording",
+          "cinematics",
+          "analyze utrace",
+          "gauntlet setup"
+        ]
+      },
+      "disambiguation": ".replay-based performance testing via DemoRec + AutomatedPerfTesting (Issue #6944). Not input recording for functional tests (ue-test-record), not .utrace direct analysis (ue-insights-profiler), not Gauntlet orchestration (ue-gauntlet-orchestration).",
+      "priority": 54,
+      "mcp_tools_used": [
+        "ue_editor_automation",
+        "ue_build_pipeline",
+        "ue_analyze_insights",
+        "ue_glob"
+      ]
+    },
+    {
+      "skill": "animation-workflow",
+      "trigger_patterns": {
+        "ko": [
+          "AnimBP 분석",
+          "애님BP",
+          "애니메이션 블루프린트",
+          "AnimGraph",
+          "몽타주",
+          "BlendSpace",
+          "상태 머신",
+          "애니메이션 검색",
+          "애니메이션 시스템",
+          "statemachine",
+          "전투 애니메이션"
+        ],
+        "en": [
+          "AnimBP",
+          "AnimGraph",
+          "play montage",
+          "animation blueprint",
+          "blend space",
+          "state machine animation",
+          "animation search",
+          "state machine",
+          "combat anims",
+          "transition"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "BP 실행 흐름",
+          "블루프린트 분석",
+          "일반 BP 분석"
+        ],
+        "en": [
+          "BP execution flow",
+          "trace execution"
+        ]
+      },
+      "disambiguation": "AnimBP/AnimGraph/Montage/BlendSpace analysis (not BP flow tracing which is blueprint-flow)",
+      "priority": 142,
+      "mcp_tools_used": [
+        "ue_manage_animation",
+        "ue_search_assets",
+        "ue_manage_blueprint",
+        "ue_analyze_symbols"
+      ]
+    },
+    {
+      "skill": "audio-workflow",
+      "trigger_patterns": {
+        "ko": [
+          "사운드 재생",
+          "오디오 검색",
+          "SoundCue",
+          "SoundClass",
+          "SoundMix",
+          "BGM",
+          "효과음",
+          "spatial audio",
+          "오디오 컴포넌트",
+          "3D 오디오",
+          "포지셔널 오디오",
+          "AudioComponent 추가"
+        ],
+        "en": [
+          "play sound",
+          "audio search",
+          "SoundCue",
+          "SoundClass",
+          "sound effect",
+          "spatial audio",
+          "audio component",
+          "attenuation",
+          "3d positional audio",
+          "AudioComponent",
+          "sound loop"
+        ]
+      },
+      "disambiguation": "Audio asset search, playback, and SoundAttenuation inspection (not animation or material). USoundAttenuation/falloff/spatialization queries route here.",
+      "priority": 143,
+      "mcp_tools_used": [
+        "ue_search_assets",
+        "ue_editor_automation",
+        "ue_manage_attenuation"
+      ],
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      }
+    },
+    {
+      "skill": "blueprint-flow",
+      "trigger_patterns": {
+        "ko": [
+          "BP 실행 흐름",
+          "BP 분석",
+          "Blueprint 구조",
+          "BP 그래프",
+          "블루프린트 실행",
+          "어빌리티 흐름",
+          "BP 구조 분석",
+          "트리거되",
+          "실행 흐름",
+          "E키 누르면",
+          "노드 실행 순서",
+          "BP 내부 흐름",
+          "BP 전체 분석"
+        ],
+        "en": [
+          "BP execution flow",
+          "blueprint structure",
+          "BP analysis",
+          "BP graph",
+          "blueprint flow",
+          "what triggers when",
+          "node execution order",
+          "BP internals"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "BP 생성",
+          "BP를 C++로",
+          "BP 변환 검증",
+          "BP 이해도 평가",
+          "BP 그래프 만들어",
+          "Blueprint 생성",
+          "C++로 변환",
+          "C++로 옮긴",
+          "네이티브로",
+          "HTML 파일",
+          "HTML로 만들어",
+          "브라우저",
+          "cross-domain",
+          "GAS flow",
+          "어빌리티 플로우",
+          "BP 리팩터링",
+          "BP 리팩토링",
+          "BP 개선",
+          "BP 정리",
+          "블루프린트 정리"
+        ],
+        "en": [
+          "create blueprint",
+          "convert BP",
+          "migration validation",
+          "comprehension eval",
+          "create Blueprint graph",
+          "generate Blueprint",
+          "build a BP graph",
+          "convert to C++",
+          "to native C++",
+          "HTML file",
+          "HTML export",
+          "browser",
+          "cross-domain",
+          "ability flow",
+          "GAS flow",
+          "refactor BP",
+          "refactor Blueprint",
+          "clean up BP",
+          "optimize BP graph",
+          "Blueprint refactor"
+        ]
+      },
+      "disambiguation": "Blueprint execution flow analysis (not creation=blueprint-generator, not conversion=bp-to-cpp, not eval=bp-flow-comprehension-eval, not refactoring=ue-refactor-bp)",
+      "priority": 58,
+      "mcp_tools_used": [
+        "ue_manage_blueprint",
+        "ue_trace_execution"
+      ]
+    },
+    {
+      "skill": "bp-flow-comprehension-eval",
+      "trigger_patterns": {
+        "ko": [
+          "BP 이해도 평가",
+          "BP 이해도",
+          "comprehension eval",
+          "blind protocol",
+          "이해도 테스트",
+          "comprehension test",
+          "이해도 평가"
+        ],
+        "en": [
+          "BP comprehension eval",
+          "comprehension evaluation",
+          "blind protocol",
+          "flow comprehension",
+          "comprehension test",
+          "comprehension eval",
+          "BP understanding"
+        ]
+      },
+      "disambiguation": "BP flow comprehension evaluation with blind protocol (not BP flow tracing which is blueprint-flow)",
+      "priority": 59,
+      "mcp_tools_used": [
+        "ue_trace_execution"
+      ],
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      }
+    },
+    {
+      "skill": "bp-to-cpp-validator",
+      "trigger_patterns": {
+        "ko": [
+          "BP 변환 검증",
+          "마이그레이션 검증",
+          "C++ 마이그레이션 확인",
+          "변환 완료 검증",
+          "로직이 동일한지",
+          "migration validation",
+          "검증해줘",
+          "C++로 옮"
+        ],
+        "en": [
+          "migration validation",
+          "validate migration",
+          "migration completeness",
+          "BP to C++ validation",
+          "conversion validation"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "BP를 C++로",
+          "C++로 변환",
+          "문서 소스 검증",
+          "doc verify",
+          "문서 검증"
+        ],
+        "en": [
+          "convert to C++",
+          "migrate to C++",
+          "doc verify",
+          "source doc verify",
+          "document verification"
+        ]
+      },
+      "disambiguation": "Validate BP→C++ migration completeness. NOT: logic conversion (bp-to-cpp), NOT: project infrastructure (bp-cpp-project-init).",
+      "priority": 60,
+      "mcp_tools_used": [
+        "ue_manage_blueprint",
+        "ue_generate_code",
+        "ue_analyze_symbols",
+        "ue_fix_errors"
+      ]
+    },
+    {
+      "skill": "ci-monitor",
+      "trigger_patterns": {
+        "ko": [
+          "CI 모니터링",
+          "빌드 상태 모니터링",
+          "테스트 실패 모니터링",
+          "워크플로우 실패",
+          "워크플로우 모니터링",
+          "CI 폴링",
+          "자동 복구 모니터링"
+        ],
+        "en": [
+          "CI monitoring",
+          "monitor CI",
+          "workflow monitoring",
+          "CI polling",
+          "workflow failure monitoring",
+          "track workflow",
+          "auto-recovery monitoring"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "CI 상태 확인",
+          "CI 통과했나"
+        ],
+        "en": [
+          "CI status",
+          "CI passed",
+          "check CI"
+        ]
+      },
+      "disambiguation": "Long-running CI monitoring with polling loop (not one-shot CI status check which is ci-verify, not skill integrity check which is ci-monitor-self-test)",
+      "priority": 61,
+      "mcp_tools_used": []
+    },
+    {
+      "skill": "code-generation",
+      "trigger_patterns": {
+        "ko": [
+          "C++ 클래스 생성",
+          "클래스 생성",
+          "컴포넌트 생성",
+          "클래스 하나 만들어",
+          "코드 생성",
+          "C++ 클래스",
+          "C++ 코드"
+        ],
+        "en": [
+          "generate class",
+          "create class",
+          "generate a class",
+          "create a class",
+          "class inheriting from",
+          "generate boilerplate",
+          "scaffold code for a new",
+          "C++ class",
+          "subclass called"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "시스템 만들어",
+          "기능 생성",
+          "구현해줘",
+          "시스템 전체",
+          "전체 코드 생성",
+          "멀티클래스",
+          "세트 생성"
+        ],
+        "en": [
+          "weapon system",
+          "full system",
+          "create feature",
+          "build feature",
+          "multi-class",
+          "entire system",
+          "complete system"
+        ]
+      },
+      "disambiguation": "Single C++ class generation (not multi-class system=code-generation-power, not feature scaffolding=ue-scaffold)",
+      "priority": 62,
+      "mcp_tools_used": [
+        "ue_generate_code",
+        "ue_fix_errors",
+        "ue_analyze_symbols"
+      ]
+    },
+    {
+      "skill": "codebase-self-analyzer",
+      "trigger_patterns": {
+        "ko": [
+          "코드베이스 분석",
+          "자기 진단",
+          "코드베이스 자기 진단",
+          "프로젝트 건강 스캔",
+          "개선 이슈 생성",
+          "프로젝트 헬스 스캔"
+        ],
+        "en": [
+          "codebase self analysis",
+          "codebase analysis",
+          "project health scan",
+          "self-analyze",
+          "improvement issue creation",
+          "analyze and create improvement",
+          "improvement issues",
+          "self-analysis"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "프로젝트 상태",
+          "감사",
+          "건강 검진"
+        ],
+        "en": [
+          "audit",
+          "health check",
+          "project health check"
+        ]
+      },
+      "disambiguation": "NarshaMCP codebase self-analysis and issue creation (not UE project audit which is ue-audit)",
+      "priority": 63,
+      "mcp_tools_used": []
+    },
+    {
+      "skill": "confluence-manual-update",
+      "trigger_patterns": {
+        "ko": [
+          "매뉴얼 스크린샷",
+          "스크린샷 업로드",
+          "스크린샷 캡처",
+          "매뉴얼 페이지 스크린샷",
+          "Confluence 매뉴얼",
+          "confluence 스크린샷",
+          "confluence-manual-update"
+        ],
+        "en": [
+          "confluence screenshot",
+          "manual update with screenshots",
+          "screenshot upload",
+          "capture screenshots",
+          "screenshot capture",
+          "capture and upload"
+        ]
+      },
+      "disambiguation": "Confluence manual page screenshot capture and upload (not general Confluence updates)",
+      "priority": 64,
+      "negative_patterns": {
+        "ko": [],
+        "en": []
+      },
+      "mcp_tools_used": []
+    },
+    {
+      "skill": "ue-network-audit",
+      "trigger_patterns": {
+        "ko": [
+          "네트워크 감사",
+          "대역폭 분석",
+          "리플리케이션 검사",
+          "RPC 감사",
+          "리플리케이션 검증",
+          "네트워크 건강도"
+        ],
+        "en": [
+          "network audit",
+          "bandwidth analysis",
+          "replication check",
+          "replication audit",
+          "rpc audit",
+          "network replication"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "성능 분석",
+          "프로파일링",
+          "왜 느려",
+          "네트워크 린트",
+          "멀티플레이어 린트"
+        ],
+        "en": [
+          "profiling",
+          "utrace",
+          "performance profiling",
+          "frame drop",
+          "why is my game slow",
+          "network lint",
+          "multiplayer lint"
+        ]
+      },
+      "disambiguation": "Static network replication audit (source analysis). For per-line anti-pattern scanning use ue-network-lint. For runtime performance profiling use ue-insights-profiler.",
+      "priority": 67,
+      "mcp_tools_used": [
+        "ue_analyze_symbols"
+      ],
+      "step0_discovery": false
+    },
+    {
+      "skill": "ue-network-lint",
+      "trigger_patterns": {
+        "ko": [
+          "네트워크 린트",
+          "멀티플레이어 린트",
+          "RPC 안티패턴 검사",
+          "네트워크 코드 검사",
+          "멀티플레이어 코드 검사",
+          "NET 규칙 검사"
+        ],
+        "en": [
+          "network lint",
+          "multiplayer lint",
+          "RPC anti-pattern check",
+          "network code scan",
+          "multiplayer code check",
+          "check NET rules",
+          "scan network rules"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "대역폭 분석",
+          "네트워크 감사",
+          "네트워크 건강도",
+          "리플리케이션 검증"
+        ],
+        "en": [
+          "bandwidth analysis",
+          "network audit",
+          "network health",
+          "replication audit",
+          "replication check"
+        ]
+      },
+      "disambiguation": "Per-line network anti-pattern scanning (NET-001~010 rules). For replication health overview and bandwidth estimation use ue-network-audit.",
+      "priority": 103,
+      "mcp_tools_used": [
+        "ue_grep",
+        "ue_read",
+        "ue_analyze_source",
+        "ue_analyze_symbols",
+        "ue_diff"
+      ],
+      "step0_discovery": true
+    },
+    {
+      "skill": "ue-security-lint",
+      "trigger_patterns": {
+        "ko": [
+          "보안 린트",
+          "보안 검사",
+          "시큐리티 린트",
+          "취약점 검사",
+          "보안 취약점 스캔",
+          "SEC 규칙 검사",
+          "코드 보안 검사"
+        ],
+        "en": [
+          "security lint",
+          "security scan",
+          "vulnerability scan",
+          "security check",
+          "check SEC rules",
+          "scan security rules",
+          "code security audit"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "네트워크 보안",
+          "프로젝트 감사",
+          "보안 감사 전체"
+        ],
+        "en": [
+          "network security audit",
+          "project audit",
+          "penetration test"
+        ]
+      },
+      "disambiguation": "Per-line security vulnerability scanning (SEC-001~012: trust boundaries, data exposure, secrets, supply chain). For network correctness use ue-network-lint. For performance use ue-perf-lint.",
+      "priority": 106,
+      "mcp_tools_used": [
+        "ue_grep",
+        "ue_read",
+        "ue_glob",
+        "ue_analyze_source",
+        "ue_analyze_symbols"
+      ],
+      "step0_discovery": true
+    },
+    {
+      "skill": "ue-migrate",
+      "trigger_patterns": {
+        "ko": [
+          "버전 업그레이드",
+          "마이그레이션",
+          "UE 버전",
+          "엔진 업그레이드"
+        ],
+        "en": [
+          "version upgrade",
+          "migrate",
+          "migration",
+          "engine upgrade"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "데이터 마이그레이션",
+          "DB 마이그레이션",
+          "API 변경 분석",
+          "API_CHANGES",
+          "API diff",
+          "BP to C++",
+          "Blueprint 변환",
+          "네이티브로 옮겨",
+          "네이티브로 마이그레이션",
+          "변환 완료",
+          "변환 리포트",
+          "마이그레이션 완료",
+          "브랜드 마이그레이션",
+          "API 변경점",
+          "migration guide",
+          "breaking changes"
+        ],
+        "en": [
+          "data migration",
+          "database migration",
+          "API change",
+          "API_CHANGES",
+          "API diff",
+          "BP to C++",
+          "Blueprint to C++",
+          "convert BP",
+          "native C++",
+          "migration complete",
+          "conversion report",
+          "verify migration",
+          "brand migration",
+          "migration guide",
+          "breaking changes",
+          "API changes"
+        ]
+      },
+      "disambiguation": "UE engine version migration (scan deprecated APIs/configs/assets, generate report, auto-fix). Not for data/DB migration or CL tracking (/ue-cl-tracker).",
+      "priority": 68,
+      "mcp_tools_used": [
+        "ue_analyze_config",
+        "ue_fix_errors",
+        "ue_build_pipeline",
+        "ue_glob",
+        "ue_read"
+      ]
+    },
+    {
+      "skill": "caller-graph-visualizer",
+      "trigger_patterns": {
+        "ko": [
+          "이름 바꿔도 돼",
+          "이름 바꿔도 괜찮",
+          "시그니처 변경",
+          "deprecated 마킹",
+          "삭제하고 싶",
+          "바꾸면 뭐가 깨져",
+          "rename safely",
+          "함수 이름 바꿔도 안전",
+          "이름을 바꾸",
+          "함수 이름",
+          "삭제하고",
+          "대체하려"
+        ],
+        "en": [
+          "can I rename safely",
+          "can I safely rename",
+          "refactoring impact analysis",
+          "is it safe to change",
+          "is it safe to rename",
+          "delegate binding",
+          "what will break if I change",
+          "signature change impact",
+          "delete function",
+          "replace with",
+          "breaking change for rename",
+          "safe to rename"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "호출 관계 보여줘",
+          "양방향 추적",
+          "콜 그래프"
+        ],
+        "en": [
+          "show call graph",
+          "bidirectional trace",
+          "dependency trace"
+        ]
+      },
+      "disambiguation": "Refactoring safety — answers 'Can I rename/delete this safely?' with full caller/override/delegate analysis. For general call graph understanding, use execution-flow-explorer.",
+      "priority": 71,
+      "mcp_tools_used": [
+        "ue_analyze_symbols",
+        "ue_manage_blueprint"
+      ]
+    },
+    {
+      "skill": "execution-flow-explorer",
+      "trigger_patterns": {
+        "ko": [
+          "호출 관계 보여줘",
+          "양방향 추적",
+          "콜 체인 보여줘",
+          "뭘 호출하는지",
+          "어디서 호출되는지",
+          "콜 그래프",
+          "호출 흐름",
+          "호출 체인",
+          "함수 내부"
+        ],
+        "en": [
+          "show call graph",
+          "dependency trace",
+          "bidirectional trace",
+          "who calls",
+          "what does it call",
+          "call chain",
+          "function internals",
+          "call flow"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "이름 바꿔도",
+          "deprecated 하면",
+          "시그니처 변경"
+        ],
+        "en": [
+          "can I rename",
+          "is it safe to",
+          "refactoring impact"
+        ]
+      },
+      "disambiguation": "Bidirectional call graph for code understanding — callers AND callees with Mermaid. For refactoring safety (rename/delete), use caller-graph-visualizer.",
+      "priority": 72,
+      "mcp_tools_used": [
+        "ue_analyze_symbols"
+      ]
+    },
+    {
+      "skill": "gas-development",
+      "trigger_patterns": {
+        "ko": [
+          "GAS 분석",
+          "GAS 세팅",
+          "GAS 구조",
+          "Ability 개발",
+          "GameplayTag 분석",
+          "Attribute 분석",
+          "GA_ 분석",
+          "GameplayEffect 분석",
+          "어빌리티 개발",
+          "GA_Melee",
+          "GA_Dash",
+          "GA_Fireball",
+          "GA_Weapon",
+          "Ability.Attack",
+          "Ability.Combat",
+          "어빌리티 activation",
+          "GE_Damage",
+          "AttributeSet에",
+          "GAS 처음",
+          "AbilitySystem 세팅"
+        ],
+        "en": [
+          "GAS analysis",
+          "ability development",
+          "GAS setup",
+          "ability execution flow",
+          "tag hierarchy",
+          "GameplayEffect analysis",
+          "AttributeSet analysis",
+          "GA_ activation",
+          "gameplay ability",
+          "ability tag",
+          "GAS from scratch",
+          "setup AbilitySystem"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "Input부터 Animation",
+          "전체 크로스 도메인",
+          "밸런스 분석",
+          "게임 디자인 문서",
+          "performance analysis",
+          "전체 프로젝트 성능",
+          "GAS ability flow",
+          "InputTag chain",
+          "trace를 HTML",
+          "HTML export",
+          "trace HTML",
+          "실행 추적",
+          "trace ability"
+        ],
+        "en": [
+          "cross-domain",
+          "input to animation",
+          "balance analysis",
+          "game design report",
+          "performance analysis",
+          "project performance",
+          "GAS ability flow",
+          "InputTag chain",
+          "trace HTML",
+          "HTML export",
+          "Trace ability flow",
+          "execution trace"
+        ]
+      },
+      "disambiguation": "Single GAS ability development — tag/ability/attribute analysis and flow tracing. For full Input→Ability→Animation chain, use cross-domain-flow. For balance reports, use game-design-intelligence. For animation/montage queries (even with GA references), use animation-workflow.",
+      "priority": 73,
+      "mcp_tools_used": [
+        "ue_manage_gameplay",
+        "ue_trace_execution",
+        "ue_analyze_symbols"
+      ]
+    },
+    {
+      "skill": "cross-domain-flow",
+      "trigger_patterns": {
+        "ko": [
+          "InputAction에서",
+          "IA_에서",
+          "Input부터 Animation",
+          "크로스 도메인",
+          "전체 흐름 보여줘",
+          "InputTag",
+          "AbilityTask",
+          "GA_에서 InputAction"
+        ],
+        "en": [
+          "cross-domain flow",
+          "InputTag chain",
+          "ability flow from input",
+          "GAS ability flow",
+          "input to animation",
+          "full ability flow"
+        ]
+      },
+      "disambiguation": "GAS-aware deep execution chain: Input→InputTag→Ability→Blueprint→C++→Animation. For single GAS analysis without cross-domain tracing, use gas-development.",
+      "priority": 74,
+      "mcp_tools_used": [
+        "ue_manage_gameplay",
+        "ue_trace_execution",
+        "ue_analyze_symbols",
+        "ue_manage_blueprint",
+        "ue_search_assets"
+      ],
+      "negative_patterns": {
+        "ko": [
+          "단순 GAS",
+          "어빌리티 하나",
+          "GAS 세팅"
+        ],
+        "en": [
+          "single ability",
+          "GAS setup",
+          "simple GAS"
+        ]
+      }
+    },
+    {
+      "skill": "blueprint-generator",
+      "trigger_patterns": {
+        "ko": [
+          "BP 생성",
+          "BP 그래프 생성",
+          "블루프린트 그래프 만들어",
+          "BP 로직 만들어",
+          "BP 노드 추가해줘",
+          "블루프린트 만들어야",
+          "BP를 만들어",
+          "BP 만들어",
+          "BP 그래프 만들어",
+          "Blueprint 만들어"
+        ],
+        "en": [
+          "create Blueprint graph",
+          "generate Blueprint graph",
+          "make a Blueprint graph",
+          "build a BP graph",
+          "BP graph for",
+          "create a BP",
+          "generate a Blueprint",
+          "Blueprint for",
+          "BP for"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "BP 분석",
+          "BP 실행 흐름",
+          "BP 구조 분석",
+          "BP를 C++로"
+        ],
+        "en": [
+          "analyze Blueprint",
+          "Blueprint structure",
+          "convert Blueprint",
+          "Blueprint flow"
+        ]
+      },
+      "disambiguation": "Create NEW Blueprint graphs from natural language via the T3D pipeline (build_graph_guide → build_graph → import_t3d → compile). For analyzing existing BPs, use blueprint-flow. For C++ class creation, use ue-scaffold or code-generation.",
+      "priority": 75,
+      "mcp_tools_used": [
+        "ue_check_health",
+        "ue_editor_assets",
+        "ue_manage_blueprint"
+      ]
+    },
+    {
+      "skill": "code-generation-power",
+      "trigger_patterns": {
+        "ko": [
+          "무기 시스템 전체 만들어",
+          "시스템 전체 생성",
+          "전투 시스템 세트 생성",
+          "멀티클래스 생성",
+          "AI 적 시스템 전체",
+          "시스템 전체 코드 생성",
+          "전체 구현해줘",
+          "시스템 전체",
+          "세트 생성",
+          "전체 코드 생성",
+          "전체 구현"
+        ],
+        "en": [
+          "generate weapon system",
+          "full system generation",
+          "complete inventory system",
+          "generate full GAS",
+          "full AI enemy system",
+          "vehicle system 전체",
+          "complete system with",
+          "entire system",
+          "multi-class"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "클래스 하나",
+          "컴포넌트 생성"
+        ],
+        "en": [
+          "single class",
+          "one class",
+          "generate class"
+        ]
+      },
+      "disambiguation": "Multi-class system generation (3-10 classes, 17 scenarios) via NarshaMCP analysis + Editor RC creation for BP/VFX/Input. For single class creation, use ue_generate_code(smart) or code-generation skill.",
+      "priority": 76,
+      "mcp_tools_used": [
+        "ue_analyze_symbols",
+        "ue_check_health",
+        "ue_fix_errors",
+        "ue_generate_code",
+        "ue_manage_blueprint"
+      ]
+    },
+    {
+      "skill": "material-analysis",
+      "trigger_patterns": {
+        "ko": [
+          "머테리얼 분석",
+          "머티리얼 분석",
+          "M_ 분석",
+          "머테리얼 구조",
+          "머테리얼 성능",
+          "머테리얼 노드 구조",
+          "머테리얼 인스트럭션",
+          "머테리얼 그래프",
+          "머테리얼이 인스트럭션",
+          "머테리얼 인스턴스",
+          "머테리얼 DBuffer",
+          "머테리얼에서",
+          "노드 연결 구조",
+          "레이어 블렌드"
+        ],
+        "en": [
+          "material analysis",
+          "analyze material",
+          "material structure",
+          "material performance",
+          "material graph analysis",
+          "material node",
+          "analyze M_",
+          "material graph of M_",
+          "node connection",
+          "layer blend"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "일괄 수정",
+          "대량 변경",
+          "파라미터 값 바꿔"
+        ],
+        "en": [
+          "bulk modify",
+          "batch change",
+          "change parameter"
+        ]
+      },
+      "disambiguation": "Material structure analysis with hierarchy, nodes, and performance metrics. For bulk material changes, use asset-modification-wizard.",
+      "priority": 77,
+      "mcp_tools_used": [
+        "ue_manage_material"
+      ]
+    },
+    {
+      "skill": "lighting-workflow",
+      "trigger_patterns": {
+        "ko": [
+          "조명 추가",
+          "조명 생성",
+          "라이트 생성",
+          "라이트 배치",
+          "라이트 검색",
+          "3점 조명",
+          "라이팅 빌드",
+          "포인트 라이트",
+          "스팟 라이트",
+          "디렉셔널 라이트",
+          "라이트 강도",
+          "RectLight",
+          "PointLight",
+          "SpotLight",
+          "조명 세팅"
+        ],
+        "en": [
+          "add light",
+          "spawn light",
+          "three point lighting",
+          "build lighting",
+          "search light assets",
+          "point light",
+          "spot light",
+          "rect light",
+          "spotlight",
+          "lighting setup"
+        ]
+      },
+      "disambiguation": "Lighting setup automation — search, spawn, and configure lights. For material analysis, use material-analysis.",
+      "priority": 78,
+      "mcp_tools_used": [
+        "ue_search_assets",
+        "ue_editor_actors"
+      ],
+      "negative_patterns": {
+        "ko": [
+          "머티리얼",
+          "Material",
+          "블루프린트",
+          "Blueprint"
+        ],
+        "en": [
+          "material",
+          "Material",
+          "Blueprint",
+          "blueprint"
+        ]
+      }
+    },
+    {
+      "skill": "pcg-workflow",
+      "trigger_patterns": {
+        "ko": [
+          "PCG 성능 최적화",
+          "PCG 에셋 일괄 교체",
+          "전체 PCG 감사",
+          "PCG 그래프 복제",
+          "PCG 워크플로우",
+          "PCG 파이프라인",
+          "PCG 마이그레이션",
+          "PCG 일괄 변경",
+          "PCG 밀도",
+          "SurfaceSampler"
+        ],
+        "en": [
+          "PCG performance audit",
+          "batch PCG audit",
+          "clone PCG graph",
+          "PCG workflow",
+          "PCG pipeline",
+          "batch replace PCG",
+          "PCG migration",
+          "PCG density",
+          "SurfaceSampler"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "PCG 구조 보여줘",
+          "PCG 파라미터 하나"
+        ],
+        "en": [
+          "PCG structure",
+          "single PCG parameter"
+        ]
+      },
+      "disambiguation": "Multi-tool PCG orchestration (audit, batch, clone, migrate). For single PCG operations, use ue_manage_pcg directly.",
+      "priority": 79,
+      "mcp_tools_used": [
+        "ue_manage_pcg",
+        "ue_search_assets",
+        "ue_editor_actors"
+      ]
+    },
+    {
+      "skill": "module-mapper",
+      "trigger_patterns": {
+        "ko": [
+          "모듈 의존성 해결",
+          "어떤 모듈에 있는",
+          ".Build.cs 수정",
+          "module-mapper",
+          "Build.cs 수정",
+          "Build.cs module",
+          "링커 모듈 찾기",
+          "링커 에러 모듈"
+        ],
+        "en": [
+          "unresolved external symbol",
+          "which module is",
+          "Build.cs module dependency",
+          "UBT Manifest",
+          "Build.cs",
+          "linker module missing"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "모듈 분석",
+          "모듈 구조 분석",
+          "아키텍처 파악"
+        ],
+        "en": [
+          "module analysis",
+          "analyze module structure",
+          "module architecture"
+        ]
+      },
+      "disambiguation": ".Build.cs dependency resolution for linker errors using UBT Manifest. For module structure analysis (headers, deps), use module-analyzer.",
+      "priority": 80,
+      "mcp_tools_used": [
+        "ue_analyze_symbols",
+        "ue_grep"
+      ]
+    },
+    {
+      "skill": "module-analyzer",
+      "trigger_patterns": {
+        "ko": [
+          "모듈 분석",
+          "OVERVIEW.md 생성",
+          "CLASSES.md 생성",
+          "UE 모듈 구조 분석",
+          "모듈 헤더 의존성",
+          "모듈 클래스 문서",
+          "module-analyzer"
+        ],
+        "en": [
+          "module analysis",
+          "analyze module structure",
+          "generate overview",
+          "architecture analysis",
+          "module documentation"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "링커 에러",
+          ".Build.cs 수정",
+          "모듈 의존성 해결"
+        ],
+        "en": [
+          "linker error",
+          "unresolved external",
+          "Build.cs dependency"
+        ]
+      },
+      "disambiguation": "Analyze UE module structure (Build.cs, headers, deps) to generate OVERVIEW.md and CLASSES.md. For linker error resolution, use module-mapper.",
+      "priority": 81,
+      "mcp_tools_used": [
+        "ue_analyze_symbols"
+      ]
+    },
+    {
+      "skill": "performance-health-check",
+      "trigger_patterns": {
+        "ko": [
+          "프로젝트 건강도",
+          "최적화 기회",
+          "Epic 표준 위반",
+          "Blueprint 복잡도 분석",
+          "빌드 시간 분석",
+          "코드 품질 메트릭",
+          "Tech Debt",
+          "성능 리포트",
+          "빌드 시간",
+          "모듈 의존성",
+          "Epic 표준",
+          "블루프린트 복잡도",
+          "코드 품질",
+          "순환 의존",
+          "최적화 스캔"
+        ],
+        "en": [
+          "project health check",
+          "optimization opportunities",
+          "Epic standards violations",
+          "Blueprint complexity",
+          "build time analysis",
+          "code quality metrics",
+          "performance report",
+          "build time",
+          "Epic standards",
+          "blueprint complexity",
+          "code quality",
+          "circular dependency",
+          "optimization scan"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "프로파일링",
+          "utrace",
+          "진단해줘",
+          "경고 요약",
+          "메시지 로그",
+          "왜 느려",
+          "프레임 드랍",
+          "반복 수정",
+          "목표 점수",
+          "반복 리뷰"
+        ],
+        "en": [
+          "profiling",
+          "utrace",
+          "project audit",
+          "diagnostic audit",
+          "session health check",
+          "MCP health check",
+          "server health",
+          "frame drop",
+          "hot function",
+          "auto fix warnings",
+          "iterate",
+          "target score",
+          "review iterate"
+        ]
+      },
+      "disambiguation": "Project-wide static health audit (BP complexity, C++ architecture, build time, Epic standards). For runtime .utrace profiling, use ue-insights-profiler. For diagnostic/audit, use ue-audit. For a scored trace-quality + runtime performance audit of a .utrace, use ue-perf-audit.",
+      "priority": 82,
+      "mcp_tools_used": [
+        "ue_glob",
+        "ue_analyze_symbols"
+      ]
+    },
+    {
+      "skill": "api-diff-analyzer",
+      "trigger_patterns": {
+        "ko": [
+          "API 변경점",
+          "API 변경 문서",
+          "API 변경 이력",
+          "API_CHANGES.md",
+          "엔진 API 차이점",
+          "api-diff-analyzer"
+        ],
+        "en": [
+          "API diff",
+          "API changes",
+          "version migration analysis",
+          "API_CHANGES.md",
+          "engine API differences"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "breaking change 탐지",
+          "영향 분석"
+        ],
+        "en": [
+          "breaking change detection",
+          "impact analysis"
+        ]
+      },
+      "disambiguation": "UE API change analyzer for version migration. Generates breaking changes and migration guides for engine upgrades.",
+      "priority": 83,
+      "mcp_tools_used": [
+        "ue_grep",
+        "ue_read",
+        "ue_analyze_symbols"
+      ]
+    },
+    {
+      "skill": "asset-modification-wizard",
+      "trigger_patterns": {
+        "ko": [
+          "일괄 수정",
+          "BP 대량 변경",
+          "모든 블루프린트에서 변경",
+          "일괄로 모든",
+          "전부 한번에 바꿔",
+          "밸런스 패치로 BP 대량",
+          "모든 적 BP에",
+          "일괄 변경",
+          "전부 바꿔",
+          "디폴트값을"
+        ],
+        "en": [
+          "bulk modify",
+          "change all Blueprints",
+          "batch update",
+          "add property to all",
+          "change MaxHealth in every",
+          "batch change",
+          "bulk change",
+          "change in every",
+          "modify all"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "하나만 바꿔",
+          "구조 분석",
+          "에셋 검증"
+        ],
+        "en": [
+          "single asset",
+          "analyze structure",
+          "validate asset"
+        ]
+      },
+      "disambiguation": "Safe bulk asset modification (Discovery→Impact→Strategy→Dry-Run→Execute). For single asset changes, use MCP tools directly.",
+      "priority": 84,
+      "mcp_tools_used": [
+        "ue_modify_asset",
+        "ue_manage_blueprint",
+        "ue_search_assets"
+      ]
+    },
+    {
+      "skill": "bp-to-cpp",
+      "trigger_patterns": {
+        "ko": [
+          "BP를 C++로",
+          "BP 로직 C++로",
+          "BP 노드를 C++로",
+          "BP 자동 변환",
+          "C++로 변환",
+          "블루프린트 C++ 변환",
+          "C++로 빼",
+          "BP 코드 변환",
+          "블루프린트 로직 변환"
+        ],
+        "en": [
+          "convert BP to C++",
+          "Blueprint to C++",
+          "convert BP logic",
+          "BP auto convert",
+          "convert Blueprint to C++",
+          "convert to C++",
+          "Blueprint logic to C++",
+          "BP to C++ conversion"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "프로젝트 전환",
+          "Source 디렉토리",
+          "프로젝트 초기화",
+          "BP 분석",
+          "BP 생성",
+          "변환 검증",
+          "BP 리팩터링"
+        ],
+        "en": [
+          "project init",
+          "Source directory",
+          "add C++ to project",
+          "analyze Blueprint",
+          "generate Blueprint",
+          "migration validation",
+          "refactor Blueprint"
+        ]
+      },
+      "disambiguation": "Analyze BP logic and generate equivalent C++ code. NOT: project infrastructure (bp-cpp-project-init), NOT: migration validation (bp-to-cpp-validator), NOT: BP analysis only (blueprint-flow).",
+      "priority": 107,
+      "mcp_tools_used": [
+        "ue_manage_blueprint",
+        "ue_generate_code",
+        "ue_analyze_symbols",
+        "ue_trace_execution",
+        "ue_run_workflow",
+        "ue_fix_errors",
+        "ue_search_assets"
+      ]
+    },
+    {
+      "skill": "bp-cpp-project-init",
+      "trigger_patterns": {
+        "ko": [
+          "C++ 프로젝트로 전환",
+          "Source 디렉토리 만들어",
+          "C++ 프로젝트 초기화",
+          "BP only에서 C++",
+          "네이티브로 마이그레이션",
+          "네이티브로 옮겨",
+          "C++ 모듈 추가"
+        ],
+        "en": [
+          "init C++ project",
+          "add C++ to project",
+          "create Source directory",
+          "convert to C++ project",
+          "enable C++ for project",
+          "convert to native",
+          "migrate to C++ project"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "BP 분석",
+          "BP 로직",
+          "BP 노드",
+          "클래스 생성",
+          "BP 생성",
+          "C++로 변환"
+        ],
+        "en": [
+          "analyze Blueprint",
+          "BP logic",
+          "BP nodes",
+          "create class",
+          "generate Blueprint",
+          "convert BP to C++"
+        ]
+      },
+      "disambiguation": "Initialize C++ project structure (Source/, Build.cs, Target.cs) for BP-only projects. Does NOT convert BP logic to C++ (use bp-to-cpp for that).",
+      "priority": 85,
+      "mcp_tools_used": [
+        "ue_manage_blueprint",
+        "ue_generate_code",
+        "ue_analyze_symbols"
+      ]
+    },
+    {
+      "skill": "source-doc-verify",
+      "trigger_patterns": {
+        "ko": [
+          "문서 검증",
+          "문서 정확성",
+          "출처 확인",
+          "코드 기반 문서 검증",
+          "source-doc-verify",
+          "소스코드 교차",
+          "문서 소스 검증"
+        ],
+        "en": [
+          "doc verify",
+          "verify documentation",
+          "source verification",
+          "claim validation",
+          "check doc accuracy",
+          "cross-verify"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "코드 리뷰",
+          "Blueprint 분석",
+          "README 업데이트",
+          "에셋 검증"
+        ],
+        "en": [
+          "code review",
+          "Blueprint analysis",
+          "update readme",
+          "asset validation"
+        ]
+      },
+      "disambiguation": "Source-to-document cross-verification (8 claim types). For code review, use ns-review. For asset validation, use ue-validate.",
+      "priority": 86,
+      "mcp_tools_used": [
+        "ue_grep",
+        "ue_read"
+      ]
+    },
+    {
+      "skill": "example-extractor",
+      "trigger_patterns": {
+        "ko": [
+          "예제 추출",
+          "사용 예제",
+          "EXAMPLES.md 생성",
+          "엔진 코드 사용 예제",
+          "사용법 찾기",
+          "코드 샘플",
+          "example-extractor",
+          "엔진 예제",
+          "코드 예제 수집",
+          "예제 문서"
+        ],
+        "en": [
+          "usage examples",
+          "extract examples",
+          "code samples",
+          "usage patterns",
+          "generate example documentation",
+          "code examples from engine",
+          "usage example documentation",
+          "collect examples"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "모듈 분석",
+          "문서 검증",
+          "트러블슈팅"
+        ],
+        "en": [
+          "module analysis",
+          "doc verify",
+          "troubleshoot"
+        ]
+      },
+      "disambiguation": "Extract usage examples from UE engine code to generate EXAMPLES.md. For module analysis, use module-analyzer.",
+      "priority": 87,
+      "mcp_tools_used": [
+        "ue_analyze_symbols"
+      ]
+    },
+    {
+      "skill": "troubleshoot-generator",
+      "trigger_patterns": {
+        "ko": [
+          "트러블슈팅 문서",
+          "TROUBLESHOOT.md",
+          "문제 해결 문서",
+          "문제 해결 가이드 생성",
+          "troubleshoot-generator",
+          "UE 모듈 트러블슈팅"
+        ],
+        "en": [
+          "troubleshooting guide",
+          "generate troubleshoot",
+          "troubleshoot documentation",
+          "common issues documentation"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "빌드 에러 해결",
+          "크래시 디버그",
+          "라이브 코딩 에러"
+        ],
+        "en": [
+          "fix build error",
+          "debug crash",
+          "live coding error"
+        ]
+      },
+      "disambiguation": "Generate TROUBLESHOOT.md from known issues and solutions. For active debugging, use ue-debug or unreal-error-doctor.",
+      "priority": 88,
+      "mcp_tools_used": [
+        "ue_grep",
+        "ue_read"
+      ]
+    },
+    {
+      "skill": "trace-html-visualizer",
+      "trigger_patterns": {
+        "ko": [
+          "trace HTML",
+          "HTML로 보여줘",
+          "HTML 파일로 만들어",
+          "시각화 파일",
+          "HTML로 export",
+          "브라우저에서 확인",
+          "인터랙티브 HTML",
+          "HTML 파일로",
+          "HTML로 만들어",
+          "HTML로 내보내",
+          "브라우저에서 볼"
+        ],
+        "en": [
+          "trace to HTML",
+          "HTML visualization",
+          "open trace in browser",
+          "interactive trace HTML",
+          "generate trace HTML",
+          "save as HTML",
+          "HTML file",
+          "open in browser",
+          "interactive HTML",
+          "HTML export"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "실행 흐름 분석",
+          "BP 분석",
+          "trace JSON"
+        ],
+        "en": [
+          "execution flow analysis",
+          "Blueprint analysis",
+          "trace JSON"
+        ]
+      },
+      "disambiguation": "Interactive trace HTML visualization file. For trace analysis without HTML export, use blueprint-flow or ue-execution-trace.",
+      "priority": 89,
+      "mcp_tools_used": [
+        "ue_trace_execution",
+        "ue_manage_blueprint"
+      ]
+    },
+    {
+      "skill": "review-fix",
+      "trigger_patterns": {
+        "ko": [
+          "리뷰 수정",
+          "타입 힌트 추가",
+          "타입 힌트 자동",
+          "import 정리",
+          "리뷰 후 자동 수정",
+          "safe auto-fix",
+          "review fix",
+          "코드 리뷰 후 수정",
+          "자동 수정 리뷰"
+        ],
+        "en": [
+          "review fix",
+          "apply safe fixes",
+          "auto fix review",
+          "safe auto-fix",
+          "fix type annotations",
+          "sort imports",
+          "review then fix",
+          "review and fix"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "코드 리뷰만",
+          "목표 점수까지",
+          "반복 리뷰",
+          "빌드 에러 수정"
+        ],
+        "en": [
+          "code review only",
+          "target score",
+          "iterate review",
+          "fix build error"
+        ]
+      },
+      "disambiguation": "Code review + safe auto-fixes (type hints, imports, whitespace). For iterative review to target score, use review-iterate. For code review only, use ns-review.",
+      "priority": 90,
+      "mcp_tools_used": [
+        "ue_grep",
+        "ue_read"
+      ]
+    },
+    {
+      "skill": "review-iterate",
+      "trigger_patterns": {
+        "ko": [
+          "목표 점수까지",
+          "반복 리뷰",
+          "9점까지",
+          "자동 개선 반복",
+          "점수 달성까지 반복",
+          "review-iterate",
+          "점수 기반 반복"
+        ],
+        "en": [
+          "iterate until",
+          "target score",
+          "review iterate",
+          "iterative review improvement",
+          "auto improve",
+          "keep fixing until"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "리뷰 수정 적용",
+          "계획 리뷰"
+        ],
+        "en": [
+          "apply safe fixes",
+          "plan review"
+        ]
+      },
+      "disambiguation": "Iterate review-fix cycles until target score (default 9.0). For one-shot review+fix, use review-fix.",
+      "priority": 91,
+      "mcp_tools_used": [
+        "ue_grep",
+        "ue_read"
+      ]
+    },
+    {
+      "skill": "session-health-check",
+      "trigger_patterns": {
+        "ko": [
+          "세션 체크",
+          "서버 상태 확인",
+          "MCP 준비",
+          "세션 준비",
+          "MCP 서버 상태",
+          "MCP 연결 상태",
+          "세션 헬스",
+          "session-health-check"
+        ],
+        "en": [
+          "session check",
+          "MCP ready",
+          "server status",
+          "session readiness",
+          "server status deep check",
+          "MCP session health"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "프로젝트 진단",
+          "MCP 분석",
+          "MCP 라이브 테스트",
+          "MCP 배포"
+        ],
+        "en": [
+          "project audit",
+          "MCP analysis",
+          "MCP live test",
+          "MCP deploy"
+        ]
+      },
+      "disambiguation": "Deep MCP session readiness verification (server health + cache/index + editor ports). For project-wide audit, use ue-audit.",
+      "priority": 92,
+      "mcp_tools_used": [
+        "ue_check_health",
+        "ue_cache_control"
+      ]
+    },
+    {
+      "skill": "readme-update",
+      "trigger_patterns": {
+        "ko": [
+          "README 업데이트",
+          "리드미 최신화",
+          "README 동기화",
+          "리드미 CHANGELOG",
+          "README 불일치",
+          "readme-update",
+          "README 수정"
+        ],
+        "en": [
+          "update readme",
+          "readme sync",
+          "readme check",
+          "update project readme",
+          "verify readme",
+          "README mismatch",
+          "README inconsistency"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "문서 검증",
+          "CHANGELOG 생성"
+        ],
+        "en": [
+          "doc verify",
+          "generate changelog"
+        ]
+      },
+      "disambiguation": "README.md SSOT cross-validation against Cargo.toml, CLAUDE.md, CHANGELOG.md. For source-to-doc verification, use source-doc-verify.",
+      "priority": 93,
+      "mcp_tools_used": [
+        "ue_analyze_symbols",
+        "ue_check_health"
+      ]
+    },
+    {
+      "skill": "demo-live-refresh",
+      "trigger_patterns": {
+        "ko": [
+          "데모 결과 갱신",
+          "데모 라이브 리프레시",
+          "데모 증거 갱신",
+          "라이브 데모 업데이트",
+          "데모 자료 새로고침",
+          "라이브 증거 리프레시",
+          "demo-live-refresh",
+          "DEMO_LIVE_RESULTS",
+          "demo refresh",
+          "라이브 데모 재실행",
+          "MCP 데모 증거 갱신"
+        ],
+        "en": [
+          "demo live refresh",
+          "demo evidence refresh",
+          "refresh demo data",
+          "update demo evidence",
+          "live demo update",
+          "demo refresh run",
+          "MCP demo evidence refresh"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "MCP 라이브 테스트",
+          "매뉴얼 스크린샷"
+        ],
+        "en": [
+          "MCP live test",
+          "manual screenshot"
+        ]
+      },
+      "disambiguation": "NarshaMCP live demo evidence refresh workflow. For MCP testing, use mcp-live-test.",
+      "priority": 94,
+      "mcp_tools_used": [
+        "ue_check_health",
+        "ue_analyze_symbols",
+        "ue_manage_blueprint"
+      ]
+    },
+    {
+      "skill": "narsha-ide-launch",
+      "trigger_patterns": {
+        "ko": [
+          "Narsha IDE 실행",
+          "나르샤 IDE",
+          "IDE 빌드하고 실행",
+          "IDE 시작",
+          "나르샤 에디터 실행",
+          "IDE 컴파일",
+          "나르샤 IDE 열어",
+          "narsha-ide-launch",
+          "Narsha 에디터",
+          "Narsha IDE 빌드"
+        ],
+        "en": [
+          "launch narsha",
+          "narsha IDE",
+          "build narsha IDE",
+          "narsha launch",
+          "narsha editor",
+          "Narsha editor",
+          "build narsha",
+          "Narsha IDE build"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "언리얼 에디터 실행",
+          "프로젝트 빌드"
+        ],
+        "en": [
+          "launch unreal editor",
+          "build project"
+        ]
+      },
+      "disambiguation": "Build and launch Narsha IDE (VSCode fork). For Unreal Editor launch, use ue-editor-launcher.",
+      "priority": 95,
+      "mcp_tools_used": [
+        "ue_grep"
+      ]
+    },
+    {
+      "skill": "rebrand",
+      "trigger_patterns": {
+        "ko": [
+          "리브랜딩",
+          "브랜드 변경",
+          "프로젝트 이름 변경",
+          "이름 변경 자동화",
+          "rebrand"
+        ],
+        "en": [
+          "rebrand",
+          "change brand name",
+          "rename project",
+          "project rebranding",
+          "brand migration"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "클래스 이름 변경",
+          "함수 리네임"
+        ],
+        "en": [
+          "rename class",
+          "rename function"
+        ]
+      },
+      "disambiguation": "Automated project rebranding workflow (dry-run, validation, backup, rollback). For C++ class/function rename, use ue-cpp-refactor.",
+      "priority": 96,
+      "mcp_tools_used": [
+        "ue_grep"
+      ]
+    },
+    {
+      "skill": "release-package-tester",
+      "trigger_patterns": {
+        "ko": [
+          "릴리즈 패키지 테스트",
+          "패키지 설치 검증",
+          "릴리즈 설치 검증",
+          "MCP 패키지 검증",
+          "release-package-tester",
+          "MCP 설치 후",
+          "설치 후 동작"
+        ],
+        "en": [
+          "release package test",
+          "validate release artifact",
+          "package installation test",
+          "5-phase release verification",
+          "test release package",
+          "after installation",
+          "post-installation"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "릴리즈 자동화",
+          "배포 테스트",
+          "MCP 라이브 테스트"
+        ],
+        "en": [
+          "release automation",
+          "deploy test",
+          "MCP live test"
+        ]
+      },
+      "disambiguation": "5-Phase release package testing (Pre-Flight→Extract→Reset→Build→MCP Test). For release automation, use release-automation. For MCP testing, use mcp-live-test.",
+      "priority": 97,
+      "mcp_tools_used": [
+        "ue_check_health"
+      ]
+    },
+    {
+      "skill": "session-dashboard",
+      "trigger_patterns": {
+        "ko": [
+          "대시보드",
+          "세션 대시보드",
+          "진행 현황",
+          "진행 상황 요약",
+          "세션 진행",
+          "현재 상태 요약",
+          "작업 현황판"
+        ],
+        "en": [
+          "dashboard",
+          "session dashboard",
+          "session status",
+          "progress overview",
+          "progress dashboard",
+          "session progress",
+          "work status",
+          "session summary"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "DDC",
+          "프로젝트 진단",
+          "프로젝트 상태"
+        ],
+        "en": [
+          "health check",
+          "project audit",
+          "DDC health",
+          "project dashboard"
+        ]
+      },
+      "disambiguation": "Session progress dashboard (implementation/test/review/PR/CI status in one compact table). NOT project health audit (/ue-audit) or server health (/session-health-check) or project infrastructure (/ue-project-ops).",
+      "priority": 98,
+      "mcp_tools_used": [],
+      "step0_discovery": false
+    },
+    {
+      "skill": "epic-toolset-tracker",
+      "trigger_patterns": {
+        "ko": [
+          "Epic 추적",
+          "Epic 도구",
+          "도구 변경 추적",
+          "경쟁 추적"
+        ],
+        "en": [
+          "epic tracking",
+          "toolset tracking",
+          "upstream monitor",
+          "epic ai tools",
+          "competitive tracking"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [],
+        "en": [
+          "ue-cl-tracker",
+          "CL history",
+          "when was",
+          "which CL"
+        ]
+      },
+      "disambiguation": "Epic AI toolset competitive tracking (daily ue5-main scan). NOT for: individual CL lookup (use ue-cl-tracker), general engine changes.",
+      "priority": 99,
+      "mcp_tools_used": []
+    },
+    {
+      "skill": "community-scrape",
+      "trigger_patterns": {
+        "ko": [
+          "커뮤니티 스크랩",
+          "불편사항 수집",
+          "레딧 긁어",
+          "포럼 긁어",
+          "pain point 수집",
+          "커뮤니티 피드백",
+          "사용자 불편",
+          "경쟁사 모니터링",
+          "경쟁 분석",
+          "경쟁사 추적"
+        ],
+        "en": [
+          "community scrape",
+          "scrape reddit",
+          "pain point collection",
+          "community feedback",
+          "scrape forums",
+          "user complaints",
+          "community pain",
+          "competitor monitor",
+          "competitive intelligence",
+          "competitor tracking"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "Epic 추적"
+        ],
+        "en": [
+          "epic tracker",
+          "epic toolset"
+        ]
+      },
+      "disambiguation": "Community pain point scraper + competitive intelligence (Reddit/UE Forums for UE + AI assistant complaints and competitor monitoring). NOT for: Epic toolset tracking (use epic-toolset-tracker).",
+      "priority": 104,
+      "mcp_tools_used": [],
+      "step0_discovery": false
+    },
+    {
+      "skill": "ue-refactor-bp",
+      "trigger_patterns": {
+        "ko": [
+          "BP 리팩터링",
+          "BP 리팩토링",
+          "BP 개선",
+          "블루프린트 정리",
+          "블루프린트 개선",
+          "BP 노드 정리",
+          "BP 구조 개선",
+          "BP 그래프 최적화",
+          "BP 그래프 정리",
+          "블루프린트 리팩터링",
+          "BP 최적화",
+          "블루프린트 구조 개선"
+        ],
+        "en": [
+          "refactor Blueprint",
+          "refactor BP",
+          "improve Blueprint",
+          "clean up BP",
+          "optimize BP graph",
+          "simplify Blueprint",
+          "restructure BP",
+          "Blueprint cleanup",
+          "Blueprint refactor",
+          "optimize Blueprint",
+          "BP graph optimization",
+          "Blueprint restructuring"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "BP 생성",
+          "BP 실행 흐름",
+          "BP 분석",
+          "BP를 C++로",
+          "C++로 변환",
+          "BP 구조 분석",
+          "클래스 이름 변경",
+          "함수 추출",
+          "리네임",
+          "BP 그래프 만들어",
+          "블루프린트 만들어"
+        ],
+        "en": [
+          "create Blueprint",
+          "generate Blueprint",
+          "BP execution flow",
+          "BP analysis",
+          "convert BP to C++",
+          "Blueprint to C++",
+          "rename class",
+          "extract method",
+          "rename function",
+          "BP structure analysis",
+          "create BP graph",
+          "generate BP graph"
+        ]
+      },
+      "disambiguation": "Blueprint-to-Blueprint refactoring (modify existing BP graph). NOT: analysis only (blueprint-flow), new BP creation (blueprint-generator), C++ refactoring (ue-cpp-refactor), BP-to-C++ logic conversion (bp-to-cpp), C++ project init (bp-cpp-project-init).",
+      "priority": 101,
+      "mcp_tools_used": [
+        "ue_manage_blueprint",
+        "ue_trace_execution",
+        "ue_check_health",
+        "ue_fix_errors"
+      ]
+    },
+    {
+      "skill": "ue-safe-modify",
+      "trigger_patterns": {
+        "ko": [
+          "안전하게 수정",
+          "스냅샷 찍고",
+          "롤백",
+          "되돌려",
+          "수정 전 백업",
+          "안전장치",
+          "원래대로",
+          "안전 모드",
+          "백업하고 수정"
+        ],
+        "en": [
+          "safe modify",
+          "safely modify",
+          "snapshot before",
+          "with rollback",
+          "rollback changes",
+          "undo AI changes",
+          "safely change",
+          "safe mode modify",
+          "backup before change"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "리네임",
+          "클래스 이름 변경",
+          "일괄 수정",
+          "빌드 에러"
+        ],
+        "en": [
+          "rename class",
+          "rename function",
+          "bulk modify",
+          "build error"
+        ]
+      },
+      "disambiguation": "AI modification safety net with snapshot+rollback. NOT: rename (safe-class-rename), bulk asset modification (asset-modification-wizard), error fixing (ue-debug).",
+      "priority": 102,
+      "mcp_tools_used": [
+        "ue_fix_errors",
+        "ue_manage_blueprint",
+        "ue_analyze_config"
+      ],
+      "step0_discovery": false
+    },
+    {
+      "skill": "ue-vcs-diff",
+      "trigger_patterns": {
+        "ko": [
+          "VCS 변경사항",
+          "변경 diff",
+          "뭐가 바뀌었어",
+          "svn diff",
+          "git diff",
+          "p4 diff",
+          "변경된 에셋 분석",
+          "리비전 비교",
+          "리비전 diff",
+          "커밋 변경사항"
+        ],
+        "en": [
+          "vcs diff",
+          "revision diff",
+          "what changed",
+          "svn diff",
+          "git diff",
+          "p4 diff",
+          "asset changes",
+          "compare revisions",
+          "changed files analysis",
+          "changelist diff"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "리플리케이션 감사",
+          "설정 비교",
+          "계층 비교",
+          "config chain",
+          "커밋 전",
+          "커밋 검사",
+          "변경하면 영향"
+        ],
+        "en": [
+          "replication audit",
+          "compare configs",
+          "diff hierarchy",
+          "config chain",
+          "pre-commit",
+          "safe to commit",
+          "impact if changed"
+        ]
+      },
+      "disambiguation": "VCS revision-range diff with per-file structured analysis. NOT: entity diff (ue-diff), pre-commit safety (ue-pre-commit), hypothetical impact (ue-impact).",
+      "priority": 109,
+      "mcp_tools_used": [
+        "ue_diff",
+        "ue_trace_execution"
+      ],
+      "step0_discovery": false
+    },
+    {
+      "skill": "skill-finder",
+      "trigger_patterns": {
+        "ko": [
+          "어떤 스킬",
+          "스킬 추천",
+          "스킬 찾아",
+          "무슨 스킬",
+          "스킬 뭐",
+          "어떤 명령",
+          "추천해줘 스킬"
+        ],
+        "en": [
+          "find skill",
+          "which skill",
+          "recommend skill",
+          "skill finder",
+          "what skill",
+          "suggest skill",
+          "skill for"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "스킬 만들어",
+          "스킬 생성",
+          "스킬 빌더",
+          "스킬 평가"
+        ],
+        "en": [
+          "create skill",
+          "build skill",
+          "skill builder",
+          "evaluate skill"
+        ]
+      },
+      "disambiguation": "Find the right skill for a task via routing.json matching. NOT: creating/building skills (mcp-skill-builder), evaluating skills (ns-skills-evaluator).",
+      "priority": 111,
+      "mcp_tools_used": [],
+      "step0_discovery": false
+    },
+    {
+      "skill": "mirror-issue-triage",
+      "trigger_patterns": {
+        "ko": [
+          "미러 이슈",
+          "미러 트리아지",
+          "외부 이슈",
+          "미러 레포",
+          "narsha-mcp 이슈",
+          "미러 정리",
+          "외부 이슈 분류",
+          "미러 중복 검사",
+          "미러 동기화",
+          "미러 이슈 닫기"
+        ],
+        "en": [
+          "mirror issue",
+          "mirror triage",
+          "triage mirror",
+          "external issues",
+          "narsha-mcp issues",
+          "mirror repo issues",
+          "mirror scan",
+          "mirror duplicates",
+          "mirror sync",
+          "sync closed mirror"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "이슈 찾아",
+          "이슈 만들어",
+          "이슈 정합성",
+          "이슈 업데이트"
+        ],
+        "en": [
+          "find issues",
+          "create issue",
+          "issue consistency",
+          "issue update"
+        ]
+      },
+      "disambiguation": "Triage mirror repo (nextstage-dev/narsha-mcp) issues against main repo. Detects duplicates, resolved, new. NOT: issue discovery (issue-find), NOT: issue state fix (issue-update), NOT: issue creation (issue-setup).",
+      "priority": 112,
+      "mcp_tools_used": [],
+      "step0_discovery": false
+    },
+    {
+      "skill": "mirror-pr-triage",
+      "trigger_patterns": {
+        "ko": [
+          "미러 PR",
+          "미러 풀리퀘스트",
+          "외부 PR",
+          "외부 PR 검토",
+          "미러 레포 PR",
+          "narsha-mcp PR",
+          "미러 PR 정리",
+          "체리픽",
+          "미러 PR 트리아지"
+        ],
+        "en": [
+          "mirror PR",
+          "mirror pull request",
+          "triage mirror PR",
+          "external PR",
+          "external PR review",
+          "narsha-mcp PR",
+          "cherry-pick mirror",
+          "mirror contribution",
+          "mirror PR triage"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "미러 이슈",
+          "이슈 트리아지",
+          "PR 만들어",
+          "PR 생성"
+        ],
+        "en": [
+          "mirror issue",
+          "issue triage",
+          "create PR",
+          "make PR",
+          "open PR"
+        ]
+      },
+      "disambiguation": "Triage mirror repo PRs (code review, conflict check, cherry-pick). NOT: mirror issue triage (mirror-issue-triage), NOT: creating PRs (pr-create), NOT: PR review (ns-review).",
+      "priority": 113,
+      "mcp_tools_used": [],
+      "step0_discovery": false
+    },
+    {
+      "skill": "token-monitor",
+      "trigger_patterns": {
+        "ko": [
+          "토큰 모니터",
+          "토큰 분석",
+          "주간 토큰",
+          "낭비 분석",
+          "토큰 추세",
+          "토큰 소비"
+        ],
+        "en": [
+          "token monitor",
+          "token analysis",
+          "weekly waste",
+          "waste report",
+          "token consumption",
+          "token trend"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "토큰 설명",
+          "토큰 뭐야"
+        ],
+        "en": [
+          "explain token",
+          "what is token"
+        ]
+      },
+      "disambiguation": "Weekly token waste monitoring with WoW trends and regression alerts. NOT: explaining what tokens are (ue-explain).",
+      "priority": 114,
+      "mcp_tools_used": [],
+      "step0_discovery": false
+    },
+    {
+      "skill": "agent-test",
+      "trigger_patterns": {
+        "ko": [
+          "에이전트 테스트",
+          "스킬 테스트",
+          "훅 테스트",
+          "컴포넌트 테스트",
+          "트리거 테스트",
+          "스킬 트리거",
+          "훅 동작 테스트"
+        ],
+        "en": [
+          "agent test",
+          "skill test",
+          "hook test",
+          "component test",
+          "trigger test",
+          "skill trigger",
+          "hook behavior test"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "MCP 라이브 테스트",
+          "E2E 테스트",
+          "cargo test",
+          "pytest",
+          "테스트 생성",
+          "테스트 만들어",
+          "자동화 테스트",
+          "테스트 시나리오"
+        ],
+        "en": [
+          "MCP live test",
+          "e2e test",
+          "cargo test",
+          "pytest",
+          "generate test",
+          "create test",
+          "automation test",
+          "test scenario"
+        ]
+      },
+      "disambiguation": "Agent component (skill/hook/subagent) clean-environment testing framework via eval-channel. NOT: MCP live test (mcp-live-test), NOT: cargo/pytest (test-run), NOT: UE automation test generation (ue-test-gen), NOT: E2E nightly (mcp-e2e-nightly).",
+      "priority": 115,
+      "mcp_tools_used": [],
+      "step0_discovery": false
+    },
+    {
+      "skill": "adk-roadmap-planner",
+      "trigger_patterns": {
+        "ko": [
+          "ADK 로드맵",
+          "에픽 이슈 생성",
+          "로드맵 이슈",
+          "에픽 만들어",
+          "ADK 이슈",
+          "ADK 갭 이슈"
+        ],
+        "en": [
+          "ADK roadmap",
+          "create epic issues",
+          "roadmap issues",
+          "epic planner",
+          "ADK gap issues",
+          "create ADK issues"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "Epic 추적",
+          "Epic 변경",
+          "이슈 찾아",
+          "이슈 목록"
+        ],
+        "en": [
+          "Epic tracking",
+          "toolset tracking",
+          "find issues",
+          "issue list"
+        ]
+      },
+      "disambiguation": "ADK roadmap epic issue creation from gap analysis. Delegates to epic-planner with ADK-specific defaults. NOT Epic Games tracking (use epic-toolset-tracker). NOT general issue search (use issue-find). NOT single issue creation (use issue-setup). NOT generic epic planning (use epic-planner).",
+      "priority": 116,
+      "mcp_tools_used": [],
+      "step0_discovery": false
+    },
+    {
+      "skill": "ue-test-autofix",
+      "trigger_patterns": {
+        "ko": [
+          "테스트 실패 자동 수정",
+          "테스트 자동 고치기",
+          "자동 테스트 루프",
+          "실패하면 자동 고쳐서 재실행",
+          "테스트 실패 자동 루프",
+          "테스트 자동 수정 루프"
+        ],
+        "en": [
+          "test autofix loop",
+          "failure fix rerun",
+          "autofix test failures",
+          "test failure auto-fix",
+          "fix tests and rerun loop",
+          "closed-loop test autofix"
+        ]
+      },
+      "negative_patterns": {
+        "ko": [
+          "엣지 케이스",
+          "버그 헌팅",
+          "clean pass",
+          "클린 패스",
+          "테스트 반복",
+          "테스트 생성",
+          "테스트 만들어",
+          "개발 루프",
+          "개발 사이클",
+          "시나리오 테스트",
+          "입력 녹화",
+          "PIE 녹화"
+        ],
+        "en": [
+          "edge case",
+          "bug hunting",
+          "clean pass",
+          "generate test",
+          "create test",
+          "dev cycle",
+          "dev loop",
+          "build loop",
+          "test scenario",
+          "record input",
+          "PIE recording"
+        ]
+      },
+      "disambiguation": "Closed-loop auto-fix of failing UE Automation tests. Reads structured TestResult (Issue #7924), classifies compile/runtime/assertion, routes to ue_fix_errors, rebuilds, reruns. Different from /test-iterate (edge-case rotation) and /ue-dev-cycle (no test in inner loop). Not test generation (/ue-test-gen, /ue-automation-test-builder).",
+      "priority": 144,
+      "mcp_tools_used": [
+        "ue_editor_automation",
+        "ue_fix_errors",
+        "ue_build_pipeline",
+        "ue_check_health"
+      ]
+    },
+    {
+      "skill": "pc-matrix",
+      "plugin": "core",
+      "trigger_patterns": {
+        "ko": [
+          "능력 매트릭스",
+          "이 PC에서 가능한",
+          "이 PC로 할 수 있는",
+          "PC 매트릭스",
+          "여기서 할 수 있는"
+        ],
+        "en": [
+          "pc matrix",
+          "capability matrix",
+          "what can I work on here",
+          "what's possible on this pc"
+        ]
+      },
+      "negative_patterns": {
+        "en": [
+          "issue find",
+          "find issues",
+          "start issue"
+        ]
+      },
+      "disambiguation": "Triage matrix only. For actionable filtered list use /issue-find. For per-issue gate enforcement use /issue-start.",
+      "priority": 186,
+      "mcp_tools_used": []
+    }
+  ],
+  "fallback": {
+    "description": "When no rule matches AND query is a high-level workflow request, search marketplace for relevant skills (Issue #5902)",
+    "marketplace_search": {
+      "enabled": true,
+      "trigger_signals": {
+        "positive": [
+          "Natural language feature/workflow requests (e.g., 'help me with X', 'I want to X')",
+          "Domain keywords not covered by existing rules (e.g., 'networking', 'multiplayer', 'UI animation')",
+          "Multi-step guidance requests (e.g., 'how should I approach X', 'best practice for X')"
+        ],
+        "negative": [
+          "Direct MCP tool/operation names (e.g., 'trace_hierarchy', 'search_symbols', 'get_structure')",
+          "Specific file paths or text file extensions (already caught by STOP rule)",
+          "Simple data queries (e.g., 'list all blueprints', 'find asset X')",
+          "Queries that map directly to MCP-First table entries"
+        ]
+      },
+      "search_strategy": {
+        "extract_keywords": "From user query, extract 1-3 domain keywords",
+        "mcp_call": "ue_marketplace(operation='search', query='<keywords>', limit=3)",
+        "present_results": "Show top 1-3 skills with name, description, and install command. Note: available in next session after install."
+      }
+    }
+  }
+}

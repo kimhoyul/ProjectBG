@@ -1,0 +1,35 @@
+{
+  "name": "attribute_set",
+  "description": "GAS AttributeSet with custom accessors and default attributes",
+  "version": "2.0.0",
+  "base_class": "UAttributeSet",
+  "default_specifiers": "",
+  "includes": [
+    "CoreMinimal.h",
+    "AttributeSet.h",
+    "AbilitySystemComponent.h"
+  ],
+  "interfaces": [],
+  "molecules": ["attribute_set_base"],
+  "default_attributes": [
+    {
+      "name": "Health",
+      "default_value": 100.0,
+      "description": "Current health value"
+    },
+    {
+      "name": "MaxHealth",
+      "default_value": 100.0,
+      "description": "Maximum health value"
+    },
+    {
+      "name": "Damage",
+      "default_value": 0.0,
+      "is_meta": true,
+      "description": "Meta attribute for incoming damage"
+    }
+  ],
+  "module_dependencies": {
+    "public": ["GameplayAbilities"]
+  }
+}

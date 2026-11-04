@@ -1,0 +1,126 @@
+{
+  "skill": "ue-cpp-refactor",
+  "description": "Trigger precision eval: verify ue-cpp-refactor activates on refactoring/rename/extract queries and NOT on scaffold/create/build queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "리팩터링해줘",
+      "should_trigger": true,
+      "reason": "Korean '리팩터링' — core trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "AEnemy를 ABaseEnemy로 리네임해줘",
+      "should_trigger": true,
+      "reason": "Korean '리네임' — rename trigger with specific classes"
+    },
+    {
+      "id": "tp-03",
+      "query": "rename class AMyPawn to AMyCharacter",
+      "should_trigger": true,
+      "reason": "English 'rename class' — direct trigger"
+    },
+    {
+      "id": "tp-04",
+      "query": "ACharacter에서 함수 추출해줘",
+      "should_trigger": true,
+      "reason": "Korean '함수 추출' — exact trigger pattern from routing.json (not '메서드 추출')"
+    },
+    {
+      "id": "tp-05",
+      "query": "extract method from this function",
+      "should_trigger": true,
+      "reason": "English 'extract method' — direct trigger"
+    },
+    {
+      "id": "tp-06",
+      "query": "클래스 이름 변경해줘",
+      "should_trigger": true,
+      "reason": "Korean '클래스 이름 변경' — class rename trigger"
+    },
+    {
+      "id": "tp-07",
+      "query": "rename function TakeDamage to ApplyDamage",
+      "should_trigger": true,
+      "reason": "English 'rename function' — function rename trigger"
+    },
+    {
+      "id": "tp-08",
+      "query": "change signature of BeginPlay",
+      "should_trigger": true,
+      "reason": "English 'change signature' — direct trigger"
+    },
+    {
+      "id": "tp-09",
+      "query": "함수 추출해줘",
+      "should_trigger": true,
+      "reason": "Korean '함수 추출' — function extraction trigger"
+    },
+    {
+      "id": "tp-10",
+      "query": "safe delete this unused class",
+      "should_trigger": true,
+      "reason": "English 'safe delete' — safe deletion trigger"
+    },
+    {
+      "id": "tn-01",
+      "query": "캐릭터 만들어줘",
+      "should_trigger": false,
+      "reason": "TN: '만들어줘' is ue-scaffold trigger. Creating new features, not refactoring existing code."
+    },
+    {
+      "id": "tn-02",
+      "query": "Create a Character class",
+      "should_trigger": false,
+      "reason": "TN: 'Create' is ue-scaffold trigger. New class creation, not refactoring."
+    },
+    {
+      "id": "tn-03",
+      "query": "Build an inventory system",
+      "should_trigger": false,
+      "reason": "TN: 'Build' is ue-scaffold trigger. New feature construction, not refactoring."
+    },
+    {
+      "id": "tn-04",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "TN: '에러 해결' is ue-debug trigger. Error fixing, not refactoring."
+    },
+    {
+      "id": "tn-05",
+      "query": "ACharacter 어떻게 동작해?",
+      "should_trigger": false,
+      "reason": "TN: '어떻게 동작' is ue-explain trigger. Explanation, not refactoring."
+    },
+    {
+      "id": "tn-06",
+      "query": "Scaffold a health bar widget",
+      "should_trigger": false,
+      "reason": "TN: 'Scaffold' is ue-scaffold trigger. Generating new UI, not refactoring."
+    },
+    {
+      "id": "tn-07",
+      "query": "APawn 변경하면 뭐가 깨져?",
+      "should_trigger": false,
+      "reason": "TN: '변경하면 깨져' is ue-impact trigger. Impact analysis, not refactoring."
+    },
+    {
+      "id": "tn-08",
+      "query": "테스트 생성해줘",
+      "should_trigger": false,
+      "reason": "TN: '테스트 생성' is ue-test-gen trigger. Test creation, not refactoring."
+    },
+    {
+      "id": "tn-09",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "TN: '진단' is ue-audit trigger. Project health, not refactoring."
+    },
+    {
+      "id": "tn-10",
+      "query": "Set up a damage system",
+      "should_trigger": false,
+      "reason": "TN: 'Set up' is ue-scaffold trigger. Feature scaffolding, not code refactoring."
+    }
+  ]
+}

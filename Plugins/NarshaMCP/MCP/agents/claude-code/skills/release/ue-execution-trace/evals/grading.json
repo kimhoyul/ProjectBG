@@ -1,0 +1,78 @@
+{
+  "skill": "ue-execution-trace",
+  "version": "1.0.0",
+  "description": "Output quality eval: verify ue-execution-trace produces step-by-step execution chains with node types and cross-BP connections",
+  "cases": [
+    {
+      "id": "QUAL-01",
+      "prompt": "B_Hero_Default 실행 추적해줘",
+      "requires_asset": ["B_Hero_Default"],
+      "_precondition_rationale": "Issues #19514 and #25527: the llm_judge below strictly requires a real step-by-step trace, so it may only run where B_Hero_Default genuinely exists. The canonical Lyra 5.7 fixture was verified to expose an event-root graph with reachable depth 8; declare it present via EVAL_PROJECT_ASSETS/--project-assets or SKIP (never a project-version false-red, and a SKIP can't mask a real trace failure — no-mask #14675).",
+      "assertions": [
+        {
+          "type": "tool_usage",
+          "value": "ue_trace_execution",
+          "description": "Should use ue_trace_execution for Blueprint flow tracing"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(execution.*flow|trace|chain|node|step|event|Event)",
+          "description": "Should show execution chain with steps or nodes"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response show a step-by-step execution chain for B_Hero_Default with numbered steps or nodes? It should trace the flow from an event entry point through downstream calls.",
+          "threshold": 0.6,
+          "description": "Should provide sequential execution flow (LLM judge)"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-02",
+      "prompt": "GA_Weapon_Fire 어빌리티 플로우 추적",
+      "requires_asset": ["GA_Weapon_Fire"],
+      "_precondition_rationale": "Issue #19514: gated so an absent GA_Weapon_Fire SKIPs rather than 'lenient-passing' on a non-existent asset (a subtle no-mask violation #14675 — a pass here would falsely imply the ability flow traces). Runs where the asset is declared present.",
+      "assertions": [
+        {
+          "type": "tool_usage",
+          "value": "ue_trace_execution",
+          "description": "Should use ue_trace_execution for ability flow tracing"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["ability", "GA_Weapon_Fire", "어빌리티", "flow", "activate", "commit", "end"],
+          "description": "Should reference ability lifecycle stages"
+        },
+        {
+          "type": "content_pattern",
+          "value": "(activate|commit|end|gameplay.?effect|montage|tag|cost|cooldown)",
+          "description": "Should trace GAS ability lifecycle"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-03",
+      "prompt": "IA_Jump 입력부터 추적해줘",
+      "requires_asset": ["IA_Jump"],
+      "_precondition_rationale": "Issue #19514: same strict-judge shape as QUAL-01 — the llm_judge requires a real input-to-action chain, so it only runs where IA_Jump exists; otherwise SKIP (no project-version false-red).",
+      "assertions": [
+        {
+          "type": "tool_usage",
+          "value": "ue_trace_execution",
+          "description": "Should use ue_trace_execution for input chain tracing"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["IA_Jump", "input", "입력", "action", "mapping", "InputAction"],
+          "description": "Should reference input action and mapping context"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response trace the chain from input action (IA_Jump) through the input mapping context to the actual gameplay action (e.g., character jump)?",
+          "threshold": 0.6,
+          "description": "Should show complete input-to-action chain (LLM judge)"
+        }
+      ]
+    }
+  ]
+}

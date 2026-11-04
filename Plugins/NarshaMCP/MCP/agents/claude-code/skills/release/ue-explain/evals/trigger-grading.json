@@ -1,0 +1,126 @@
+{
+  "skill": "ue-explain",
+  "description": "Trigger precision eval: verify ue-explain activates on explanation/understanding queries and NOT on debug/scaffold/impact/audit/validate/cvar queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "ACharacter 어떻게 동작해?",
+      "should_trigger": true,
+      "reason": "Korean 'how does it work' pattern - core trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "Explain BP_Player",
+      "should_trigger": true,
+      "reason": "English 'explain' keyword - core trigger"
+    },
+    {
+      "id": "tp-03",
+      "query": "M_Rock 설명해줘",
+      "should_trigger": true,
+      "reason": "Korean 'explain' keyword on material asset"
+    },
+    {
+      "id": "tp-04",
+      "query": "GameplayAbility 뭐야?",
+      "should_trigger": true,
+      "reason": "Korean 'what is' pattern"
+    },
+    {
+      "id": "tp-05",
+      "query": "What is Enhanced Input?",
+      "should_trigger": true,
+      "reason": "English 'what is' pattern"
+    },
+    {
+      "id": "tp-06",
+      "query": "NavMesh 어떻게 동작해?",
+      "should_trigger": true,
+      "reason": "Korean 'how does it work' on navigation system"
+    },
+    {
+      "id": "tp-07",
+      "query": "Tell me about UAbilitySystemComponent",
+      "should_trigger": true,
+      "reason": "English 'tell me about' pattern"
+    },
+    {
+      "id": "tp-08",
+      "query": "How does the Gameplay Effect system work?",
+      "should_trigger": true,
+      "reason": "English 'how does' pattern on GAS subsystem"
+    },
+    {
+      "id": "tp-09",
+      "query": "FGameplayTag 뭐야?",
+      "should_trigger": true,
+      "reason": "Korean 'what is' on a specific struct"
+    },
+    {
+      "id": "tp-10",
+      "query": "What is the difference between BehaviorTree and StateTree?",
+      "should_trigger": true,
+      "reason": "English 'what is' pattern comparing two AI systems"
+    },
+    {
+      "id": "tn-01",
+      "query": "BP_Player 빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "Error fix request -> ue-debug (contains '에러', '해결해줘')"
+    },
+    {
+      "id": "tn-02",
+      "query": "캐릭터 만들어줘",
+      "should_trigger": false,
+      "reason": "Creation request -> ue-scaffold (contains '만들어줘')"
+    },
+    {
+      "id": "tn-03",
+      "query": "APawn 변경하면 뭐가 깨져?",
+      "should_trigger": false,
+      "reason": "Impact analysis -> ue-impact (contains '변경하면', '깨져'). Note '뭐가' is similar to '뭐야' but context is impact, not explanation"
+    },
+    {
+      "id": "tn-04",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "Audit/diagnostic request -> ue-audit (contains '진단')"
+    },
+    {
+      "id": "tn-05",
+      "query": "에셋 검증해줘",
+      "should_trigger": false,
+      "reason": "Validation request -> ue-validate (contains '검증')"
+    },
+    {
+      "id": "tn-06",
+      "query": "r.Shadow.MaxResolution 설정 검색",
+      "should_trigger": false,
+      "reason": "CVar search -> ue-cvar-explorer (contains 'CVar-like name' + '설정 검색'). Note: '뭐야' on a CVar should route to ue-explain, but '설정 검색' routes to cvar-explorer"
+    },
+    {
+      "id": "tn-07",
+      "query": "ACharacter 테스트 생성해줘",
+      "should_trigger": false,
+      "reason": "Test generation -> ue-test-gen (contains '테스트 생성')"
+    },
+    {
+      "id": "tn-08",
+      "query": "Fix this linker error in ACharacter",
+      "should_trigger": false,
+      "reason": "Error fix -> ue-debug (contains 'fix', 'error'). Similar asset name but debug intent"
+    },
+    {
+      "id": "tn-09",
+      "query": "Create a health bar widget",
+      "should_trigger": false,
+      "reason": "Creation -> ue-scaffold (contains 'create'). Not an explanation request"
+    },
+    {
+      "id": "tn-10",
+      "query": "BP_Player 수정하면 영향 범위?",
+      "should_trigger": false,
+      "reason": "Impact analysis -> ue-impact (contains '수정하면', '영향')"
+    }
+  ]
+}

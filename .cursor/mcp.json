@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "narshamcp": {
+      "args": [
+        "--stdio",
+        "--project-path",
+        "C:/Work/Unreal/ProjectBG/",
+        "--engine-path",
+        "C:/Program Files/Epic Games/UE_5.8/Engine/"
+      ],
+      "command": "C:/Work/Unreal/ProjectBG/Plugins/NarshaMCP/Source/ThirdParty/bin/narshamcp.exe",
+      "env": {
+        "RUST_LOG": "error"
+      }
+    }
+  }
+}

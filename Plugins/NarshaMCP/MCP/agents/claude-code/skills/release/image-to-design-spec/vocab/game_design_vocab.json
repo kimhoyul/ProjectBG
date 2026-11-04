@@ -1,0 +1,173 @@
+{
+  "$schema_version": "1.0",
+  "source": "徐炜泓, 『游戏设计：深层设计思想与技巧』, 2018 + Western frameworks (MDA/Flow/Norman/Schell)",
+  "description": "Canonical vocabulary for Design-from-Image pipeline. Changes here invalidate prompt cache (see VOCABULARY_CHEATSHEET.md §15).",
+  "vocabularies": {
+    "challenge_kind": {
+      "values": ["hot_stimulation", "cold_strategy", "mixed", "none"],
+      "metadata": {
+        "hot_stimulation": {"ko": "열자극", "ref": "徐 §1.2", "examples": ["다크 소울", "슈퍼 마리오", "비트세이버"]},
+        "cold_strategy":   {"ko": "냉전략",  "ref": "徐 §1.2", "examples": ["문명", "하스스톤", "체스"]},
+        "mixed":           {"ko": "혼합",    "ref": "徐 §1.2", "examples": ["데드 셀"]},
+        "none":            {"ko": "없음",    "ref": "徐 §1.2", "examples": ["시각 소설"]}
+      }
+    },
+    "psychology_signals": {
+      "values": [
+        "social_proof",
+        "cognitive_dissonance",
+        "anchoring",
+        "sunk_cost",
+        "scarcity",
+        "completion_feeling",
+        "reciprocity",
+        "informational_persuasion"
+      ],
+      "metadata": {
+        "social_proof":              {"ko": "군중심리/사회적 증거", "ref": "2.2.1"},
+        "cognitive_dissonance":      {"ko": "인지부조화",           "ref": "2.2.2"},
+        "anchoring":                 {"ko": "앵커링/닻 내리기",     "ref": "2.2.7"},
+        "sunk_cost":                 {"ko": "매몰비용",             "ref": "2.2.7"},
+        "scarcity":                  {"ko": "희소성",               "ref": "4.4.3"},
+        "completion_feeling":        {"ko": "완결감",               "ref": "2.2.8"},
+        "reciprocity":               {"ko": "호혜성/도움",          "ref": "2.2.4"},
+        "informational_persuasion":  {"ko": "설득의 정보적 요인",   "ref": "2.2.5"}
+      }
+    },
+    "emotion_curve_pattern": {
+      "values": ["basic", "hollywood", "wave"],
+      "metadata": {
+        "basic":     {"ko": "기본식 (3막: setup→conflict→resolution)", "ref": "3.2.1"},
+        "hollywood": {"ko": "할리우드식 (영웅의 여정, 다중 피크)",       "ref": "3.2.2"},
+        "wave":      {"ko": "파동식 (반복 짧은 피크)",                   "ref": "3.2.3"}
+      }
+    },
+    "tone": {
+      "values": ["light_slow", "light_fast", "heavy_slow", "heavy_fast"],
+      "metadata": {
+        "light_slow": {"ko": "경과완", "ref": "3.3.1", "examples": ["Animal Crossing", "Stardew Valley"]},
+        "light_fast": {"ko": "경과급", "ref": "3.3.2", "examples": ["마리오", "카트라이더"]},
+        "heavy_slow": {"ko": "중과완", "ref": "3.3.3", "examples": ["The Last of Us", "Witcher 3"]},
+        "heavy_fast": {"ko": "중과급", "ref": "3.3.4", "examples": ["Doom Eternal", "Dark Souls"]}
+      }
+    },
+    "circulation_model": {
+      "values": ["full", "semi", "none"],
+      "metadata": {
+        "full": {"ko": "완전 유통", "ref": "4.3.1", "examples": ["EVE Online"]},
+        "semi": {"ko": "반유통",   "ref": "4.3.2", "examples": ["WoW (BoE/BoP)"]},
+        "none": {"ko": "무유통",   "ref": "4.3.3", "examples": ["모바일 가챠"]}
+      }
+    },
+    "r_tier": {
+      "values": ["F2P", "small_R", "mid_R", "big_R", "whale"],
+      "metadata": {
+        "F2P":     {"ko": "무과금",        "arpu_usd_monthly": "$0"},
+        "small_R": {"ko": "소액 과금자",   "arpu_usd_monthly": "$5-15",    "ref": "4.5.1"},
+        "mid_R":   {"ko": "중액 과금자",   "arpu_usd_monthly": "$50-100",  "ref": "4.5.1"},
+        "big_R":   {"ko": "고액 과금자",   "arpu_usd_monthly": "$200-500", "ref": "4.5.1"},
+        "whale":   {"ko": "대R/고래",      "arpu_usd_monthly": "$1000+"}
+      }
+    },
+    "loop_kind": {
+      "values": ["main_loop", "growth_loop", "economy_loop", "social_loop", "session_loop"],
+      "metadata": {
+        "main_loop":    {"ko": "메인 루프",  "ref": "3.4.2", "cycle": "30초~5분"},
+        "growth_loop":  {"ko": "성장 루프",  "ref": "4.1",   "cycle": "1일~1주"},
+        "economy_loop": {"ko": "경제 루프",  "ref": "4.3",   "cycle": "화폐 흐름"},
+        "social_loop":  {"ko": "사교 루프",  "ref": "2.3",   "cycle": "길드/친구"},
+        "session_loop": {"ko": "세션 루프",  "cycle": "한 세션"}
+      }
+    },
+    "value_factors": {
+      "description": "각 0.0-1.0 점수",
+      "fields": ["utility", "urgency", "acquisition_difficulty", "external_recognition"],
+      "metadata": {
+        "utility":                {"ko": "효용성",       "ref": "4.4.1"},
+        "urgency":                {"ko": "절박성",       "ref": "4.4.2"},
+        "acquisition_difficulty": {"ko": "획득 난이도",  "ref": "4.4.3"},
+        "external_recognition":   {"ko": "외부 가치 인정", "ref": "4.4.4"}
+      }
+    },
+    "mda_layer": {
+      "values": ["mechanics", "dynamics", "aesthetics"],
+      "metadata": {
+        "mechanics":  {"ko": "메커닉스 (규칙·시스템)",     "ref": "Hunicke et al. 2004"},
+        "dynamics":   {"ko": "다이내믹스 (실행 시 행동)",  "ref": "Hunicke et al. 2004"},
+        "aesthetics": {"ko": "에스테틱스 (플레이어 감정)", "ref": "Hunicke et al. 2004"}
+      }
+    },
+    "norman_layer": {
+      "values": ["visceral", "behavioral", "reflective"],
+      "metadata": {
+        "visceral":    {"ko": "비셔럴 (즉각 시각 매력)", "ref": "Norman 2004"},
+        "behavioral":  {"ko": "비헤이비어럴 (사용 행동)", "ref": "Norman 2004"},
+        "reflective":  {"ko": "리플렉티브 (정체성·서사)", "ref": "Norman 2004"}
+      }
+    },
+    "schell_lens": {
+      "description": "상위 10개 Lens 라벨. Vision에서 최대 3개 선택.",
+      "values": [
+        "lens_of_emotion",
+        "lens_of_curiosity",
+        "lens_of_player",
+        "lens_of_flow",
+        "lens_of_challenge",
+        "lens_of_reward",
+        "lens_of_economy",
+        "lens_of_friendship",
+        "lens_of_judgment",
+        "lens_of_secrets"
+      ],
+      "metadata": {
+        "lens_of_emotion":    {"ko": "감정의 렌즈",    "ref": "Schell §10"},
+        "lens_of_curiosity":  {"ko": "호기심의 렌즈",  "ref": "Schell §15"},
+        "lens_of_player":     {"ko": "플레이어의 렌즈", "ref": "Schell §16"},
+        "lens_of_flow":       {"ko": "플로우의 렌즈",  "ref": "Schell §22"},
+        "lens_of_challenge":  {"ko": "도전의 렌즈",    "ref": "Schell §31"},
+        "lens_of_reward":     {"ko": "보상의 렌즈",    "ref": "Schell §47"},
+        "lens_of_economy":    {"ko": "경제의 렌즈",    "ref": "Schell §66"},
+        "lens_of_friendship": {"ko": "우정의 렌즈",    "ref": "Schell §76"},
+        "lens_of_judgment":   {"ko": "판단의 렌즈",    "ref": "Schell §83"},
+        "lens_of_secrets":    {"ko": "비밀의 렌즈",    "ref": "Schell §85"}
+      }
+    },
+    "flow_tunnel_width": {
+      "values": ["narrow", "medium", "wide"],
+      "metadata": {
+        "narrow": {"ko": "좁음 (하드코어, 낮은 허용오차)", "ref": "Chen 2007"},
+        "medium": {"ko": "보통 (대부분 액션 게임)",         "ref": "Chen 2007"},
+        "wide":   {"ko": "넓음 (캐주얼, 폭넓은 능력 수용)", "ref": "Chen 2007"}
+      }
+    },
+    "learning_curve_slope": {
+      "values": ["gentle", "moderate", "steep"],
+      "metadata": {
+        "gentle":   {"ko": "완만 (모든 연령)",   "ref": "Koster 2005"},
+        "moderate": {"ko": "보통 (일반 게임)",   "ref": "Koster 2005"},
+        "steep":    {"ko": "가파름 (Dark Souls 류)", "ref": "Koster 2005"}
+      }
+    },
+    "image_category": {
+      "values": ["ui_mockup", "concept_art", "system_diagram", "mixed"],
+      "metadata": {
+        "ui_mockup":      {"ko": "UI 시안",           "signals": ["위젯 그리드", "텍스트 라벨", "직사각형 컴포넌트"]},
+        "concept_art":    {"ko": "컨셉아트",           "signals": ["회화적 톤", "비정형 구도", "캐릭터/환경 일러스트"]},
+        "system_diagram": {"ko": "시스템 다이어그램", "signals": ["박스+화살표", "FSM", "노드 그래프"]},
+        "mixed":          {"ko": "혼합/불명확",       "signals": ["신호 2개 이상 또는 confidence < 0.6"]}
+      },
+      "ui_subkind": {
+        "values": ["general", "hud", "menu", "dialog", "economy_ui", "onboarding", "settings"],
+        "metadata": {
+          "general":    {"ko": "일반 UI"},
+          "hud":        {"ko": "HUD (게임 중)"},
+          "menu":       {"ko": "메인 메뉴"},
+          "dialog":     {"ko": "대화/모달"},
+          "economy_ui": {"ko": "상점/뽑기/보상 (가치체계 명세 필요)"},
+          "onboarding": {"ko": "튜토리얼"},
+          "settings":   {"ko": "설정"}
+        }
+      }
+    }
+  }
+}

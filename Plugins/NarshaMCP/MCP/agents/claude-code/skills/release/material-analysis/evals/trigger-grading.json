@@ -1,0 +1,150 @@
+{
+  "skill": "material-analysis",
+  "description": "Trigger precision eval: verify material-analysis activates on material structure/performance analysis queries and NOT on bulk modification, project audit, or lighting queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "M_Character_Skin 머테리얼이 인스트럭션 300개 넘는다고 경고 뜨는데, 어떤 노드가 비용 많이 잡아먹는지 분석해줘. Subsurface 쪽이 의심됨",
+      "should_trigger": true,
+      "reason": "Korean material performance analysis with instruction count warning and suspect area"
+    },
+    {
+      "id": "tp-02",
+      "query": "머테리얼 분석 — M_Landscape_AutoMaterial material structure 보여줘. 8 texture samples 사용",
+      "should_trigger": true,
+      "reason": "English material analysis with sampler limit error and platform constraint"
+    },
+    {
+      "id": "tp-03",
+      "query": "M_Water_Ocean 머테리얼 노드 구조 보여줘. 파도 디스플레이스먼트에 WorldPositionOffset 쓰고 있는데 VertexInterpolator 최적화가 제대로 되어 있는지 확인하고 싶어",
+      "should_trigger": true,
+      "reason": "Korean water material node structure with WPO and vertex interpolator check"
+    },
+    {
+      "id": "tp-04",
+      "query": "M_Weapon_Base 머테리얼 인스턴스가 15개 있는데, 부모 머테리얼의 파라미터 구조가 어떻게 되어 있는지 분석해줘. StaticSwitchParameter로 분기 타는 부분이 있을 거야",
+      "should_trigger": true,
+      "reason": "Korean parent material parameter structure analysis with static switch"
+    },
+    {
+      "id": "tp-05",
+      "query": "material graph analysis for MI_Glass_Frosted - the refraction looks broken after the 5.4 upgrade. need to see if the Fresnel node is still connected to Opacity and if the blend mode is correct",
+      "should_trigger": true,
+      "reason": "English material instance analysis post-engine-upgrade with specific node concern"
+    },
+    {
+      "id": "tp-06",
+      "query": "M_VFX_Fire 머테리얼 성능 이슈 봐줘. 파티클 1000개 이상 스폰되면 프레임 뚝 떨어지는데 머테리얼 복잡도 때문인지 Overdraw 때문인지 구분해야 해",
+      "should_trigger": true,
+      "reason": "Korean VFX material performance with particle count and overdraw concern"
+    },
+    {
+      "id": "tp-07",
+      "query": "M_Terrain_Blend4Layer 노드 연결 구조 보여줘. LandscapeLayerBlend에서 4개 레이어 각각 Normal, Roughness, BaseColor 어떻게 연결되어 있는지. HeightBlend 세팅도 확인하고 싶어",
+      "should_trigger": true,
+      "reason": "Korean landscape material layer blend structure with height blend setting"
+    },
+    {
+      "id": "tp-08",
+      "query": "analyze the material graph of M_Hologram_UI - it uses a custom HLSL node for scan line effects and I need to understand how the EmissiveColor is calculated from the ScreenPosition input",
+      "should_trigger": true,
+      "reason": "English material analysis with custom HLSL and emissive calculation"
+    },
+    {
+      "id": "tp-09",
+      "query": "M_Decal_Blood 머테리얼 DBuffer 설정이 맞는지 확인해줘. 데칼이 메시 위에 렌더링 안 되는 이슈가 있어서 BlendMode이랑 DecalBlendMode 분석 필요",
+      "should_trigger": true,
+      "reason": "Korean decal material analysis with DBuffer and blend mode rendering issue"
+    },
+    {
+      "id": "tp-10",
+      "query": "M_Character_Cloth 머테리얼에서 Cloth 시뮬레이션용 WorldPositionOffset이랑 Normal 연결 구조 파악해줘. TwoSidedSign 노드가 제대로 들어가 있는지도 체크",
+      "should_trigger": true,
+      "reason": "Korean cloth material WPO and normal structure with two-sided check"
+    },
+    {
+      "id": "tp-11",
+      "query": "M_Character_Skin 머테리얼을 출력 핀별로 흐름 단계를 나눠서 분석해줘. BaseColor(색감) / Normal·WorldPositionOffset(모양) / Roughness·Metallic(질감) 각각 어떤 노드 구간으로 구성되는지, 공용 입력부(UV 변형 같은)는 따로 묶어서 보여줘",
+      "should_trigger": true,
+      "reason": "Korean Part 4 flow-stage-split request (Issue #14979): output-pin backtrace + per-stage segmentation + shared-input grouping is exactly the stage-split workflow"
+    },
+    {
+      "id": "tp-12",
+      "query": "break down M_Landscape_AutoMaterial into flow stages — trace each output pin (BaseColor, Normal, Roughness) back through its upstream subgraph, cut the subgraph into stages at the Lerp/TextureSample/MaterialFunction boundaries, and label what each stage does",
+      "should_trigger": true,
+      "reason": "English Part 4 flow-stage-split request (Issue #14979): output-pin backtrace + cut-point segmentation + stage labeling maps to the stage-split algorithm"
+    },
+    {
+      "id": "tp-13",
+      "query": "M_TeamColorBasic 머테리얼 분석해줘 — 기능군별 담당 파라미터, 기본값, 제작자 조합, 각 기능 끄는 법까지 카탈로그로 정리하고 MI 패밀리 diff 표도 보여줘",
+      "should_trigger": true,
+      "reason": "Korean Part 5 feature-catalog request (Issue #16326): 기능군→파라미터→기본값→조합→끄는 법 catalog + MI family diff is exactly the compare_mi_family + get_nodes synthesis. Pure-analysis framing ('분석해줘') wins material-analysis under priority arbitration; avoids higher-priority positive triggers (만들어/생성/how to) and negative_patterns (파라미터 값 바꿔)"
+    },
+    {
+      "id": "tp-14",
+      "query": "analyze M_TeamColorBasic material structure — group features, list parameters, defaults, disable conditions, and an MI family diff table",
+      "should_trigger": true,
+      "reason": "English Part 5 feature-catalog request (Issue #16326): feature grouping + parameters + defaults + disable conditions + MI family diff maps to the catalog workflow. 'analyze ... material structure' triggers material-analysis; 'disable conditions' deliberately avoids ue-explain's 'how to disable' trigger"
+    },
+    {
+      "id": "tn-01",
+      "query": "모든 머테리얼에서 파라미터 값 바꿔줘",
+      "should_trigger": false,
+      "reason": "Bulk modification -> asset-modification-wizard"
+    },
+    {
+      "id": "tn-02",
+      "query": "프로젝트 건강도 진단해줘",
+      "should_trigger": false,
+      "reason": "Project health audit -> performance-health-check"
+    },
+    {
+      "id": "tn-03",
+      "query": "라이팅 설정 분석해줘",
+      "should_trigger": false,
+      "reason": "Lighting workflow -> lighting-workflow"
+    },
+    {
+      "id": "tn-04",
+      "query": "BP_Player 실행 흐름 분석해줘",
+      "should_trigger": false,
+      "reason": "BP execution flow -> blueprint-flow"
+    },
+    {
+      "id": "tn-05",
+      "query": "C++ 클래스 생성해줘",
+      "should_trigger": false,
+      "reason": "C++ class generation -> code-generation"
+    },
+    {
+      "id": "tn-06",
+      "query": "BP를 C++로 변환해줘",
+      "should_trigger": false,
+      "reason": "BP to C++ conversion -> bp-cpp-project-init"
+    },
+    {
+      "id": "tn-07",
+      "query": "TakeDamage 함수 리팩토링 영향 분석",
+      "should_trigger": false,
+      "reason": "Refactoring impact -> caller-graph-visualizer"
+    },
+    {
+      "id": "tn-08",
+      "query": "GAS ability flow 추적해줘",
+      "should_trigger": false,
+      "reason": "GAS cross-domain flow -> cross-domain-flow"
+    },
+    {
+      "id": "tn-09",
+      "query": "무기 시스템 전체 생성해줘",
+      "should_trigger": false,
+      "reason": "Multi-class system -> code-generation-power"
+    },
+    {
+      "id": "tn-10",
+      "query": "이 함수 호출 관계 보여줘",
+      "should_trigger": false,
+      "reason": "Call graph -> execution-flow-explorer"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "description": "Example-execution smoke (Issue #19945/#22982): every ue_manage_rigging(...) example must use real top-level schema kwargs, real operations (single- or double-quoted), and schema enum values (e.g. rig_type in control_rig|ik_rig). Catches params={} wrapper and phantom kwargs. Consumed by tests/unit/pure/skills/test_skill_example_smoke.py.",
+  "tool": "ue_manage_rigging",
+  "files": ["SKILL.md", "REFERENCE.md", "EXAMPLES.md"]
+}

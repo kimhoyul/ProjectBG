@@ -1,0 +1,127 @@
+{
+  "skill": "audio-workflow",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for audio-workflow skill. Tests correct activation on sound/audio/BGM queries, and correct rejection of animation, lighting, and material queries.",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "BP_PlayerCharacter에서 점프 착지할 때 S_Footstep_Landing 사운드 재생하고 싶은데, 착지 속도에 따라 볼륨 스케일링도 적용해줘. AnimNotify_PlaySound 말고 직접 SpawnSoundAtLocation 쓰고 싶어",
+      "should_trigger": true,
+      "reason": "Sound playback on landing with velocity-based volume — specific BP and sound asset names"
+    },
+    {
+      "id": "TP-02",
+      "query": "i have a cave level (L_DungeonCave) and need spatial audio set up for the ambient drip sounds. SC_CaveDrip is the sound cue but the attenuation feels flat - inner radius 200, outer 2000. can you check and adjust the falloff?",
+      "should_trigger": true,
+      "reason": "Spatial audio attenuation tuning with specific level, cue, and radius values"
+    },
+    {
+      "id": "TP-03",
+      "query": "Content/Audio/SFX 폴더에서 검 휘두르는 효과음 찾아줘. sword나 slash 관련 wave 파일이 있을 텐데 어떤 SoundCue에서 참조되고 있는지도 알고 싶어",
+      "should_trigger": true,
+      "reason": "Audio asset search in specific folder with SoundCue reference tracking"
+    },
+    {
+      "id": "TP-04",
+      "query": "BP_Weapon_Rifle에서 발사할 때 SC_RifleShot 재생하고 있는데, 3인칭에서 들으면 거리감이 없어. AttenuationSettings에서 SpatializationAlgorithm을 HRTF로 바꾸고 내추럴 감쇠로 해줘",
+      "should_trigger": true,
+      "reason": "3D sound spatialization config change with specific sound cue and algorithm names"
+    },
+    {
+      "id": "TP-05",
+      "query": "메인메뉴에서 BGM_MainTheme 재생하다가 인게임으로 넘어갈 때 BGM_Combat로 크로스페이드 시키고 싶어. 페이드아웃 2초, 페이드인 1.5초로. SoundMix 쓰는 게 나을까 직접 FadeIn/Out 쓰는 게 나을까",
+      "should_trigger": true,
+      "reason": "BGM crossfade between scenes with specific fade durations and implementation approach question"
+    },
+    {
+      "id": "TP-06",
+      "query": "SC_FootstepMaster라는 SoundCue가 있는데 안에 SwitchOnPhysicalSurface 노드로 바닥 재질별 다른 소리 나게 해놨거든. 근데 금속 바닥일 때 소리가 안 나. Metal 브랜치 확인해줘",
+      "should_trigger": true,
+      "reason": "SoundCue debugging with specific node type and physical surface branch issue"
+    },
+    {
+      "id": "TP-07",
+      "query": "3d positional audio for the campfire in my open world map. the fire crackle sound (S_FireCrackle_Loop) should be louder when the player is close and completely silent beyond 1500 units. also needs some low-pass filter when obstructed",
+      "should_trigger": true,
+      "reason": "3D audio with distance attenuation, specific range, and occlusion filtering"
+    },
+    {
+      "id": "TP-08",
+      "query": "BP_Enemy_Goblin에 AudioComponent 추가해서 idle 상태일 때 S_Goblin_Idle 루프 재생하고, 전투 들어가면 S_Goblin_Aggro로 바꿔야 해. 상태 전환은 이미 StateTree에서 하고 있어",
+      "should_trigger": true,
+      "reason": "Audio component addition with state-driven sound switching, specific assets named"
+    },
+    {
+      "id": "TP-09",
+      "query": "히트 사운드가 너무 단조로운데, SC_Hit_Impac... [3d positional audio] t라는 SoundCue 만들어서 S_Hit_01~S_Hit_05 중에서 랜덤으로 재생하게 해줘. 피치 랜덤 ±0.1도 넣고 싶어",
+      "should_trigger": true,
+      "reason": "SoundCue creation with random selection, specific wave files, and pitch randomization"
+    },
+    {
+      "id": "TP-10",
+      "query": "옵션 메뉴에서 마스터/배경음/효과음 볼륨 슬라이더가 있는데 SoundMix랑 SoundClass 구조를 어떻게 잡아야 할지 모르겠어. SC_Master 밑에 SC_BGM이랑 SC_SFX 만들면 되나? 게임 저장/로드 때 볼륨 값 유지도 필요해",
+      "should_trigger": true,
+      "reason": "Audio volume system architecture with SoundMix/SoundClass hierarchy and persistence"
+    },
+    {
+      "id": "TN-01",
+      "query": "AnimBP 분석해줘",
+      "should_trigger": false,
+      "reason": "AnimBP analysis — belongs to animation-workflow skill"
+    },
+    {
+      "id": "TN-02",
+      "query": "조명 추가해줘 스포트라이트로",
+      "should_trigger": false,
+      "reason": "Spotlight placement — belongs to lighting-workflow skill"
+    },
+    {
+      "id": "TN-03",
+      "query": "M_Glass 머티리얼 투명도 조절",
+      "should_trigger": false,
+      "reason": "Material opacity adjustment — belongs to material-analysis skill"
+    },
+    {
+      "id": "TN-04",
+      "query": "캐릭터 만들어줘",
+      "should_trigger": false,
+      "reason": "Character scaffolding — belongs to ue-scaffold skill"
+    },
+    {
+      "id": "TN-05",
+      "query": "몽타주 재생 설정",
+      "should_trigger": false,
+      "reason": "Montage playback — belongs to animation-workflow skill"
+    },
+    {
+      "id": "TN-06",
+      "query": "Niagara 파티클 이펙트 추가",
+      "should_trigger": false,
+      "reason": "Niagara VFX — belongs to ue_manage_niagara direct MCP call"
+    },
+    {
+      "id": "TN-07",
+      "query": "BP_Player 블루프린트 노드 분석",
+      "should_trigger": false,
+      "reason": "Blueprint node analysis — belongs to blueprint-flow skill"
+    },
+    {
+      "id": "TN-08",
+      "query": "PCG 그래프 파라미터 변경",
+      "should_trigger": false,
+      "reason": "PCG parameter modification — belongs to pcg-workflow skill"
+    },
+    {
+      "id": "TN-09",
+      "query": "프로젝트 건강도 분석해줘",
+      "should_trigger": false,
+      "reason": "Project health analysis — belongs to performance-health-check skill"
+    },
+    {
+      "id": "TN-10",
+      "query": "라이팅 빌드 실행",
+      "should_trigger": false,
+      "reason": "Lighting build — belongs to lighting-workflow skill"
+    }
+  ]
+}

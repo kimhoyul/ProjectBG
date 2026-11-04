@@ -1,0 +1,79 @@
+{
+  "skill": "ue-explain",
+  "version": "1.0.0",
+  "description": "Output quality eval: verify ue-explain produces comprehensive explanations with hierarchy, MCP tool usage, and code examples",
+  "cases": [
+    {
+      "id": "QUAL-01",
+      "prompt": "ACharacter 어떻게 동작해?",
+      "assertions": [
+        {
+          "type": "content_contains_any",
+          "values": ["ACharacter", "Character", "캐릭터"],
+          "description": "Should reference ACharacter in the explanation"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response explain ACharacter's class hierarchy or parent classes (e.g., APawn, AActor, UObject)? It should mention inheritance or parent class relationships.",
+          "threshold": 0.6,
+          "description": "Should include class hierarchy or parent class information (LLM judge)"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response explain ACharacter's movement system or CharacterMovementComponent? It should describe how characters move, walk, jump, or use movement components.",
+          "threshold": 0.6,
+          "description": "Should explain core ACharacter movement system (LLM judge)"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-02",
+      "prompt": "Explain BP_Player",
+      "assertions": [
+        {
+          "type": "content_contains_any",
+          "values": ["BP_Player", "Blueprint", "블루프린트", "Player"],
+          "description": "Should reference the Blueprint asset"
+        },
+        {
+          "type": "llm_judge",
+          "criteria": "Does the response address BP_Player in any meaningful way? This includes: attempting to find the asset, reporting it was not found, describing what a Player Blueprint typically is, suggesting alternatives, or providing any relevant Blueprint information. Even a 'not found' response with context counts as meeting the criteria.",
+          "threshold": 0.3,
+          "description": "Should address BP_Player query meaningfully, even if asset not found (LLM judge)"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-03",
+      "prompt": "GameplayAbility 뭐야?",
+      "assertions": [
+        {
+          "type": "content_contains_any",
+          "values": ["GAS", "Gameplay Ability", "ability system", "어빌리티", "ability"],
+          "description": "Should provide an overview of the Gameplay Ability System"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["UGameplayAbility", "ActivateAbility", "CommitAbility", "EndAbility", "GameplayEffect", "AbilitySystemComponent", "GameplayAbility", "ability", "effect", "attribute"],
+          "description": "Should include key GAS class/function names or concepts"
+        }
+      ]
+    },
+    {
+      "id": "QUAL-04",
+      "prompt": "What is Enhanced Input?",
+      "assertions": [
+        {
+          "type": "content_contains_any",
+          "values": ["Enhanced Input", "InputAction", "InputMappingContext", "EnhancedInput", "Input Action", "input system", "입력"],
+          "description": "Should reference Enhanced Input system concepts"
+        },
+        {
+          "type": "content_contains_any",
+          "values": ["mapping context", "Mapping Context", "action", "trigger", "modifier", "input", "bind"],
+          "description": "Should explain key Enhanced Input concepts"
+        }
+      ]
+    }
+  ]
+}

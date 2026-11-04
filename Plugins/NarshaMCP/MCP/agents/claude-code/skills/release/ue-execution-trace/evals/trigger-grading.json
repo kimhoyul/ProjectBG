@@ -1,0 +1,127 @@
+{
+  "skill": "ue-execution-trace",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for ue-execution-trace skill. Tests correct activation on Blueprint/GAS execution flow tracing queries, and correct rejection of impact analysis, concept explanation, debugging, and BP structure analysis.",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "실행 추적해줘",
+      "should_trigger": true,
+      "reason": "Execution trace — direct trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "실행 플로우 분석해줘",
+      "should_trigger": true,
+      "reason": "Execution flow analysis — core purpose"
+    },
+    {
+      "id": "tp-03",
+      "query": "어빌리티 플로우 추적",
+      "should_trigger": true,
+      "reason": "Ability flow tracing — GAS execution"
+    },
+    {
+      "id": "tp-04",
+      "query": "입력 추적해줘",
+      "should_trigger": true,
+      "reason": "Input trace — trace from input"
+    },
+    {
+      "id": "tp-05",
+      "query": "BP_Player 실행 추적해줘",
+      "should_trigger": true,
+      "reason": "Named Blueprint execution trace"
+    },
+    {
+      "id": "tp-06",
+      "query": "Trace execution flow for BP_Hero",
+      "should_trigger": true,
+      "reason": "English execution flow trace"
+    },
+    {
+      "id": "tp-07",
+      "query": "실행 추적 — Trace execution flow for GA_Weapon_Fire",
+      "should_trigger": true,
+      "reason": "English ability flow trace"
+    },
+    {
+      "id": "tp-08",
+      "query": "What happens when the player presses Jump?",
+      "should_trigger": true,
+      "reason": "What happens when — execution trace trigger"
+    },
+    {
+      "id": "tp-09",
+      "query": "Trace from input IA_Jump to execution",
+      "should_trigger": true,
+      "reason": "Input to execution trace"
+    },
+    {
+      "id": "tp-10",
+      "query": "GA_Melee 어빌리티 플로우 추적해줘",
+      "should_trigger": true,
+      "reason": "Named ability flow trace"
+    },
+    {
+      "id": "tn-01",
+      "query": "APawn 변경하면 뭐가 깨져?",
+      "should_trigger": false,
+      "reason": "Impact analysis — belongs to ue-impact skill"
+    },
+    {
+      "id": "tn-02",
+      "query": "GameplayAbility 뭐야?",
+      "should_trigger": false,
+      "reason": "Concept explanation — belongs to ue-explain skill"
+    },
+    {
+      "id": "tn-03",
+      "query": "런타임 크래시 디버깅해줘",
+      "should_trigger": false,
+      "reason": "Debugging — belongs to ue-debug skill"
+    },
+    {
+      "id": "tn-04",
+      "query": "BP_Player 구조 보여줘",
+      "should_trigger": false,
+      "reason": "BP structure analysis — belongs to blueprint-flow skill"
+    },
+    {
+      "id": "tn-05",
+      "query": "What breaks if I change ACharacter?",
+      "should_trigger": false,
+      "reason": "Impact analysis — belongs to ue-impact skill"
+    },
+    {
+      "id": "tn-06",
+      "query": "Explain how GAS abilities work",
+      "should_trigger": false,
+      "reason": "Concept explanation — belongs to ue-explain skill"
+    },
+    {
+      "id": "tn-07",
+      "query": "Fix this crash in BeginPlay",
+      "should_trigger": false,
+      "reason": "Crash debugging — belongs to ue-debug skill"
+    },
+    {
+      "id": "tn-08",
+      "query": "Show BP_Player graph structure",
+      "should_trigger": false,
+      "reason": "BP structure — belongs to blueprint-flow skill"
+    },
+    {
+      "id": "tn-09",
+      "query": "어떤 BP가 Jump를 사용해?",
+      "should_trigger": false,
+      "reason": "Cross-reference/who uses — belongs to ue-impact skill"
+    },
+    {
+      "id": "tn-10",
+      "query": "에셋 참조 찾아줘",
+      "should_trigger": false,
+      "reason": "Asset reference graph — belongs to ue-asset-discovery skill"
+    }
+  ]
+}

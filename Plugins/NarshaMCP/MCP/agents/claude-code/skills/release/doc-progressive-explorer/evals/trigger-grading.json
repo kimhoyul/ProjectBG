@@ -1,0 +1,146 @@
+{
+  "skill": "doc-progressive-explorer",
+  "version": "1.0.0",
+  "description": "Trigger precision eval for doc-progressive-explorer skill — progressive disclosure document navigation",
+  "cases": [
+    {
+      "id": "TP-01",
+      "query": "문서 탐색해줘",
+      "should_trigger": true,
+      "reason": "Document navigation request"
+    },
+    {
+      "id": "TP-02",
+      "query": "점진적 공개 탐색",
+      "should_trigger": true,
+      "reason": "Progressive disclosure"
+    },
+    {
+      "id": "TP-03",
+      "query": "상세 보기 drill down",
+      "should_trigger": true,
+      "reason": "Drill down detail view"
+    },
+    {
+      "id": "TP-04",
+      "query": "EXAMPLES 분석해줘",
+      "should_trigger": true,
+      "reason": "EXAMPLES analysis"
+    },
+    {
+      "id": "TP-05",
+      "query": "deep dive into doc",
+      "should_trigger": true,
+      "reason": "Deep dive into documentation"
+    },
+    {
+      "id": "TP-06",
+      "query": "explore doc structure",
+      "should_trigger": true,
+      "reason": "Explore document structure"
+    },
+    {
+      "id": "TP-07",
+      "query": "문서 섹션 필터링",
+      "should_trigger": true,
+      "reason": "Document section filtering"
+    },
+    {
+      "id": "TP-08-absorb-20012",
+      "query": "progressive disclosure navigation",
+      "should_trigger": true,
+      "reason": "Progressive disclosure navigation — exploration intent absorbed from archived navigation-generator",
+      "note": "Issue #20012: navigation-generator archived; the #10340 boundary (negative_pattern) was removed and this query now routes here"
+    },
+    {
+      "id": "TP-09",
+      "query": "단계별 문서 탐색",
+      "should_trigger": true,
+      "reason": "Step-by-step document exploration"
+    },
+    {
+      "id": "TP-10",
+      "query": "doc-progressive-explorer 실행",
+      "should_trigger": true,
+      "reason": "Direct skill invocation"
+    },
+    {
+      "id": "TN-01",
+      "query": "문서 검증해줘",
+      "should_trigger": false,
+      "reason": "Doc verification — belongs to source-doc-verify"
+    },
+    {
+      "id": "TN-02",
+      "query": "README 업데이트",
+      "should_trigger": false,
+      "reason": "README update — belongs to readme-update"
+    },
+    {
+      "id": "TN-03",
+      "query": "예제 추출",
+      "should_trigger": false,
+      "reason": "Example extraction — belongs to example-extractor"
+    },
+    {
+      "id": "TN-04",
+      "query": "모듈 분석",
+      "should_trigger": false,
+      "reason": "Module analysis — belongs to module-analyzer"
+    },
+    {
+      "id": "TN-05",
+      "query": "네비게이션 생성",
+      "should_trigger": false,
+      "reason": "Navigation generation — retired activity (navigation-generator archived, Issue #20012); generation intent has no owner by design"
+    },
+    {
+      "id": "TN-06",
+      "query": "코드 검색",
+      "should_trigger": false,
+      "reason": "Code search — not doc exploration"
+    },
+    {
+      "id": "TN-07",
+      "query": "트러블슈팅 문서",
+      "should_trigger": false,
+      "reason": "Troubleshoot — belongs to troubleshoot-generator"
+    },
+    {
+      "id": "TN-08",
+      "query": "엔진 문서 품질 사이클",
+      "should_trigger": false,
+      "reason": "Engine doc cycle — belongs to ns-engine-doc-quality-cycle"
+    },
+    {
+      "id": "TN-09",
+      "query": "API 변경점",
+      "should_trigger": false,
+      "reason": "API changes — belongs to api-diff-analyzer"
+    },
+    {
+      "id": "TN-10",
+      "query": "프로젝트 온보딩",
+      "should_trigger": false,
+      "reason": "Onboarding — belongs to project-onboarding"
+    },
+    {
+      "id": "TP-11-absorb-20012",
+      "query": "5단계 네비게이션 보여줘",
+      "should_trigger": true,
+      "reason": "5-level navigation view — absorbed from archived navigation-generator (Issue #20012)"
+    },
+    {
+      "id": "TP-12-absorb-20012",
+      "query": "엔진 문서 네비게이션",
+      "should_trigger": true,
+      "reason": "Engine doc navigation — absorbed from archived navigation-generator (Issue #20012)"
+    },
+    {
+      "id": "TP-13-absorb-20012",
+      "query": "5-level navigation",
+      "should_trigger": true,
+      "reason": "5-level navigation — absorbed from archived navigation-generator (Issue #20012)"
+    }
+  ]
+}

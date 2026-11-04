@@ -1,0 +1,126 @@
+{
+  "skill": "ue-test-scenario",
+  "description": "Trigger precision eval: verify ue-test-scenario activates on scenario-based test queries and NOT on test-gen/test-record/scaffold queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "테스트 시나리오 작성해줘",
+      "should_trigger": true,
+      "reason": "Korean '테스트 시나리오' — core trigger (avoids '만들어줘' → ue-scaffold)"
+    },
+    {
+      "id": "tp-02",
+      "query": "test scenario: move and jump",
+      "should_trigger": true,
+      "reason": "English 'test scenario' — direct trigger with action description"
+    },
+    {
+      "id": "tp-03",
+      "query": "시나리오 테스트 작성해줘",
+      "should_trigger": true,
+      "reason": "Korean '시나리오 테스트' — scenario test trigger"
+    },
+    {
+      "id": "tp-04",
+      "query": "캐릭터가 10m 전진 후 점프 테스트 시나리오",
+      "should_trigger": true,
+      "reason": "Korean natural language scenario with specific actions"
+    },
+    {
+      "id": "tp-05",
+      "query": "게임 시나리오 테스트",
+      "should_trigger": true,
+      "reason": "Korean '게임 시나리오 테스트' — game scenario test trigger"
+    },
+    {
+      "id": "tp-06",
+      "query": "scenario test: player takes damage then heals",
+      "should_trigger": true,
+      "reason": "English 'scenario test' with multi-step game actions"
+    },
+    {
+      "id": "tp-07",
+      "query": "시나리오 테스트 결과 확인해줘",
+      "should_trigger": true,
+      "reason": "Korean '시나리오 테스트' — exact trigger pattern (avoids '검증' → ue-validate)"
+    },
+    {
+      "id": "tp-08",
+      "query": "test scenario for inventory pickup flow",
+      "should_trigger": true,
+      "reason": "English 'test scenario' — workflow scenario trigger"
+    },
+    {
+      "id": "tp-09",
+      "query": "NPC 대화 후 퀘스트 수락 시나리오 테스트",
+      "should_trigger": true,
+      "reason": "Korean complex game scenario with NPC interaction"
+    },
+    {
+      "id": "tp-10",
+      "query": "scenario validation for combat flow",
+      "should_trigger": true,
+      "reason": "English 'scenario validation' — direct trigger"
+    },
+    {
+      "id": "tn-01",
+      "query": "테스트 생성해줘",
+      "should_trigger": false,
+      "reason": "TN: '테스트 생성' is ue-test-gen trigger. One-shot test generation, not scenario-based."
+    },
+    {
+      "id": "tn-02",
+      "query": "Generate test for TakeDamage",
+      "should_trigger": false,
+      "reason": "TN: 'generate test for' is ue-test-gen trigger. Function-targeted test, not scenario."
+    },
+    {
+      "id": "tn-03",
+      "query": "create test for ACharacter",
+      "should_trigger": false,
+      "reason": "TN: 'create test for' is ue-test-gen trigger. Class-targeted test, not scenario."
+    },
+    {
+      "id": "tn-04",
+      "query": "PIE 입력 녹화해서 테스트 만들어줘",
+      "should_trigger": false,
+      "reason": "TN: 'PIE 입력 녹화' is ue-test-record trigger. Input recording, not scenario authoring."
+    },
+    {
+      "id": "tn-05",
+      "query": "캐릭터 만들어줘",
+      "should_trigger": false,
+      "reason": "TN: '만들어줘' is ue-scaffold trigger. Feature creation, not test scenario."
+    },
+    {
+      "id": "tn-06",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "TN: '에러 해결' is ue-debug trigger. Error fixing, not test scenario."
+    },
+    {
+      "id": "tn-07",
+      "query": "record input and export test",
+      "should_trigger": false,
+      "reason": "TN: 'record input' is ue-test-record trigger. PIE recording, not scenario test."
+    },
+    {
+      "id": "tn-08",
+      "query": "테스트 만들어줘 ACharacter::TakeDamage",
+      "should_trigger": false,
+      "reason": "TN: Function-specific test is ue-test-gen trigger. Targeted test, not scenario."
+    },
+    {
+      "id": "tn-09",
+      "query": "에셋 유효성 검사해줘",
+      "should_trigger": false,
+      "reason": "TN: '유효성 검사' is ue-validate trigger. Validation, not test scenario."
+    },
+    {
+      "id": "tn-10",
+      "query": "edge case 테스트 반복해줘",
+      "should_trigger": false,
+      "reason": "TN: 'edge case 테스트 반복' is test-iterate trigger. Test iteration, not scenario creation."
+    }
+  ]
+}

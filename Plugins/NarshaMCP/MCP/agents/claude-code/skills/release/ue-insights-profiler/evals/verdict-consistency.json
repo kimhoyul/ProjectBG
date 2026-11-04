@@ -1,0 +1,197 @@
+{
+  "skill": "ue-insights-profiler",
+  "issue": "#96",
+  "f_ids": ["F-006", "F-007"],
+  "description": "Verdict consistency eval — same trace, 20 question phrasings must yield the SAME bottleneck verdict and citation of the SAME raw fields. Pre-Issue #96 the skill flipped between GameThread-bound and GPU-bound depending on how the user phrased the question.",
+  "judge": {
+    "model": "claude-sonnet-4-6",
+    "temperature": 0.0,
+    "instructions_path": "verdict-consistency-judge.md",
+    "blind_protocol": {
+      "writer_role": "scenario-author",
+      "responder_role": "ue-insights-profiler-skill",
+      "judge_role": "separate-model-instance",
+      "rule": "The judge MUST NOT see the scenario's expected_verdict or scenario.id when scoring. Same model may serve as writer and judge only if temperature=0.0 AND the judge sees ONLY {trace_response, candidate_answer}."
+    }
+  },
+  "categories": {
+    "unit_violation": {
+      "severity": "critical",
+      "allowed_fail": 0,
+      "definition": "Cited a number exceeding trace_duration_seconds*1000 (Layer 3 sanity check violation)."
+    },
+    "label_citation_missing": {
+      "severity": "critical",
+      "allowed_fail": 0,
+      "definition": "Answer states a verdict without citing the source field name (e.g. claims 'GameThread bottleneck' without referencing summary.bottleneck_thread)."
+    },
+    "verdict_value_recomputed": {
+      "severity": "critical",
+      "allowed_fail": 0,
+      "definition": "Answer's bottleneck time differs from verdict_value by more than f64 rounding (1e-6 ms). Skill recomputed instead of citing."
+    },
+    "phrasing_drift": {
+      "severity": "non-critical",
+      "allowed_fail": 1,
+      "definition": "Verdict thread name differs from the majority answer across the 20 scenarios (i.e. phrasing flipped the conclusion)."
+    }
+  },
+  "pass_threshold": {
+    "min_pass_count": 19,
+    "total_scenarios": 20,
+    "critical_fail_blocks": true,
+    "non_critical_max_fail": 1,
+    "notes": "20 of 20 phrasings must yield the SAME verdict. 19/20 allowed only when the 1 failure is a non-critical phrasing-drift; ANY critical-category failure (unit_violation / label_citation_missing / verdict_value_recomputed) blocks the eval regardless of count."
+  },
+  "gold_fixture": {
+    "description": "3 questions where the correct answer is independently verifiable by a human. The judge must score these BEFORE the 20 scenarios. Threshold: 3/3 correct → eval valid. 2/3 or fewer → judge drift, abort and replace judge model.",
+    "validation_threshold": "3/3",
+    "drift_action": "Abort eval. Replace judge model (e.g. switch claude-sonnet-4-6 → claude-opus-4-7) and re-run. Do NOT lower the threshold.",
+    "category_coverage_rule": "The 3 gold questions MUST cover the 3 critical categories 1:1:1 (unit_violation, label_citation_missing, verdict_value_recomputed). One gold question per critical category — drift detection is structural, not statistical.",
+    "questions": [
+      {
+        "id": "gold-1",
+        "category_under_test": "unit_violation",
+        "candidate_answer": "GameThread bottleneck took 1318 seconds (SceneRender field) on this 43-second trace.",
+        "expected_judgment": "FAIL",
+        "expected_judgment_reason": "1318 seconds > trace_duration_seconds (43s). Sanity check violation. Layer 3 reject."
+      },
+      {
+        "id": "gold-2",
+        "category_under_test": "label_citation_missing",
+        "candidate_answer": "It's clearly a GameThread bottleneck.",
+        "expected_judgment": "FAIL",
+        "expected_judgment_reason": "Verdict stated without citing summary.bottleneck_thread / verdict_value field path. Layer 2 Citation Rule violation."
+      },
+      {
+        "id": "gold-3",
+        "category_under_test": "verdict_value_recomputed",
+        "candidate_answer": "summary.bottleneck_thread = GameThread, verdict_value = 16.0 ms (cited from get_thread_breakdown response).",
+        "expected_judgment": "PASS",
+        "expected_judgment_reason": "Cites raw field names verbatim, time matches verdict_value within 1e-6."
+      }
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "vc-01",
+      "phrasing": "이 trace에서 병목이 뭐야?",
+      "lang": "ko",
+      "expected_field_citation": "summary.bottleneck_thread"
+    },
+    {
+      "id": "vc-02",
+      "phrasing": "What's the bottleneck thread?",
+      "lang": "en",
+      "expected_field_citation": "summary.bottleneck_thread"
+    },
+    {
+      "id": "vc-03",
+      "phrasing": "CPU 병목을 찾아줘",
+      "lang": "ko",
+      "expected_field_citation": "summary.bottleneck_thread"
+    },
+    {
+      "id": "vc-04",
+      "phrasing": "Is this CPU-bound or GPU-bound?",
+      "lang": "en",
+      "expected_field_citation": "summary.bottleneck_thread + gpu_cpu_bound"
+    },
+    {
+      "id": "vc-05",
+      "phrasing": "스레드별로 분해해줘",
+      "lang": "ko",
+      "expected_field_citation": "threads[*].thread_name + total_time_ms"
+    },
+    {
+      "id": "vc-06",
+      "phrasing": "Show me per-thread breakdown",
+      "lang": "en",
+      "expected_field_citation": "threads[*].thread_name + total_time_ms"
+    },
+    {
+      "id": "vc-07",
+      "phrasing": "어느 스레드가 가장 무거워?",
+      "lang": "ko",
+      "expected_field_citation": "summary.bottleneck_thread + verdict_value"
+    },
+    {
+      "id": "vc-08",
+      "phrasing": "Which thread eats the most time?",
+      "lang": "en",
+      "expected_field_citation": "summary.bottleneck_thread + verdict_value"
+    },
+    {
+      "id": "vc-09",
+      "phrasing": "전체적으로 최적화 어디부터 해야해?",
+      "lang": "ko",
+      "expected_field_citation": "summary.bottleneck_thread + bottleneck_analysis.recommendation"
+    },
+    {
+      "id": "vc-10",
+      "phrasing": "Where should I start optimizing?",
+      "lang": "en",
+      "expected_field_citation": "summary.bottleneck_thread + bottleneck_analysis.recommendation"
+    },
+    {
+      "id": "vc-11",
+      "phrasing": "GPU 시간 얼마나 써?",
+      "lang": "ko",
+      "expected_field_citation": "summary.total_gpu_time_ms (F-005: grand total)"
+    },
+    {
+      "id": "vc-12",
+      "phrasing": "How much GPU time is being spent?",
+      "lang": "en",
+      "expected_field_citation": "summary.total_gpu_time_ms (F-005: grand total)"
+    },
+    {
+      "id": "vc-13",
+      "phrasing": "GameThread 무거워?",
+      "lang": "ko",
+      "expected_field_citation": "threads where thread_name == 'GameThread'"
+    },
+    {
+      "id": "vc-14",
+      "phrasing": "Is GameThread heavy on this trace?",
+      "lang": "en",
+      "expected_field_citation": "threads where thread_name == 'GameThread'"
+    },
+    {
+      "id": "vc-15",
+      "phrasing": "어디가 느려?",
+      "lang": "ko",
+      "expected_field_citation": "summary.bottleneck_thread + bottleneck_analysis.percentage"
+    },
+    {
+      "id": "vc-16",
+      "phrasing": "Why is this slow?",
+      "lang": "en",
+      "expected_field_citation": "summary.bottleneck_thread + bottleneck_analysis.percentage"
+    },
+    {
+      "id": "vc-17",
+      "phrasing": "RenderThread 비중 알려줘",
+      "lang": "ko",
+      "expected_field_citation": "threads where thread_name == 'RenderThread' + percentage"
+    },
+    {
+      "id": "vc-18",
+      "phrasing": "What share does RenderThread hold?",
+      "lang": "en",
+      "expected_field_citation": "threads where thread_name == 'RenderThread' + percentage"
+    },
+    {
+      "id": "vc-19",
+      "phrasing": "verdict 신뢰도 어때?",
+      "lang": "ko",
+      "expected_field_citation": "verdict_warning (must report if non-null per Layer 2 surfacing rule)"
+    },
+    {
+      "id": "vc-20",
+      "phrasing": "How confident is this bottleneck verdict?",
+      "lang": "en",
+      "expected_field_citation": "verdict_warning (must report if non-null per Layer 2 surfacing rule)"
+    }
+  ]
+}

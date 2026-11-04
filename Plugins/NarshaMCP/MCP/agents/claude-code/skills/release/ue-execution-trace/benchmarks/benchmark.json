@@ -1,0 +1,20 @@
+{
+  "skill": "ue-execution-trace",
+  "version": "1.0.0",
+  "date": "2026-07-18",
+  "trigger_eval": {
+    "total": 20,
+    "passed": 20,
+    "pass_rate": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "tp": 10,
+    "fp": 0,
+    "tn": 10,
+    "fn": 0
+  },
+  "method": "deterministic_pattern_match",
+  "routing_json_version": "2.3.1",
+  "failures": []
+}

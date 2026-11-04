@@ -1,0 +1,101 @@
+{
+  "_meta": {
+    "skill_name": "ue-impact",
+    "purpose": "Change impact analysis for UE entities — traces callers, subclasses, Blueprint references, config deps.",
+    "schema_version": "1.0",
+    "capture_date": "2026-06-16",
+    "narshamcp_version": "0.10.1",
+    "ue_version": "5.7.1",
+    "project": "Lyra_5.7",
+    "capture_method": "Live in-session MCP calls against the NarshaMCP daemon (read-only ops, Lyra_5.7 indexed). Responses trimmed to representative excerpts; arrays truncated where noted. Re-capture: see _capture.py (Issue #15437)."
+  },
+  "tools": {
+    "ue_analyze_symbols": {
+      "_status": "captured",
+      "operations": {
+        "impact_analysis": {
+          "request": {"operation": "impact_analysis", "class_name": "ALyraCharacter", "depth": 1},
+          "response": {
+            "operation": "impact_analysis",
+            "risk_level": "high",
+            "total_affected": 51,
+            "total_before_cap": 96,
+            "summary": {
+              "by_hop": {"1": 51},
+              "cpp_interface_implementors": 4,
+              "interface_implementors": 4,
+              "virtual_event_overrides": 1,
+              "direct_callers": 0
+            },
+            "affected_blueprints_sample": [
+              {"blueprint": "B_Hero_ShooterMannequin", "hop_distance": 1},
+              {"blueprint": "GA_Hero_Heal", "hop_distance": 1},
+              {"blueprint": "B_Weapon", "hop_distance": 1}
+            ],
+            "_truncated": "affected_blueprints: 51 total, 3 shown; delegate_binders/broadcasters arrays elided"
+          }
+        }
+      },
+      "note": "ue-impact's signature op — impact_analysis returns risk_level + total_affected + affected_blueprints (BP refs via the asset index)."
+    },
+    "ue_grep": {
+      "_status": "captured",
+      "operations": {
+        "source_search": {
+          "request": {"query": "ALyraCharacter", "domain": "source", "limit": 5},
+          "response": {
+            "operation": "ue_grep",
+            "query": "ALyraCharacter",
+            "scope": "project",
+            "total_found": 80,
+            "matches_sample": [
+              "[source] LyraGameplayAbility.cpp:92 — ALyraCharacter* ULyraGameplayAbility::GetLyraCharacterFromActorInfo() const",
+              "[source] Source\\LyraGame\\Character\\LyraCharacter.cpp:30 — ALyraCharacter::ALyraCharacter(const FObjectInitializer& ObjectInitializer)"
+            ],
+            "_truncated": "80 total matches, 2 shown"
+          }
+        }
+      },
+      "note": "Text cross-reference of the target symbol across project source; ue-impact uses this to surface C++ call sites."
+    },
+    "ue_read": {
+      "_status": "captured",
+      "operations": {
+        "symbol_detail": {
+          "request": {"identifier": "ALyraCharacter::BeginPlay"},
+          "response": {
+            "operation": "ue_read",
+            "identifier": "ALyraCharacter::BeginPlay",
+            "type": "method",
+            "owner": "ALyraCharacter",
+            "signature": "T_VOID (void)",
+            "return_type": "T_VOID",
+            "source_file": "Source/LyraGame/Character/LyraCharacter.cpp",
+            "line_number": 89,
+            "caller_count": 0
+          }
+        }
+      },
+      "note": "Enriched symbol detail for a specific entity (file/line/signature) — used to confirm the target before impact tracing."
+    },
+    "ue_manage_blueprint": {
+      "_status": "captured",
+      "operations": {
+        "get_structure": {
+          "request": {"operation": "get_structure", "blueprint_name": "B_Hero_ShooterMannequin", "detail_level": "summary"},
+          "response": {
+            "operation": "get_structure",
+            "blueprint_name": "B_Hero_ShooterMannequin",
+            "node_count": 171,
+            "fast_path": true,
+            "source": "asset_cache_type_filtered",
+            "results": [
+              {"name": "B_Hero_ShooterMannequin", "path": "/Game/Game/B_Hero_ShooterMannequin", "node_count": 171, "source": "filesystem"}
+            ]
+          }
+        }
+      },
+      "note": "Offline binary-parser BP structure (node_count, path) — ue-impact uses BP refs as one of its dependency dimensions."
+    }
+  }
+}

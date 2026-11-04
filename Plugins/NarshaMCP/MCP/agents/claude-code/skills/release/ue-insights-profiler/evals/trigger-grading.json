@@ -1,0 +1,225 @@
+{
+  "skill": "ue-insights-profiler",
+  "description": "Trigger precision eval: verify ue-insights-profiler activates on performance/profiling/bottleneck queries and NOT on debug/audit/project-ops queries",
+  "cases": [
+    {
+      "id": "tp-01",
+      "query": "성능 분석해줘",
+      "should_trigger": true,
+      "reason": "Korean '성능 분석' — core performance analysis trigger"
+    },
+    {
+      "id": "tp-02",
+      "query": "performance profiling for my game",
+      "should_trigger": true,
+      "reason": "English 'performance profiling' — exact trigger pattern from routing.json"
+    },
+    {
+      "id": "tp-03",
+      "query": "프로파일링 결과 분석해줘",
+      "should_trigger": true,
+      "reason": "Korean '프로파일링' — profiling trigger"
+    },
+    {
+      "id": "tp-04",
+      "query": "Analyze this utrace file",
+      "should_trigger": true,
+      "reason": "English 'utrace' — Unreal Insights trace file trigger"
+    },
+    {
+      "id": "tp-05",
+      "query": "병목 분석해줘",
+      "should_trigger": true,
+      "reason": "Korean '병목' — bottleneck analysis trigger"
+    },
+    {
+      "id": "tp-06",
+      "query": "Find the bottleneck in rendering",
+      "should_trigger": true,
+      "reason": "English 'bottleneck' — direct trigger"
+    },
+    {
+      "id": "tp-07",
+      "query": "왜 느려?",
+      "should_trigger": true,
+      "reason": "Korean '왜 느려' — why slow pattern"
+    },
+    {
+      "id": "tp-08",
+      "query": "frame drop analysis",
+      "should_trigger": true,
+      "reason": "English 'frame drop' — performance trigger"
+    },
+    {
+      "id": "tp-09",
+      "query": "hot function 분석",
+      "should_trigger": true,
+      "reason": "Korean+English 'hot function' — profiling trigger"
+    },
+    {
+      "id": "tp-10",
+      "query": "병목 지점이 GPU인지 CPU인지 확인해줘",
+      "should_trigger": true,
+      "reason": "Korean '병목' — exact trigger pattern from routing.json"
+    },
+    {
+      "id": "tn-01",
+      "query": "빌드 에러 해결해줘",
+      "should_trigger": false,
+      "reason": "TN: '에러 해결' is ue-debug trigger. Error fixing, not profiling."
+    },
+    {
+      "id": "tn-02",
+      "query": "프로젝트 진단해줘",
+      "should_trigger": false,
+      "reason": "TN: '진단' is ue-audit trigger. Project-wide health, not Insights profiling."
+    },
+    {
+      "id": "tn-03",
+      "query": "DDC 상태 확인해줘",
+      "should_trigger": false,
+      "reason": "TN: 'DDC 상태' is ue-project-ops trigger. Infrastructure, not profiling."
+    },
+    {
+      "id": "tn-04",
+      "query": "ACharacter 어떻게 동작해?",
+      "should_trigger": false,
+      "reason": "TN: '어떻게 동작' is ue-explain trigger. Explanation, not performance."
+    },
+    {
+      "id": "tn-05",
+      "query": "런타임 크래시 원인 찾아줘",
+      "should_trigger": false,
+      "reason": "TN: '크래시' is ue-debug trigger. Crash diagnosis, not perf profiling."
+    },
+    {
+      "id": "tn-06",
+      "query": "에셋 유효성 검사해줘",
+      "should_trigger": false,
+      "reason": "TN: '유효성 검사' is ue-validate trigger. Validation, not profiling."
+    },
+    {
+      "id": "tn-07",
+      "query": "Build the project for Windows",
+      "should_trigger": false,
+      "reason": "TN: Build is ue-build-automate trigger. Build pipeline, not profiling."
+    },
+    {
+      "id": "tn-08",
+      "query": "r.Shadow.MaxResolution 뭐야?",
+      "should_trigger": false,
+      "reason": "TN: CVar query is ue-cvar-explorer trigger. Config lookup, not profiling."
+    },
+    {
+      "id": "tn-09",
+      "query": "경고 요약해줘",
+      "should_trigger": false,
+      "reason": "TN: '경고 요약' is ue-audit trigger. Warning summary, not perf analysis."
+    },
+    {
+      "id": "tn-10",
+      "query": "World Partition 상태",
+      "should_trigger": false,
+      "reason": "TN: 'World Partition' is ue-project-ops trigger. Infrastructure, not profiling."
+    },
+
+    {
+      "id": "ch-asset-01",
+      "query": "왜 초반에 끊겨?",
+      "should_trigger": true,
+      "channel": "asset_loading",
+      "reason": "Issue #101: '초반 끊김' → asset_loading channel (LoadTime async loads)"
+    },
+    {
+      "id": "ch-asset-02",
+      "query": "asset loading hitch analysis",
+      "should_trigger": true,
+      "channel": "asset_loading",
+      "reason": "Issue #101: 'asset loading' + 'hitch' → asset_loading channel"
+    },
+    {
+      "id": "ch-log-01",
+      "query": "로그 부하 분석해줘",
+      "should_trigger": true,
+      "channel": "log_pressure",
+      "reason": "Issue #101: '로그 부하' → log_pressure channel (Markers/Log events)"
+    },
+    {
+      "id": "ch-log-02",
+      "query": "log spam during PIE",
+      "should_trigger": true,
+      "channel": "log_pressure",
+      "reason": "Issue #101: 'log spam' → log_pressure channel"
+    },
+    {
+      "id": "ch-net-01",
+      "query": "패킷 드랍 의심돼",
+      "should_trigger": true,
+      "channel": "network_activity",
+      "reason": "Issue #101: '패킷 드랍' → network_activity channel (Net events)"
+    },
+    {
+      "id": "ch-net-02",
+      "query": "RPC replication analysis",
+      "should_trigger": true,
+      "channel": "network_activity",
+      "reason": "Issue #101: 'RPC' / 'replication' → network_activity channel"
+    },
+    {
+      "id": "ch-file-01",
+      "query": "파일 IO 병목 분석",
+      "should_trigger": true,
+      "channel": "file_io",
+      "reason": "Issue #101: '파일 IO' → file_io channel (PlatformFile events)"
+    },
+    {
+      "id": "ch-file-02",
+      "query": "disk read analysis",
+      "should_trigger": true,
+      "channel": "file_io",
+      "reason": "Issue #101: 'disk read' → file_io channel"
+    },
+    {
+      "id": "ch-strings-01",
+      "query": "FName 분석해줘",
+      "should_trigger": true,
+      "channel": "strings",
+      "reason": "Issue #101: 'FName' → strings channel (Strings definitions)"
+    },
+    {
+      "id": "ch-strings-02",
+      "query": "string pool stats",
+      "should_trigger": true,
+      "channel": "strings",
+      "reason": "Issue #101: 'string pool' → strings channel"
+    },
+    {
+      "id": "ch-diag-01",
+      "query": "세션 정보 확인",
+      "should_trigger": true,
+      "channel": "diagnostics",
+      "reason": "Issue #101: '세션 정보' → diagnostics channel (FSessionInfo)"
+    },
+    {
+      "id": "ch-diag-02",
+      "query": "trace session info",
+      "should_trigger": true,
+      "channel": "diagnostics",
+      "reason": "Issue #101: 'session info' (trace FSessionInfo) → diagnostics channel. Disambiguated from bare 'diagnostics' which collides with /ue-audit (project diagnostics)."
+    },
+    {
+      "id": "ch-modules-01",
+      "query": "모듈 로딩 추적",
+      "should_trigger": true,
+      "channel": "modules",
+      "reason": "Issue #101: '모듈 로딩' → modules channel (loaded DLL registry)"
+    },
+    {
+      "id": "ch-modules-02",
+      "query": "DLL trace analysis",
+      "should_trigger": true,
+      "channel": "modules",
+      "reason": "Issue #101: 'DLL trace' → modules channel"
+    }
+  ]
+}
