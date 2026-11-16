@@ -169,3 +169,51 @@
 2026-11-03 10:22:27.902: [INFO] BookmarkModelLoaded, ids_reassigned: 0
 2026-11-03 10:22:27.902: [INFO] BookmarksLoadDropped droppedNodes=0
 2026-11-03 10:22:27.902: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-12 08:59:20.926: [INFO] CurrentProfilePath: C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default
+2026-11-12 08:59:20.926: [INFO] Profiles total count: 1
+2026-11-12 08:59:20.926: [INFO] Profile: name=프로필 1 path=C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default lastActive=2026-11-03T10:22:28.044Z
+2026-11-12 08:59:20.926: [INFO] LastUsedProfileDir: C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default
+2026-11-12 08:59:20.926: [INFO] MostRecentlyActiveProfile: name=프로필 1 path=C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default lastActive=2026-11-03T10:22:28.044Z
+2026-11-12 08:59:20.926: [INFO] OnDoneLoading sync enabled: 0
+2026-11-12 08:59:20.926: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-12 08:59:20.926: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-12 08:59:20.927: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-12 14:35:25.767: [INFO] CurrentProfilePath: C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default
+2026-11-12 14:35:25.767: [INFO] Profiles total count: 1
+2026-11-12 14:35:25.767: [INFO] Profile: name=프로필 1 path=C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default lastActive=2026-11-12T08:59:21.070Z
+2026-11-12 14:35:25.767: [INFO] LastUsedProfileDir: C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default
+2026-11-12 14:35:25.767: [INFO] MostRecentlyActiveProfile: name=프로필 1 path=C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default lastActive=2026-11-12T08:59:21.070Z
+2026-11-12 14:35:25.767: [INFO] OnDoneLoading sync enabled: 0
+2026-11-12 14:35:25.767: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-12 14:35:25.767: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-12 14:35:25.767: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-12 15:51:12.659: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-13 02:14:57.743: [INFO] CurrentProfilePath: C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default
+2026-11-13 02:14:57.743: [INFO] Profiles total count: 1
+2026-11-13 02:14:57.743: [INFO] Profile: name=프로필 1 path=C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default lastActive=2026-11-12T14:35:25.880Z
+2026-11-13 02:14:57.743: [INFO] LastUsedProfileDir: C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default
+2026-11-13 02:14:57.743: [INFO] MostRecentlyActiveProfile: name=프로필 1 path=C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default lastActive=2026-11-12T14:35:25.880Z
+2026-11-13 02:14:57.743: [INFO] OnDoneLoading sync enabled: 0
+2026-11-13 02:14:57.743: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-13 02:14:57.743: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-13 02:14:57.743: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-13 02:25:58.452: [INFO] CurrentProfilePath: C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default
+2026-11-13 02:25:58.452: [INFO] Profiles total count: 1
+2026-11-13 02:25:58.452: [INFO] Profile: name=프로필 1 path=C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default lastActive=2026-11-13T02:14:57.870Z
+2026-11-13 02:25:58.452: [INFO] LastUsedProfileDir: C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default
+2026-11-13 02:25:58.452: [INFO] MostRecentlyActiveProfile: name=프로필 1 path=C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default lastActive=2026-11-13T02:14:57.870Z
+2026-11-13 02:25:58.452: [INFO] OnDoneLoading sync enabled: 0
+2026-11-13 02:25:58.452: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-13 02:25:58.452: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-13 02:25:58.452: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-13 02:28:15.075: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-13 16:19:29.064: [INFO] CurrentProfilePath: C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default
+2026-11-13 16:19:29.064: [INFO] Profiles total count: 1
+2026-11-13 16:19:29.064: [INFO] Profile: name=프로필 1 path=C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default lastActive=2026-11-13T02:25:58.574Z
+2026-11-13 16:19:29.064: [INFO] LastUsedProfileDir: C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default
+2026-11-13 16:19:29.064: [INFO] MostRecentlyActiveProfile: name=프로필 1 path=C:\Work\Unreal\ProjectBG\Plugins\NarshaMCP\Source\ThirdParty\bin\narshamcp.exe.WebView2\EBWebView\Default lastActive=2026-11-13T02:25:58.574Z
+2026-11-13 16:19:29.064: [INFO] OnDoneLoading sync enabled: 0
+2026-11-13 16:19:29.064: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-13 16:19:29.064: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-13 16:19:29.064: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-14 02:03:37.990: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
